@@ -28,4 +28,8 @@ public class Vehicle {
     private boolean allowsBaby;
     @OneToOne(mappedBy = "vehicle")
     private Driver driver;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private VehicleType type;
 }
