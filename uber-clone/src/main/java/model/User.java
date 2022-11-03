@@ -8,9 +8,8 @@ import java.util.List;
 
 @Setter
 @Getter
-@Entity
 public class User {
-    @Id
+
     private Long id;
     private String email;
     private String password;
@@ -19,9 +18,6 @@ public class User {
     private String city;
     private String phoneNumber;
     private String profilePicture;
-    @ElementCollection(targetClass = PaymentDetails.class)
-    private List<PaymentDetails> paymentDetails;
-    private List<Route> favoriteRoutes;
     private boolean deleted;
     private boolean banned;
 
