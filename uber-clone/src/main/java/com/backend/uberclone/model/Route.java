@@ -1,4 +1,4 @@
-package model;
+package com.backend.uberclone.model;
 
 import java.util.List;
 

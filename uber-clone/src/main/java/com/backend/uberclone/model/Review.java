@@ -1,4 +1,4 @@
-package model;
+package com.backend.uberclone.model;
 
 import lombok.Getter;
 import lombok.Setter;

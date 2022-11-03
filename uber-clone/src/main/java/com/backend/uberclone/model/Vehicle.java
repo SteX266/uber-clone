@@ -1,4 +1,4 @@
-package model;
+package com.backend.uberclone.model;
 
 public class Vehicle {
     private String model;
