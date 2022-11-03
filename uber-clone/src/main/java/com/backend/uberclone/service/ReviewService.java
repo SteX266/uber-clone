@@ -26,9 +26,7 @@ public class ReviewService {
         Reservation reservation = reservationRepository.getLockedReview(reservationId);
         SystemEntity e = reservation.getSystemEntity();
         User u = userRepository.findOneByUsername(username);
-
-
-        System.out.println("Duzina: " + e.getComplaints().size() );
+        
         for (Review r:e.getReviews()){
             if (r.getClient().getUsername().equals(username)){
                 return false;
@@ -53,7 +51,7 @@ public class ReviewService {
 
     }
 
-    public ArrayList<ReviewDTO> getAllReviws() {
+    public ArrayList<ReviewDTO> getAllReviews() {
         ArrayList<ReviewDTO> reportDTOs = new ArrayList<>();
         ArrayList<Review> reports = (ArrayList<Review>) reviewRepository.findAll();
         for (Review r: reports) {
@@ -64,7 +62,7 @@ public class ReviewService {
         return reportDTOs;
     }
     @Transactional
-    public boolean acceptReviw(ReviewDTO dto) {
+    public boolean acceptReview(ReviewDTO dto) {
         Review rr = reviewRepository.getLockedReview(dto.getId());
         rr.setApproved(true);
         reviewRepository.save(rr);
@@ -73,10 +71,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public boolean declineReviw(ReviewDTO dto) {
+    public boolean declineReview(ReviewDTO dto) {
         Review rr = reviewRepository.getLockedReview(dto.getId());
         reviewRepository.delete(rr);
         emailService.sendReservationReportDeclined(dto.getClient(),dto.getOwner(),rr.getText(),dto.getText());
         return true;
-    }*/
+    }
 }

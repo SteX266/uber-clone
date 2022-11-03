@@ -34,18 +34,18 @@ public class ReviewController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(value = "/getAllReviws")
+    @GetMapping(value = "/getAllReviews")
     public ResponseEntity<ArrayList<ReviewDTO>> getAllReviws(){
-        return new ResponseEntity<>(reviewService.getAllReviws(), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.getAllReviews(), HttpStatus.OK);
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(value = "/acceptReviw")
-    public boolean acceptReviw(@RequestBody ReviewDTO dto){
-        return reviewService.acceptReviw(dto);
+    @PostMapping(value = "/acceptReview")
+    public boolean acceptReview(@RequestBody ReviewDTO dto){
+        return reviewService.acceptReview(dto);
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(value = "/declineReviw")
-    public boolean declineReviw(@RequestBody ReviewDTO dto){
-        return reviewService.declineReviw(dto);
+    @PostMapping(value = "/declineReview")
+    public boolean declineReview(@RequestBody ReviewDTO dto){
+        return reviewService.declineReview(dto);
     }
 }
