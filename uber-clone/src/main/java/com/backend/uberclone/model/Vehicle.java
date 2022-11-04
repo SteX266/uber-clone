@@ -29,7 +29,7 @@ public class Vehicle {
     @OneToOne(mappedBy = "vehicle")
     private Driver driver;
 
-    @Column
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="vehicle_type_id")
     private VehicleType type;
 }

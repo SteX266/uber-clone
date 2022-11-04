@@ -1,5 +1,6 @@
 package com.backend.uberclone.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -15,28 +15,45 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Ride {
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="reservation_id")
-    private Reservation reservation;
 
-    @ManyToMany(mappedBy = "rides")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="route_id")
+    private Route route;
+
+    @ManyToMany(mappedBy = "reservations")
     private Set<Customer> costumers;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="driver_id")
-    private Driver driver;
+    private VehicleType vehicleType;
+
+    @Column
+    private boolean hasBaby;
+
+    @Column
+    private boolean hasPet;
+
+    @Column
+    private LocalDateTime reservationDate;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private RideStatus status;
+    private ReservationType type;
+
     @Column
-    private LocalDateTime startTime;
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
+
+
     @Column
-    private LocalDateTime endTime;
-    @Column
-    private boolean isFuture;
+    private double estimatedCost;
+
+
+
+
+
+
 }

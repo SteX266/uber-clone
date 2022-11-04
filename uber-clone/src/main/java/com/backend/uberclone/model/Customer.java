@@ -30,4 +30,10 @@ public class Customer extends User {
             inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
     private Set<Ride> rides;
 
+    @ManyToMany
+    @JoinTable(name = "reservations",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
+    private Set<Reservation> reservations;
+
 }
