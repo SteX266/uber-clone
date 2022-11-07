@@ -1,16 +1,18 @@
 package com.backend.uberclone.dto;
 
-import com.backend.uberclone.model.User;
+import com.backend.uberclone.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class RegistrationDTO extends DTO {
+public class RegistrationDTO {
     private String email;
     private String password;
     private String repeatPassword;
@@ -18,6 +20,9 @@ public class RegistrationDTO extends DTO {
     private String surname;
     private String city;
     private String phoneNumber;
+    private String vehicleModel;
+    private int numberOfSeats;
+    private VehicleType vehicleType;
 
     public boolean passwordsMatch() {
         return this.password.equals(this.repeatPassword);
@@ -36,16 +41,43 @@ public class RegistrationDTO extends DTO {
     public boolean hasValidFields() {
         if(hasNullFields()) return false;
         if(hasBlankFields()) return false;
-        if(!passwordsMatch()) return false;
-        return true;
+        return passwordsMatch();
     }
-    public User createUser() {
-        User u = new User();
-        u.setName(name);
-        u.setPassword(password);
-        u.setEmail(email);
-        u.setCity(city);
-        u.setPhoneNumber(phoneNumber);
-        return u;
+
+    public boolean hasNullFieldsDriver() {
+        return hasNullFields() && (vehicleModel == null || vehicleType == null);
     }
+
+    public boolean hasBlankFieldsDriver() {
+        return hasBlankFields() && vehicleModel.isBlank();
+    }
+
+    public boolean validNumberOfSeats() {
+        return numberOfSeats >= 0 && numberOfSeats <= 10;
+    }
+
+    public boolean hasValidFieldsDriver() {
+        if(hasNullFieldsDriver()) return false;
+        if(hasBlankFieldsDriver()) return false;
+        if(!validNumberOfSeats()) return false;
+        return passwordsMatch();
+    }
+
+    // ovo je upitno
+    public Customer createCustomer() {
+        Customer customer = new Customer();
+        customer.setName(name);
+        customer.setPassword(password); // treba da se uradi hesovanje sifre
+        customer.setEmail(email);
+        customer.setCity(city);
+        customer.setPhoneNumber(phoneNumber);
+        return customer;
+    }
+    // ovo je upitno
+    public Driver createDriver() {
+        Driver driver = new Driver();
+        return driver;
+    }
+
+
 }

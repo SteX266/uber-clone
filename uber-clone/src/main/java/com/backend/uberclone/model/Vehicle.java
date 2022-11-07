@@ -21,13 +21,16 @@ public class Vehicle {
 
     @Column
     private String model;
-    @Column
 
+    @Column
     private int numberOfSeats;
+
     @Column
     private boolean allowsPet;
+
     @Column
     private boolean allowsBaby;
+
     @OneToOne(mappedBy = "vehicle")
     private Driver driver;
 

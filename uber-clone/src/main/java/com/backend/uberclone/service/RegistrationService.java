@@ -2,7 +2,6 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.RegistrationDTO;
 import com.backend.uberclone.model.TransactionStatus;
-import com.backend.uberclone.model.User;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +20,22 @@ public class RegistrationService {
 
 
     // bilo bi kul da imamo neku klasu unutar koje je enkapsulirano stanje zavrsetka funkcije i poruka tog statusa a ne samo enumeracija
-    @Transactional
+    @Transactional // ovo nisam siguran da li treba?
     public TransactionStatus register(RegistrationDTO registrationDTO) {
         if(!registrationDTO.hasValidFields()) return TransactionStatus.INVALID_DATA;
         if(userRepository.existsByEmail(registrationDTO.getEmail())) return TransactionStatus.INVALID_DATA;
-        User user = registrationDTO.createUser();
-        userRepository.save(user);
+        userRepository.save(registrationDTO.createCustomer());
+        // emailService.sendActivationMail(registrationDTO.getEmail());
+        // pomocu email servisa poslati mejl za aktivaciju
         return TransactionStatus.SUCCESSFUL;
     }
 
+    public TransactionStatus registerDriver(RegistrationDTO registrationDTO) {
+        if(!registrationDTO.hasValidFieldsDriver()) return TransactionStatus.INVALID_DATA;
+        if(userRepository.existsByEmail(registrationDTO.getEmail())) return TransactionStatus.INVALID_DATA;
+        userRepository.save(registrationDTO.createCustomer());
+        // emailService opet
+        return TransactionStatus.SUCCESSFUL;
+    }
 
 }
