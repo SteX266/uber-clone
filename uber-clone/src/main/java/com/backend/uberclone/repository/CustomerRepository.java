@@ -1,12 +1,10 @@
 package com.backend.uberclone.repository;
 
 import com.backend.uberclone.model.Customer;
-import com.backend.uberclone.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-    boolean existsByEmail(String email);
-
+    Customer findOneByEmail(String email);
 
 }

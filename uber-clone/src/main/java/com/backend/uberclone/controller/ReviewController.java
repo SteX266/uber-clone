@@ -22,8 +22,8 @@ public class ReviewController {
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     @GetMapping(value = "/createReview")
-    public ResponseEntity<String> createReview(@RequestParam int reservationId, @RequestParam String username, @RequestParam String text, @RequestParam int rating){
-        boolean isSuccessful = reviewService.createReview(reservationId, username, text, rating);
+    public ResponseEntity<String> createReview(@RequestParam int rideId, @RequestParam String customer, @RequestParam String comment, @RequestParam int carRating, @RequestParam int driverRating){
+        boolean isSuccessful = reviewService.createReview(rideId, customer, comment, carRating, driverRating);
 
         if (isSuccessful){
             return new ResponseEntity<>("OK", HttpStatus.OK);
@@ -33,19 +33,4 @@ public class ReviewController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(value = "/getAllReviews")
-    public ResponseEntity<ArrayList<ReviewDTO>> getAllReviws(){
-        return new ResponseEntity<>(reviewService.getAllReviews(), HttpStatus.OK);
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(value = "/acceptReview")
-    public boolean acceptReview(@RequestBody ReviewDTO dto){
-        return reviewService.acceptReview(dto);
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(value = "/declineReview")
-    public boolean declineReview(@RequestBody ReviewDTO dto){
-        return reviewService.declineReview(dto);
-    }
 }
