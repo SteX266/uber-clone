@@ -10,4 +10,6 @@ public interface UserRepository<T extends User> extends JpaRepository<T, Integer
 
     T findOneById(Integer id);
 
+    User findUserByEmailAndBannedFalseAndEnabledTrueAndDeletedFalse(String email);
+
 }
