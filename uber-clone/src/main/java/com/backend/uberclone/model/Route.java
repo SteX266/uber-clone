@@ -20,12 +20,25 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ElementCollection
-    @CollectionTable(name="stations", joinColumns = @JoinColumn(name="route_id"))
     @Column
-    private List<String> stations;
+    private String name;
+
+    @Column
+    private String start;
+
+    @ElementCollection
+    @CollectionTable(name="stops", joinColumns = @JoinColumn(name="route_id"))
+    @Column
+    private List<String> stops;
+
+    @Column
+    private int estimatedTimeInMinutes; // ovo mozda bude promenjeno u zavisnosti od fronta
+
+    @Column
+    private double distanceInKm;
+
 
     @OneToMany(mappedBy = "route", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Ride> rides;
+    private List<Reservation> reservations;
 
 }

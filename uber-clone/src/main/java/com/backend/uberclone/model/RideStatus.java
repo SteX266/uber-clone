@@ -1,5 +1,5 @@
 package com.backend.uberclone.model;
 
 public enum RideStatus {
-    IN_PROGRESS,FINISHED,CANCELED,ARRIVING
+    ARRIVING, ARRIVED, ONGOING, ABORTED, CANCELED, FINISHED
 }

@@ -1,32 +1,31 @@
 package com.backend.uberclone.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ActivePeriod {
-
-
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private LocalDateTime start;
+    private String comment;
 
-    @Column
-    private LocalDateTime end;
+    @ManyToOne
+    @JoinColumn(name = "recipient_id")
+    private Driver recipient;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="driver_id")
-    private Driver driver;
+    @ManyToOne
+    @JoinColumn(name = "reporter_id")
+    private Customer reporter;
 }

@@ -24,10 +24,15 @@ public class Reservation {
     @JoinColumn(name="route_id")
     private Route route;
 
-    @ManyToMany(mappedBy = "reservations")
-    private Set<Customer> costumers;
+    @OneToOne(mappedBy = "reservation")
+    @JoinColumn(name="ride_id")
+    private Ride ride;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "reservations")
+    private Set<Customer> customers;
+
+    @Column
+    @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
 
     @Column
@@ -37,7 +42,7 @@ public class Reservation {
     private boolean hasPet;
 
     @Column
-    private LocalDateTime reservationDate;
+    private LocalDateTime reservationTime;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -50,10 +55,5 @@ public class Reservation {
 
     @Column
     private double estimatedCost;
-
-
-
-
-
 
 }

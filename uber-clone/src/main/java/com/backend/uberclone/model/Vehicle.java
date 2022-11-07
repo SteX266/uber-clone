@@ -18,9 +18,11 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private String model;
     @Column
+
     private int numberOfSeats;
     @Column
     private boolean allowsPet;
@@ -29,7 +31,7 @@ public class Vehicle {
     @OneToOne(mappedBy = "vehicle")
     private Driver driver;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="vehicle_type_id")
+    @Column
+    @Enumerated(EnumType.STRING)
     private VehicleType type;
 }

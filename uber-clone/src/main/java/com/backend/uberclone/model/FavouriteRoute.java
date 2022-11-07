@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class FavouriteRoute extends Route{
+public class FavouriteRoute extends Route {
 
 
     @Column

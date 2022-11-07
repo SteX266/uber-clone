@@ -16,27 +16,33 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class Ride {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="reservation_id")
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="reservation")
     private Reservation reservation;
 
     @ManyToMany(mappedBy = "rides")
     private Set<Customer> costumers;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="driver_id")
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
     @Column
     @Enumerated(EnumType.STRING)
     private RideStatus status;
+
     @Column
     private LocalDateTime startTime;
+
     @Column
     private LocalDateTime endTime;
+
     @Column
-    private boolean isFuture;
+    private int estimatedArrivalTimeInMinutes;
+
 }
