@@ -46,6 +46,7 @@ public class RideService {
     public void abortRide(Integer rideId, Integer driverId) {
         Ride ride = rideRepository.findByIdAndStatus(rideId, RideStatus.ONGOING);
         ride.abort();
+        // treba da se doda da taj korisnik promeni status
         rideRepository.save(ride);
     }
 
