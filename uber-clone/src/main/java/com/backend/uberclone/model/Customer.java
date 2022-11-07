@@ -17,6 +17,8 @@ import java.util.Set;
 @Entity
 public class Customer extends User {
 
+    @Column
+    private boolean riding;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FavouriteRoute> favoriteRoutes;
