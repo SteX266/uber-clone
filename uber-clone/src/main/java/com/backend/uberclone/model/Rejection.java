@@ -22,11 +22,7 @@ public class Rejection {
     @Column
     private String reason;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="driver_id")
-    private Driver driver;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="ride_id")
+    @OneToOne(mappedBy = "rejection")
     private Ride ride;
 }
