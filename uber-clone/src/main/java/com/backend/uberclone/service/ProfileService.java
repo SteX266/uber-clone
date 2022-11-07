@@ -16,6 +16,8 @@ public class ProfileService {
     }
 
     public UserDTO getProfileInfo(String email) {
-        return new UserDTO(userRepository.findUserByEmailAndBaAndBannedFalseAndEnabledTrueAndAndDeletedFalse(email));
+        return new UserDTO(userRepository.findUserByEmailAndBannedFalseAndEnabledTrueAndDeletedFalse(email));
     }
+
+
 }

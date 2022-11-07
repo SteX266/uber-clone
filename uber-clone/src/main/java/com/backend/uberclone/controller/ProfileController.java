@@ -1,6 +1,6 @@
 package com.backend.uberclone.controller;
 
-import com.backend.uberclone.dto.ReviewDTO;
+
 import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.model.User;
 import com.backend.uberclone.service.ProfileService;
