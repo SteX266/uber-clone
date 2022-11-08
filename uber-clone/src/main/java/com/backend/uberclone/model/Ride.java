@@ -18,7 +18,7 @@ public class Ride {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="reservation")
@@ -47,6 +47,7 @@ public class Ride {
 
     @Column
     private int estimatedArrivalTimeInMinutes;
+
 
     public void cancelRide() {
         this.status = RideStatus.CANCELED;
