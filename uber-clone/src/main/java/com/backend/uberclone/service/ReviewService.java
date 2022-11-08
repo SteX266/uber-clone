@@ -1,6 +1,7 @@
 package com.backend.uberclone.service;
 
 
+import com.backend.uberclone.dto.ReviewDTO;
 import com.backend.uberclone.model.Customer;
 import com.backend.uberclone.model.Review;
 import com.backend.uberclone.model.Ride;
@@ -28,12 +29,16 @@ public class ReviewService {
 
 
 
-    public boolean createReview(int rideId, String customerEmail, String comment, int carRating, int driverRating) {
-        Customer reviewer = customerRepository.findOneByEmail(customerEmail);
-        Ride ride = rideRepository.findOneById(rideId);
-        if (isRatingValid(carRating, driverRating) && isRideDateValid(ride.getStartTime())){
+    public boolean createReview(ReviewDTO reviewDTO) {
+        Customer reviewer = customerRepository.findOneByEmail(reviewDTO.getCustomerEmail());
+        Ride ride = rideRepository.findOneById(reviewDTO.getRideId());
+        if (ride == null){
+            System.out.println("ALOOO9OOOGADSOAOSOGSOASGOGAS");
+            return false;
+        }
+        if (isRatingValid(reviewDTO.getCarRating(), reviewDTO.getDriverRating()) && isRideDateValid(ride.getStartTime())){
 
-            Review review = new Review(ride, reviewer, ride.getDriver(), carRating, driverRating, comment);
+            Review review = new Review(ride, reviewer, ride.getDriver(), reviewDTO.getCarRating(), reviewDTO.getDriverRating(), reviewDTO.getComment());
             reviewRepository.save(review);
             return true;
 
