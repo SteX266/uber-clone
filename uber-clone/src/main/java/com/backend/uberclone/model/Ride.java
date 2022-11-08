@@ -49,6 +49,8 @@ public class Ride {
     @Column
     private int estimatedArrivalTimeInMinutes;
 
+    @OneToMany(mappedBy = "ride", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> reviews;
     public void cancel() {
         this.status = RideStatus.CANCELED;
         toggleCustomers(false); // ovo mozda i nije potrebno
