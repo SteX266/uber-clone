@@ -14,13 +14,25 @@ import lombok.Setter;
 @Setter
 public class RejectionDTO {
     private String reason;
-    private Integer driverId;
-    private Integer rideId;
+    private Long rideId;
 
     public Rejection createRejection(Ride ride) {
         Rejection rejection = new Rejection();
         rejection.setReason(this.reason);
         rejection.setRide(ride);
         return rejection;
+    }
+
+    public boolean hasNullFields() {
+        return reason == null || rideId == null;
+    }
+    public boolean hasBlankFields() {
+        return reason.isBlank() || rideId < 0;
+    }
+
+
+    public boolean hasValidFields() {
+        if(hasNullFields()) return false;
+        return !hasBlankFields();
     }
 }
