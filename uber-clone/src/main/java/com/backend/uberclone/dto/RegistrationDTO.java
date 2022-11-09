@@ -75,8 +75,7 @@ public class RegistrationDTO {
     }
     // ovo je upitno
     public Driver createDriver() {
-        Driver driver = new Driver();
-        return driver;
+        return new Driver();
     }
 
 

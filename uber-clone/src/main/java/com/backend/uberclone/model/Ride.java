@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -49,26 +48,28 @@ public class Ride {
     @Column
     private int estimatedArrivalTimeInMinutes;
 
-    @OneToMany(mappedBy = "ride", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Review> reviews;
-    public void cancel() {
+
+    public void cancelRide() {
         this.status = RideStatus.CANCELED;
         toggleCustomers(false); // ovo mozda i nije potrebno
+        this.driver.setAvailable(true);
     }
 
-    public void start() {
+    public void startRide() {
         this.status = RideStatus.ONGOING;
         toggleCustomers(true);
     }
 
-    public void end() {
+    public void endRide() {
         this.status = RideStatus.FINISHED;
         toggleCustomers(false);
+        this.driver.setAvailable(true);
     }
 
-    public void abort() {
+    public void abortRide() {
         this.status = RideStatus.ABORTED;
         toggleCustomers(false);
+        this.driver.setAvailable(true);
     }
 
     private void toggleCustomers(boolean value) {
@@ -76,5 +77,4 @@ public class Ride {
             c.setRiding(value);
         }
     }
-
 }
