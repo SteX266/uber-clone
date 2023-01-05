@@ -1,25 +1,26 @@
-<div class="container-fluid bg-img">
+<div [ngSwitch]="activeCard">
   <div class="card su">
     <div class="card-header su-header">
       <ul class="nav nav-fill su-nav">
         <li class="nav-item">
-          <a class="nav-link su-link" href="#">
-            <img src="assets/earn.svg" /><br />Drive
+          <a class="nav-link su-link" (click)="changeActiveCard('drive')">
+            <img [src]="drivePath" /><br />Drive
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link su-link" href="#">
-            <img src="assets/car.svg" /><br />Ride
+          <a class="nav-link su-link" (click)="changeActiveCard('ride')">
+            <img [src]="ridePath" /><br />Ride
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link su-link" href="#">
-            <img src="assets/map.svg" /><br />Try the map
+          <a class="nav-link su-link" (click)="changeActiveCard('map')">
+            <img [src]="mapPath" /><br />Try the map
           </a>
         </li>
       </ul>
     </div>
-    <div class="card-body">
+
+    <div class="card-body" *ngSwitchCase="'drive'">
       <h1 class="su-title">Get in the driver’s seat and get paid</h1>
       <p class="card-text su-text">
         Drive on the platform with the largest network of active riders.
@@ -27,6 +28,56 @@
       <button type="button" class="btn btn-dark btn-lg su-button">
         Sign up to drive
       </button>
+    </div>
+
+    <div class="card-body" *ngSwitchCase="'ride'">
+      <h1 class="su-title">Get in the back seat and enjoy the best rides.</h1>
+      <p class="card-text su-text">
+        Ride on the platform with the largest network of active riders.
+      </p>
+      <button type="button" class="btn btn-dark btn-lg su-button">
+        Sign up to ride
+      </button>
+    </div>
+    <div class="card-body" *ngSwitchCase="'map'">
+      <img src="assets/map-placeholder.png" class="map-img" />
+      <p></p>
+      <div class="container">
+        <form class="row" #calculationForm="ngForm">
+          <div class="col">
+            <label for="start" class="visually-hidden">Start</label>
+            <input
+              required
+              type="text"
+              class="form-control form-control-lg"
+              id="start"
+              placeholder="Start"
+              [(ngModel)]="start"
+              name="start"
+            />
+          </div>
+          <div class="col">
+            <label for="destination" class="visually-hidden">Destination</label>
+            <input
+              required
+              class="form-control form-control-lg"
+              id="destination"
+              placeholder="Destination"
+              [(ngModel)]="destination"
+              name="destination"
+            />
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-dark btn-lg"
+              (click)="calculateCost()"
+            >
+              Calculate cost
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
