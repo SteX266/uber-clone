@@ -4,6 +4,7 @@ package com.backend.uberclone.service;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.Role;
 import com.backend.uberclone.model.User;
+import com.backend.uberclone.repository.RoleRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public User findByUsername(String email) {
         return userRepository.findOneByEmail(email);
@@ -42,7 +45,7 @@ public class UserService {
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         List<Role> roles = new ArrayList<>();
 
-        roles.add(new Role());
+        roles.add(roleRepository.findOneById(1));
         u.setRoles(roles);
 
         return this.userRepository.save(u);

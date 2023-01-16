@@ -71,7 +71,7 @@ public class AuthentificationController {
 
     @PostMapping("/usersignup")
     public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
-
+        System.out.println("POCELA REGISTRACIJA");
         User existUser = this.userService.findByUsername(userRequest.getUsername());
 
         if (existUser != null) {
@@ -80,6 +80,7 @@ public class AuthentificationController {
         User user = this.userService.save(userRequest);
         if(userRequest.getUserType().equals("client")){
             //emailService.sendActivationEmail(user);
+
         }
         else if(userRequest.getUserType().equals("admin")){
 

@@ -14,7 +14,7 @@ public class UserRequest {
     private String username;
     private String name;
     private String surname;
-    private String addressLine;
+    private String city;
     private String password;
     private String phoneNumber;
     private String userType;

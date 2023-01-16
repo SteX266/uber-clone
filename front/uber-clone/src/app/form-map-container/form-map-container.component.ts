@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { SignUpModalComponent } from '../sign-up-modal/sign-up-modal.component';
 
 @Component({
   selector: 'app-form-map-container',
@@ -14,6 +16,15 @@ export class FormMapContainerComponent {
 
   start: string = '';
   destination: string = '';
+
+  constructor(public dialog: MatDialog) {}
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(SignUpModalComponent, {
+      width: '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });}
 
   changeActiveCard(card: string) {
     this.activeCard = card;
