@@ -5,6 +5,7 @@ import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.dto.UserTokenState;
 import com.backend.uberclone.exception.ResourceConflictException;
 import com.backend.uberclone.model.User;
+import com.backend.uberclone.service.EmailService;
 import com.backend.uberclone.service.UserService;
 import com.backend.uberclone.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class AuthentificationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
 
     @PostMapping("/login")
@@ -72,14 +76,14 @@ public class AuthentificationController {
     @PostMapping("/usersignup")
     public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
         System.out.println("POCELA REGISTRACIJA");
-        User existUser = this.userService.findByUsername(userRequest.getUsername());
+        User existUser = this.userService.findByUsername(userRequest.getEmail());
 
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Username already exists");
         }
         User user = this.userService.save(userRequest);
         if(userRequest.getUserType().equals("client")){
-            //emailService.sendActivationEmail(user);
+            emailService.sendActivationEmail(user);
 
         }
         else if(userRequest.getUserType().equals("admin")){
@@ -92,6 +96,20 @@ public class AuthentificationController {
 
         System.out.println("Registrovan " + user.getUsername());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/activate/{id}")
+    public ResponseEntity<String> activateUser(@PathVariable Integer id){
+        User user = userService.findOneById(id);
+
+        if(!user.isEnabled()){
+            user.setEnabled(true);
+            userService.saveUser(user);
+            System.out.println("USPESNA AKTIVACIJA NALOGA!");
+            return new ResponseEntity<>("Uspesna aktivacija!", HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("Neuspesna aktivacija!", HttpStatus.NOT_FOUND);
+
     }
     }
 
