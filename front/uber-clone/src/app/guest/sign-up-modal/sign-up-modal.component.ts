@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import {MatDialogRef} from '@angular/material/dialog';
+import{HttpHeaders, HttpClient} from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-up-modal',
   templateUrl: './sign-up-modal.component.html',
-  styleUrls: ['./sign-up-modal.component.scss'],
+  styleUrls: ['./sign-up-modal.component.scss']
 })
 export class SignUpModalComponent {
+
   email: string = '';
   password: string = '';
   repeatedPassword: string = '';
@@ -18,98 +19,112 @@ export class SignUpModalComponent {
   phoneNumber: string = '';
 
   private readonly registrationUrl: string;
-
-  constructor(
-    public dialogRef: MatDialogRef<SignUpModalComponent>,
-    public snackBar: MatSnackBar,
-    private http: HttpClient
-  ) {
-    this.registrationUrl = 'http://localhost:8080/auth/usersignup';
+  
+  constructor(public dialogRef: MatDialogRef<SignUpModalComponent>,public snackBar:MatSnackBar,private http:HttpClient){
+    this.registrationUrl = "http://localhost:8080/auth/usersignup";
   }
 
-  openSuccessSnackBar(text: string) {
-    this.snackBar.open(text, 'Dismiss', {
+  openSuccessSnackBar(text: string){
+    this.snackBar.open(text, "Dismiss", {
       duration: 3000,
       panelClass: ['green-snackbar', 'login-snackbar'],
-    });
-  }
-  openFailureSnackBar(text: string) {
-    this.snackBar.open(text, 'Dismiss', {
+     });
+    }
+    openFailureSnackBar(text: string){
+    this.snackBar.open(text, "Dismiss", {
       duration: 3000,
-      panelClass: ['red-snackbar', 'login-snackbar'],
-    });
-  }
+      panelClass: ['red-snackbar','login-snackbar'],
+      });
+     }
 
-  validateEmail() {
+  validateEmail(){
     return true;
   }
 
-  validateInputData() {
-    if (this.password !== this.repeatedPassword) {
-      this.openFailureSnackBar('Passwords do not match!');
+  validateInputData(){
+    if (this.password !== this.repeatedPassword){
+      this.openFailureSnackBar("Passwords do not match!");
       return false;
     }
 
-    if (!this.validateEmail()) {
-      this.openFailureSnackBar('Email is not valid!');
+
+    if (!this.validateEmail()){
+      this.openFailureSnackBar("Email is not valid!");
       return false;
     }
 
-    if (this.password.length < 6) {
-      this.openFailureSnackBar('Password must be at least 5 characters long');
-      return false;
+
+    if (this.password.length < 6){
+      this.openFailureSnackBar("Password must be at least 5 characters long");
+      return false;      
+      
     }
-    if (this.name === '') {
-      this.openFailureSnackBar('Name field is required!');
+    if (this.name === ""){
+      this.openFailureSnackBar("Name field is required!");
 
       return false;
+      
     }
-    if (this.surname === '') {
-      this.openFailureSnackBar('Surname field is required!');
+    if (this.surname === ""){
+      this.openFailureSnackBar("Surname field is required!");
+      
+      return false;
+      
+    }
+    if(this.city === ""){
+      this.openFailureSnackBar("City field is required!");
+      return false;
 
-      return false;
     }
-    if (this.city === '') {
-      this.openFailureSnackBar('City field is required!');
-      return false;
-    }
-    if (this.phoneNumber === '') {
-      this.openFailureSnackBar('Phone number field is required!');
-      return false;
+    if(this.phoneNumber === ""){
+      this.openFailureSnackBar("Phone number field is required!");
+      return false
+
+
     }
     return true;
+
   }
 
-  sendRegistrationRequest() {
+  sendRegistrationRequest(){
     let body = {
-      email: this.email,
-      password: this.password,
-      name: this.name,
-      surname: this.surname,
-      city: this.city,
-      phoneNumber: this.phoneNumber,
-      userType: 'client',
-    };
+      "email":this.email,
+      "password":this.password,
+      "name":this.name,
+      "surname":this.surname,
+      "city":this.city,
+      "phoneNumber":this.phoneNumber,
+      "userType":"client"
+
+
+    }
     console.log(body);
 
-    this.http
-      .post<any>(this.registrationUrl, body, this.getHttpOptions())
-      .subscribe();
-    this.openSuccessSnackBar('Registration successful!');
+    this.http.post<any>(this.registrationUrl,body,this.getHttpOptions()).subscribe();
+    this.openSuccessSnackBar("Registration successful!");
+
   }
 
-  getHttpOptions() {
+  getHttpOptions(){
     return {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      }),
+        'Content-Type':  'application/json',
+      })
     };
+
   }
 
-  userSignUp() {
-    if (this.validateInputData()) {
+
+  userSignUp(){
+
+    if (this.validateInputData()){
+
       this.sendRegistrationRequest();
+      
     }
+
+
+
   }
 }

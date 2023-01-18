@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { latLng, LayerGroup, tileLayer, Map, icon, marker } from 'leaflet';
+import {
+  latLng,
+  LayerGroup,
+  tileLayer,
+  Map,
+  icon,
+  marker,
+  Marker,
+} from 'leaflet';
 import { MapPoint } from '../../models/map-point.model';
 
 @Component({
@@ -17,6 +25,7 @@ export class MapSmallComponent implements OnInit {
   geoJsonLayer: any;
   start!: MapPoint;
   destionation!: MapPoint;
+  markerStart!: Marker;
   options = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -61,7 +70,13 @@ export class MapSmallComponent implements OnInit {
 
   private createMarker(point: MapPoint) {
     let coordinates = latLng([point.latitude, point.longitude]);
-    this.geoJsonLayer = marker(coordinates).addTo(this.map);
+    this.markerStart = marker(coordinates, { draggable: true });
+    this.markerStart.on('dragend', (event) => {
+      this.start.latitude = this.markerStart.getLatLng().lat;
+      this.start.longitude = this.markerStart.getLatLng().lng;
+      console.log(this.start);
+    });
+    this.geoJsonLayer = this.markerStart.addTo(this.map);
     this.map.setView(coordinates, this.map.getZoom());
   }
 }

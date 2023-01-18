@@ -31,3 +31,7 @@
   </datalist>
   <button class="btn btn-dark button" (click)="calculate()">Calculate</button>
 </form>
+<div class="list-group" *ngIf="start && destination">
+  <li class="list-group-item">{{ start }}</li>
+  <li class="list-group-item">{{ destination }}</li>
+</div>
