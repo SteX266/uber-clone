@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import{HttpHeaders, HttpClient} from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormMapContainerComponent } from '../form-map-container/form-map-container.component';
 
 @Component({
   selector: 'app-sign-up-modal',
