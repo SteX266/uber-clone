@@ -1,27 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomePageComponent } from './home-page/home-page.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { FormMapContainerComponent } from './form-map-container/form-map-container.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
-import { GoogleMapsModule } from '@angular/google-maps';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { MapSearchService } from './services/map-search.service';
+import { GuestModule } from './guest/guest.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomePageComponent,
-    HeaderComponent,
-    FooterComponent,
-    FormMapContainerComponent,
-    SignUpComponent,
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    LeafletModule,
+    HttpClientModule,
+    GuestModule,
   ],
-  imports: [BrowserModule, AppRoutingModule, GoogleMapsModule, FormsModule],
-  providers: [],
+  providers: [MapSearchService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

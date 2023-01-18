@@ -1,0 +1,33 @@
+<form #searchForm="ngForm" class="search">
+  <input
+    type="text"
+    placeholder="Start"
+    [(ngModel)]="start"
+    id="start"
+    (keyup)="searchStart(start)"
+    name="start"
+    class="form-control control"
+    list="startDatalist"
+  />
+  <datalist id="startDatalist">
+    <option *ngFor="let result of resultsStart" [value]="result.name">
+      {{ result.name }}
+    </option>
+  </datalist>
+  <input
+    type="text"
+    placeholder="Destination"
+    [(ngModel)]="destination"
+    id="start"
+    (ngModelChange)="searchDestination(destination)"
+    name="start"
+    class="form-control control"
+    list="destinationDatalist"
+  />
+  <datalist id="destinationDatalist">
+    <option *ngFor="let result of resultsDest" [value]="result.name">
+      {{ result.name }}
+    </option>
+  </datalist>
+  <button class="btn btn-dark button" (click)="calculate()">Calculate</button>
+</form>

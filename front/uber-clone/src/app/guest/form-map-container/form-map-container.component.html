@@ -40,44 +40,7 @@
       </button>
     </div>
     <div class="card-body" *ngSwitchCase="'map'">
-      <img src="assets/map-placeholder.png" class="map-img" />
-      <p></p>
-      <div class="container">
-        <form class="row" #calculationForm="ngForm">
-          <div class="col">
-            <label for="start" class="visually-hidden">Start</label>
-            <input
-              required
-              type="text"
-              class="form-control form-control-lg"
-              id="start"
-              placeholder="Start"
-              [(ngModel)]="start"
-              name="start"
-            />
-          </div>
-          <div class="col">
-            <label for="destination" class="visually-hidden">Destination</label>
-            <input
-              required
-              class="form-control form-control-lg"
-              id="destination"
-              placeholder="Destination"
-              [(ngModel)]="destination"
-              name="destination"
-            />
-          </div>
-          <div class="col">
-            <button
-              type="button"
-              class="btn btn-dark btn-lg"
-              (click)="calculateCost()"
-            >
-              Calculate cost
-            </button>
-          </div>
-        </form>
-      </div>
+      <app-map-small></app-map-small>
     </div>
   </div>
 </div>

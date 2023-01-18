@@ -1,0 +1,15 @@
+<div class="container map-container">
+  <div class="row map-container">
+    <div class="col">
+      <app-geocoding></app-geocoding>
+    </div>
+    <div
+      class="col-9 map"
+      leaflet
+      [leafletOptions]="options"
+      (leafletMapReady)="initializeMap($event)"
+    >
+      >
+    </div>
+  </div>
+</div>
