@@ -3,10 +3,10 @@
       <h1>Sign In</h1>
       <p>Sign In with your email address or social media account:</p>
       <div class="form-group">
-        <input type="email" class="form-control" placeholder="Email">
-        <input type="password" class="form-control" placeholder="Password">
+        <input type="email" name="email" id="email" class="form-control" placeholder="Email" [(ngModel)]="email">
+        <input type="password" name="password" id="password" class="form-control" placeholder="Password" [(ngModel)]="password">
       </div>
-      <button type="submit" class="btn btn-dark btn-lg su-button">Sign In</button>
+      <button (click)="login()" type="submit" class="btn btn-dark btn-lg su-button">Sign In</button>
       <hr>
       <div class="row">
           <a href="#" class ="col-6 text-center" ><i class="fa fa-facebook fa-4x "></i></a>
