@@ -8,6 +8,9 @@ import { AppComponent } from './app.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapSearchService } from './services/map-search.service';
 import { GuestModule } from './guest/guest.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,9 +20,18 @@ import { GuestModule } from './guest/guest.module';
     FormsModule,
     LeafletModule,
     HttpClientModule,
+    MatDialogModule,
     GuestModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule,
   ],
-  providers: [MapSearchService],
+  providers: [
+    MapSearchService,
+    {
+      provide: MatDialogRef,
+      useValue: {},
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
