@@ -10,8 +10,10 @@ import { FooterComponent } from './footer/footer.component';
 import { FormMapContainerComponent } from './form-map-container/form-map-container.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { SignUpModalComponent } from './sign-up-modal/sign-up-modal.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { SignInModalComponent } from './sign-in-modal/sign-in-modal.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,9 +31,14 @@ import { SignInModalComponent } from './sign-in-modal/sign-in-modal.component';
     GoogleMapsModule,
     FormsModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [     {
+    provide: MatDialogRef,
+    useValue: {}
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

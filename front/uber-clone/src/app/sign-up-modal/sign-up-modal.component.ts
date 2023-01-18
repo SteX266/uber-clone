@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import{HttpHeaders, HttpClient} from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormMapContainerComponent } from '../form-map-container/form-map-container.component';
+
 @Component({
   selector: 'app-sign-up-modal',
   templateUrl: './sign-up-modal.component.html',
@@ -18,9 +21,22 @@ export class SignUpModalComponent {
 
   private readonly registrationUrl: string;
   
-  constructor(public dialogRef: MatDialogRef<SignUpModalComponent>,private http:HttpClient){
+  constructor(public dialogRef: MatDialogRef<SignUpModalComponent>,public snackBar:MatSnackBar,private http:HttpClient){
     this.registrationUrl = "http://localhost:8080/auth/usersignup";
   }
+
+  openSuccessSnackBar(text: string){
+    this.snackBar.open(text, "Dismiss", {
+      duration: 3000,
+      panelClass: ['green-snackbar', 'login-snackbar'],
+     });
+    }
+    openFailureSnackBar(text: string){
+    this.snackBar.open(text, "Dismiss", {
+      duration: 3000,
+      panelClass: ['red-snackbar','login-snackbar'],
+      });
+     }
 
   validateEmail(){
     return true;
@@ -28,37 +44,46 @@ export class SignUpModalComponent {
 
   validateInputData(){
     if (this.password !== this.repeatedPassword){
-      console.log("Passwords do not match!");
+      this.openFailureSnackBar("Passwords do not match!");
+      return false;
     }
 
 
     if (!this.validateEmail()){
-      console.log("Email is not valid!");
+      this.openFailureSnackBar("Email is not valid!");
+      return false;
     }
 
 
     if (this.password.length < 6){
-      console.log("Password must be at least 5 characters long");
-      
+      this.openFailureSnackBar("Password must be at least 5 characters long");
+      return false;      
       
     }
     if (this.name === ""){
-      console.log("Name must not be empty!");
+      this.openFailureSnackBar("Name field is required!");
+
+      return false;
       
     }
     if (this.surname === ""){
-      console.log("Surname must not be empty!");
+      this.openFailureSnackBar("Surname field is required!");
+      
+      return false;
       
     }
     if(this.city === ""){
-      console.log("City must not be empty!");
+      this.openFailureSnackBar("City field is required!");
+      return false;
 
     }
     if(this.phoneNumber === ""){
-      console.log("Phone number must not be empty!");
+      this.openFailureSnackBar("Phone number field is required!");
+      return false
 
 
     }
+    return true;
 
   }
 
@@ -74,19 +99,10 @@ export class SignUpModalComponent {
 
 
     }
-
     console.log(body);
 
     this.http.post<any>(this.registrationUrl,body,this.getHttpOptions()).subscribe();
-    console.log(this.registrationUrl);
-    if (this.http.post<any>(this.registrationUrl,body,this.getHttpOptions())){
-
-      console.log("Uspesna registracija!");
-
-    }
-    else{
-      console.log("Neuspesna registracija!");
-    }
+    this.openSuccessSnackBar("Registration successful!");
 
   }
 
@@ -102,9 +118,13 @@ export class SignUpModalComponent {
 
 
   userSignUp(){
-    this.validateInputData();
 
-    this.sendRegistrationRequest();
+    if (this.validateInputData()){
+
+      this.sendRegistrationRequest();
+      
+    }
+
 
 
   }
