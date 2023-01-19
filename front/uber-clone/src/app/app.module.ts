@@ -11,6 +11,7 @@ import { GuestModule } from './guest/guest.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from './services/auth/auth.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
       provide: MatDialogRef,
       useValue: {},
     },
+    AuthService
   ],
   bootstrap: [AppComponent],
 })

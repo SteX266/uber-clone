@@ -46,8 +46,6 @@ public class AuthentificationController {
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
 
-        System.out.println(authenticationRequest.getEmail());
-        System.out.println(authenticationRequest.getPassword());
         Authentication authentication;
         try{
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -55,7 +53,6 @@ public class AuthentificationController {
 
         }
         catch(AuthenticationException ae){
-            System.out.println("USAOOOOOOOOOO");
             return new ResponseEntity<>(new UserTokenState(), HttpStatus.NOT_FOUND);
         }
 
