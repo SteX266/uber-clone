@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import{HttpHeaders, HttpClient} from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {SocialAuthService, FacebookLoginProvider} from '@abacritt/angularx-social-login';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
+import { UserRegistrationRequest } from 'src/app/models/UserRegistrationRequest';
+
 
 @Component({
   selector: 'app-sign-up-modal',
@@ -18,24 +21,39 @@ export class SignUpModalComponent {
   city: string = '';
   phoneNumber: string = '';
 
+
   private readonly registrationUrl: string;
   
-  constructor(public dialogRef: MatDialogRef<SignUpModalComponent>,public snackBar:MatSnackBar,private http:HttpClient){
+  constructor(
+    private authService: AuthService,
+    private snackBarService:SnackBarService,
+    private socialAuthService:SocialAuthService,
+    public dialogRef: MatDialogRef<SignUpModalComponent>,
+    ){
     this.registrationUrl = "http://localhost:8080/auth/usersignup";
   }
 
-  openSuccessSnackBar(text: string){
-    this.snackBar.open(text, "Dismiss", {
-      duration: 3000,
-      panelClass: ['green-snackbar', 'login-snackbar'],
-     });
-    }
-    openFailureSnackBar(text: string){
-    this.snackBar.open(text, "Dismiss", {
-      duration: 3000,
-      panelClass: ['red-snackbar','login-snackbar'],
-      });
-     }
+  facebookLogin(){
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((res) =>{
+     
+      this.authService.socialLogin(res).subscribe({next:(value)=>{
+        if (value) {
+          this.snackBarService.openSuccessSnackBar('Login successful!');
+          console.log(value);
+          this.authService.saveToken("Bearer " + value.accessToken);
+          console.log(this.authService.getToken());
+        } else {
+          this.snackBarService.openFailureSnackBar('Wrong credentials! Try again.');
+        }
+
+      },error:(err)=>{
+        this.snackBarService.openFailureSnackBar('Wrong credentials! Try again.');
+      }});
+    })
+
+
+  }
+
 
   validateEmail(){
     return true;
@@ -43,41 +61,41 @@ export class SignUpModalComponent {
 
   validateInputData(){
     if (this.password !== this.repeatedPassword){
-      this.openFailureSnackBar("Passwords do not match!");
+      this.snackBarService.openFailureSnackBar("Passwords do not match!");
       return false;
     }
 
 
     if (!this.validateEmail()){
-      this.openFailureSnackBar("Email is not valid!");
+      this.snackBarService.openFailureSnackBar("Email is not valid!");
       return false;
     }
 
 
     if (this.password.length < 6){
-      this.openFailureSnackBar("Password must be at least 5 characters long");
+      this.snackBarService.openFailureSnackBar("Password must be at least 5 characters long");
       return false;      
       
     }
     if (this.name === ""){
-      this.openFailureSnackBar("Name field is required!");
+      this.snackBarService.openFailureSnackBar("Name field is required!");
 
       return false;
       
     }
     if (this.surname === ""){
-      this.openFailureSnackBar("Surname field is required!");
+      this.snackBarService.openFailureSnackBar("Surname field is required!");
       
       return false;
       
     }
     if(this.city === ""){
-      this.openFailureSnackBar("City field is required!");
+      this.snackBarService.openFailureSnackBar("City field is required!");
       return false;
 
     }
     if(this.phoneNumber === ""){
-      this.openFailureSnackBar("Phone number field is required!");
+      this.snackBarService.openFailureSnackBar("Phone number field is required!");
       return false
 
 
@@ -87,32 +105,20 @@ export class SignUpModalComponent {
   }
 
   sendRegistrationRequest(){
-    let body = {
-      "email":this.email,
-      "password":this.password,
-      "name":this.name,
-      "surname":this.surname,
-      "city":this.city,
-      "phoneNumber":this.phoneNumber,
-      "userType":"client"
+    
+    let userRequest = new UserRegistrationRequest(this.email, this.name, this.surname, this.city, this.password, this.phoneNumber, "client");
+    this.authService.sendRegistrationRequest(userRequest).subscribe({next:(value) => {
+      if (value) {
+        this.snackBarService.openSuccessSnackBar('Registration successful! Check your mailbox to activate account.');
+        this.authService.saveToken("Bearer " + value.accessToken);
+        console.log(this.authService.getToken());
 
-
-    }
-    console.log(body);
-
-    this.http.post<any>(this.registrationUrl,body,this.getHttpOptions()).subscribe();
-    this.openSuccessSnackBar("Registration successful!");
-
-  }
-
-  getHttpOptions(){
-    return {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type':  'application/json',
-      })
-    };
-
+      } else {
+        this.snackBarService.openFailureSnackBar('Error! Try again.');
+      }
+    },error:(err)=>{
+      this.snackBarService.openFailureSnackBar('Error! Try again.');
+    }})
   }
 
 
@@ -123,8 +129,5 @@ export class SignUpModalComponent {
       this.sendRegistrationRequest();
       
     }
-
-
-
   }
 }

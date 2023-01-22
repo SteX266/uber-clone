@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserCredentials } from 'src/app/models/UserCredentials';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
+import {GoogleLoginProvider, SocialAuthService, FacebookLoginProvider} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -18,17 +18,46 @@ export class SignInModalComponent {
   
   constructor(
     public dialogRef: MatDialogRef<SignInModalComponent>,
-    public snackBar: MatSnackBar,
     private authService: AuthService,
-    private snackBarService:SnackBarService
+    private snackBarService:SnackBarService,
+    private socialAuthService:SocialAuthService
   ) { }
 
+  facebookLogin(){
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((res) =>{
+     
+      this.authService.socialLogin(res).subscribe({next:(value)=>{
+        if (value) {
+          this.snackBarService.openSuccessSnackBar('Login successful!');
+          console.log(value);
+          this.authService.saveToken("Bearer " + value.accessToken);
+          console.log(this.authService.getToken());
+        } else {
+          this.snackBarService.openFailureSnackBar('Wrong credentials! Try again.');
+        }
+
+      },error:(err)=>{
+        this.snackBarService.openFailureSnackBar('Wrong credentials! Try again.');
+      }});
+    })
+
+
+  }
+
+  googleLogin(){
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(() =>{
+      console.log("GUGUL");
+
+    })
+  }
 
   login() {
     this.authService.sendLoginRequest(new UserCredentials(this.email, this.password)).subscribe({next:(value) => {
       if (value) {
         this.snackBarService.openSuccessSnackBar('Login successful!');
-        this.authService.saveToken("Bearer " + value.auth.token.accessToken);
+        this.authService.saveToken("Bearer " + value.accessToken);
+        console.log(this.authService.getToken());
+
       } else {
         this.snackBarService.openFailureSnackBar('Wrong credentials! Try again.');
       }
