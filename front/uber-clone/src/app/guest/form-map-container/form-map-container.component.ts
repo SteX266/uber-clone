@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SignInModalComponent } from '../sign-in-modal/sign-in-modal.component';
 import { SignUpModalComponent } from '../sign-up-modal/sign-up-modal.component';
 
@@ -20,7 +20,7 @@ export class FormMapContainerComponent {
 
   constructor(public dialog: MatDialog) {}
 
-  openDialog(
+  openSignUpDialog(
     enterAnimationDuration: string,
     exitAnimationDuration: string
   ): void {
@@ -31,7 +31,7 @@ export class FormMapContainerComponent {
     });
   }
 
-  openLoginDialog(
+  openSignInDialog(
     enterAnimationDuration: string,
     exitAnimationDuration: string
   ): void {

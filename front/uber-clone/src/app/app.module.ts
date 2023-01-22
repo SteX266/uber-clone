@@ -12,6 +12,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from './services/auth/auth.service';
+import { SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
+import { FacebookLoginProvider, GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,12 +27,36 @@ import { AuthService } from './services/auth/auth.service';
     GuestModule,
     MatSnackBarModule,
     BrowserAnimationsModule,
+    SocialLoginModule,
   ],
   providers: [
     MapSearchService,
     {
       provide: MatDialogRef,
       useValue: {},
+    },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue:{
+        autoLogin:false,
+        providers:[
+          {
+            id:FacebookLoginProvider.PROVIDER_ID,
+            provider:new FacebookLoginProvider("518524193712114")
+          },
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '191262979102-176eepve2drkqg8bllce1dv3996mjf1o.apps.googleusercontent.com',
+
+            ),
+          },
+        ],
+        onError:(err) =>{
+          console.log(err);
+        }
+      } as SocialAuthServiceConfig
+
     },
     AuthService
   ],

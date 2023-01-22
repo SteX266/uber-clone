@@ -1,5 +1,6 @@
 package com.backend.uberclone.controller;
 
+import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserCredentialsDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.dto.UserTokenState;
@@ -37,6 +38,31 @@ public class AuthentificationController {
 
     @Autowired
     private EmailService emailService;
+
+
+    @PostMapping("/loginSocial")
+    public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody SocialUserCredentialsDTO socialUserCredentialsDTO){
+        System.out.println("EMAIIASLSGLALAS");
+        System.out.println(socialUserCredentialsDTO.getEmail());
+        User user = userService.findByUsername(socialUserCredentialsDTO.getEmail());
+
+        if(user == null){
+            user = userService.saveSocialUser(socialUserCredentialsDTO);
+        }
+        if (!user.isEnabled()){
+            return new ResponseEntity<>(new UserTokenState(), HttpStatus.NOT_FOUND);
+
+        }
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,user.getRoles());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenUtils.generateToken(user.getUsername());
+        int expiresIn = tokenUtils.getExpiredIn();
+        String role = user.getRoles().get(0).getName();
+        System.out.println("ULOGOVAN" + user.getUsername());
+
+        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
+    }
 
 
     @PostMapping("/login")

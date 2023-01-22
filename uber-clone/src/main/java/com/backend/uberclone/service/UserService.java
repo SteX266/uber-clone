@@ -1,6 +1,7 @@
 package com.backend.uberclone.service;
 
 
+import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.Role;
 import com.backend.uberclone.model.User;
@@ -26,6 +27,19 @@ public class UserService {
 
     public User findByUsername(String email) {
         return userRepository.findOneByEmail(email);
+
+    }
+
+    public User saveSocialUser(SocialUserCredentialsDTO userRequest){
+        User u = new User();
+        u.setEmail(userRequest.getEmail());
+        u.setName(userRequest.getFirstName());
+        u.setSurname(userRequest.getLastName());
+        u.setEnabled(true);
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.findOneById(1));
+        u.setRoles(roles);
+        return this.userRepository.save(u);
 
     }
 
