@@ -21,6 +21,7 @@ public class ProfileController {
 
     @GetMapping(value = "/getProfileInfo/{id}")
     public ResponseEntity<UserDTO> getProfileInfo(@PathVariable("id") String id){
+        System.out.println("USAOO SAM BRAPOOOOO");
             return new ResponseEntity<>(profileService.getUserById(Integer.valueOf(id)), HttpStatus.OK);
     }
 
