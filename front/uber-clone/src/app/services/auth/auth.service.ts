@@ -28,7 +28,21 @@ export class AuthService {
 
     
    }
+  
+  public saveCurrentUserEmail(email:string){
+    localStorage.setItem("currentUserEmail", email);
+  }
 
+  public saveCurrentUserId(id:string){
+    localStorage.setItem("currentUserId", id);
+  }
+  public getCurrentUserEmail():string{
+    return localStorage.getItem("currentUserEmail") || "";
+  }
+
+  public getCurrentUserId():string{
+    return localStorage.getItem("currentUserId") || "";
+  }
   public saveToken(token: string):void{
     try{
       localStorage.setItem('token', token);

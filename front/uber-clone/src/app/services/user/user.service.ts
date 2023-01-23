@@ -9,6 +9,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class UserService {
+
+  private readonly changePasswordUrl:string;
+
   updateCar(car: Vehicle) {
     throw new Error('Method not implemented.');
   }
@@ -46,5 +49,17 @@ export class UserService {
 
 
   }
-  constructor(private http: HttpClient, private authService:AuthService) {}
+
+  sendChangePasswordRequest(id:string, oldPassword:string, newPassword:string){
+    let body = {
+      "userId":id,
+      "oldPassword":oldPassword,
+      "newPassword":newPassword
+    }
+    return this.http.post<any>(this.changePasswordUrl, body, this.authService.getHttpOptionsWithToken());
+
+  }
+  constructor(private http: HttpClient, private authService:AuthService) {
+    this.changePasswordUrl = environment.apiEndpoint + "profile/changePassword";
+  }
 }

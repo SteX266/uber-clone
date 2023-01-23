@@ -5,6 +5,7 @@ import { UserCredentials } from 'src/app/models/UserCredentials';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import {GoogleLoginProvider, SocialAuthService, FacebookLoginProvider} from '@abacritt/angularx-social-login';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -56,6 +57,8 @@ export class SignInModalComponent {
       if (value) {
         this.snackBarService.openSuccessSnackBar('Login successful!');
         this.authService.saveToken("Bearer " + value.accessToken);
+        this.authService.saveCurrentUserEmail(value.email);
+        this.authService.saveCurrentUserId(value.id);
         console.log(this.authService.getToken());
 
       } else {

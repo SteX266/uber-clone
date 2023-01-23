@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -51,6 +53,17 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(newPassword));
         user.setResetPasswordToken(null);
         userRepository.save(user);
+    }
+
+    public boolean changePassword(User user, String newPassword, String oldPassword){
+        if (passwordEncoder.matches(oldPassword,user.getPassword())){
+            String newHashedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(newHashedPassword);
+            user.setLastPasswordResetDate(new Timestamp(new Date().getTime()));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
     public User saveSocialUser(SocialUserCredentialsDTO userRequest){
         User u = new Customer();

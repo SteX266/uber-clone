@@ -96,7 +96,7 @@ public class AuthentificationController {
         String role = user.getRoles().get(0).getName();
         System.out.println("ULOGOVAN" + user.getUsername());
 
-        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
+        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);
     }
 
 
@@ -131,7 +131,7 @@ public class AuthentificationController {
 
         String role = user.getRoles().get(0).getName();
         // Vrati token kao odgovor na uspesnu autentifikaciju
-        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
+        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);
     }
 
 
