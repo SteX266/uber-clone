@@ -11,7 +11,8 @@ import { MapSmallComponent } from './map-small/map-small.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-
+import { MatInputModule } from '@angular/material/input';
+import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -23,7 +24,14 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     HeaderComponent,
     FooterComponent,
   ],
-  imports: [CommonModule, ModelModule, FormsModule, LeafletModule],
+  imports: [
+    RouterModule,
+    CommonModule,
+    ModelModule,
+    FormsModule,
+    LeafletModule,
+    MatInputModule,
+  ],
   exports: [HomePageComponent],
 })
 export class GuestModule {}
