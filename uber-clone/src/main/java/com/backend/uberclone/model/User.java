@@ -35,6 +35,9 @@ public abstract class User implements UserDetails {
     private Timestamp lastPasswordResetDate;
 
     @Column
+    private String resetPasswordToken;
+
+    @Column
     private String name;
 
     @Column

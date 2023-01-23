@@ -11,9 +11,12 @@ import { MapSmallComponent } from './map-small/map-small.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../services/user/user.service';
+
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -24,6 +27,8 @@ import { UserService } from '../services/user/user.service';
     MapSmallComponent,
     HeaderComponent,
     FooterComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     RouterModule,

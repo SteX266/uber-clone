@@ -1,14 +1,12 @@
 package com.backend.uberclone.controller;
 
-import com.backend.uberclone.dto.SocialUserCredentialsDTO;
-import com.backend.uberclone.dto.UserCredentialsDTO;
-import com.backend.uberclone.dto.UserRequest;
-import com.backend.uberclone.dto.UserTokenState;
+import com.backend.uberclone.dto.*;
 import com.backend.uberclone.exception.ResourceConflictException;
 import com.backend.uberclone.model.User;
 import com.backend.uberclone.service.EmailService;
 import com.backend.uberclone.service.UserService;
 import com.backend.uberclone.util.TokenUtils;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +15,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -40,6 +41,34 @@ public class AuthentificationController {
     private EmailService emailService;
 
 
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<SuccessResponseDTO> processForgotPassword(@RequestBody ForgotPasswordRequestDTO request){
+        System.out.println(request.getEmail());
+
+
+        String token = RandomString.make(30);
+
+        try {
+            userService.updateResetPasswordToken(token, request.getEmail());
+            String resetPasswordLink =  "http://localhost:4200/reset_password?token=" + token;
+            emailService.sendResetPasswordEmail(request.getEmail(),resetPasswordLink);
+
+        } catch (UsernameNotFoundException ex) {
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+
+
+
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> processResetPassword(){
+
+        return new ResponseEntity<>("Neuspesna aktivacija!", HttpStatus.NOT_FOUND);
+
+    }
     @PostMapping("/loginSocial")
     public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody SocialUserCredentialsDTO socialUserCredentialsDTO){
         System.out.println("EMAIIASLSGLALAS");
