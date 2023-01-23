@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class UserProfileComponent {
   selectedId = 0;
-  user!: UserProfileInfo;
+  user = new UserProfileInfo(0,"","","","","","","");
   constructor(
     private route: ActivatedRoute,
     private userService: UserService

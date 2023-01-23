@@ -25,7 +25,7 @@ export class AuthService {
     
    }
 
-  saveToken(token: string):void{
+  public saveToken(token: string):void{
     try{
       localStorage.setItem('token', token);
     }
@@ -33,7 +33,7 @@ export class AuthService {
       console.error(err);
     }
   }
-  getToken():string {
+  public getToken():string {
     try {
       const token = localStorage.getItem('token');
       if (token === null) {
@@ -61,6 +61,16 @@ export class AuthService {
       })
     };
 
+  }
+
+  public getHttpOptionsWithToken(){
+    return {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': this.getToken(),
+        'Content-Type': 'application/json',
+      })
+    };
   }
 
   sendLoginRequest(credentials:UserCredentials): Observable<any> {

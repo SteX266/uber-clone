@@ -3,6 +3,8 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserRequest;
+import com.backend.uberclone.model.Customer;
+import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Role;
 import com.backend.uberclone.model.User;
 import com.backend.uberclone.repository.RoleRepository;
@@ -31,7 +33,7 @@ public class UserService {
     }
 
     public User saveSocialUser(SocialUserCredentialsDTO userRequest){
-        User u = new User();
+        User u = new Customer();
         u.setEmail(userRequest.getEmail());
         u.setName(userRequest.getFirstName());
         u.setSurname(userRequest.getLastName());
@@ -39,12 +41,34 @@ public class UserService {
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findOneById(1));
         u.setRoles(roles);
+        u.setId(this.generateNextId());
+
         return this.userRepository.save(u);
 
     }
 
+    public Integer generateNextId(){
+        Integer id = 0;
+        List<User> users = userRepository.findAll();
+        int numberOfUsers = users.size();
+        if ( numberOfUsers == 0){
+            id = 1;
+        }
+        else{
+            id = users.get(numberOfUsers - 1).getId() + 1;
+        }
+        System.out.println("SLEDECI ID JE" + id);
+
+        return id;
+    }
     public User save(UserRequest userRequest) {
-        User u = new User();
+        User u;
+        if (userRequest.getUserType().equals("client")){
+            u = new Customer();
+        }
+        else{
+            u = new Driver();
+        }
         u.setEmail(userRequest.getEmail());
 
         // pre nego sto postavimo lozinku u atribut hesiramo je kako bi se u bazi nalazila hesirana lozinka
@@ -59,9 +83,17 @@ public class UserService {
         u.setCity(userRequest.getCity());
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         List<Role> roles = new ArrayList<>();
-
-        roles.add(roleRepository.findOneById(1));
+        if(userRequest.getUserType().equals("client")){
+            roles.add(roleRepository.findOneById(2));
+        }
+        else if(userRequest.getUserType().equals("driver")){
+            roles.add(roleRepository.findOneById(3));
+        }
+        else{
+            roles.add(roleRepository.findOneById(1));
+        }
         u.setRoles(roles);
+        u.setId(this.generateNextId());
 
         return this.userRepository.save(u);
     }
