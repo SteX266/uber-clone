@@ -16,11 +16,13 @@ export class AuthService {
   private readonly signUpUrl: string;
   private readonly loginSocialUrl:string;
   private readonly registrationUrl:string;
+  private readonly forgotPasswordUrl:string;
   constructor(private http: HttpClient) {
       this.loginUrl = environment.apiEndpoint + 'auth/login';
       this.signUpUrl = environment.apiEndpoint + 'auth/usersignup';
       this.loginSocialUrl = environment.apiEndpoint + 'auth/loginSocial';
       this.registrationUrl = environment.apiEndpoint + "auth/usersignup";
+      this.forgotPasswordUrl = environment.apiEndpoint + "auth/forgotPassword";
 
     
    }
@@ -99,6 +101,13 @@ export class AuthService {
 
     return this.http.post<any>(this.registrationUrl,body,this.getHttpOptions());
 
+  }
+
+  sendForgotPasswordRequest(email:string):Observable<string>{
+    let body = {
+      "email":email
+    }
+    return this.http.post<any>(this.forgotPasswordUrl, body, this.getHttpOptions());
   }
 
 
