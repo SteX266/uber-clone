@@ -59,8 +59,15 @@ public class UserService {
         u.setCity(userRequest.getCity());
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         List<Role> roles = new ArrayList<>();
-
-        roles.add(roleRepository.findOneById(1));
+        if(userRequest.getUserType().equals("client")){
+            roles.add(roleRepository.findOneById(2));
+        }
+        else if(userRequest.getUserType().equals("driver")){
+            roles.add(roleRepository.findOneById(3));
+        }
+        else{
+            roles.add(roleRepository.findOneById(1));
+        }
         u.setRoles(roles);
 
         return this.userRepository.save(u);

@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
+import { AuthService } from '../auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,18 +13,31 @@ export class UserService {
   }
   profileInfoUrl = 'http://localhost:8080/profile/getProfileInfo';
   getUserById(idNumber: number) {
-    let user = new UserProfileInfo();
-    user.id = 1;
-    user.email = 'vanjas@gmail.com';
-    user.name = 'Vanja';
-    user.surname = 'Serfeze';
-    user.city = 'Zrenjanin';
-    user.phoneNumber = '0665241322';
-    user.profilePicture =
-      'https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg';
-    user.role = 'client';
+
+    let user = new UserProfileInfo(0,"","","","","","","");
+    
+    
+    this.sendGetUserRequest(idNumber).subscribe({next:(val)=>{
+      console.log(val);
+      user.city = val.city;
+      user.email = val.email;
+      user.id = idNumber;
+      user.name = val.name;
+      user.surname = val.surname;
+      user.phoneNumber = val.phoneNumber;
+      user.profilePicture = val.profilePicture;
+      user.role = val.role;
+    }});
+
+    console.log(user);
     return user;
   }
 
-  constructor(private http: HttpClient) {}
+  sendGetUserRequest(id:number){
+    return this.http.get<UserProfileInfo>(environment.apiEndpoint + "profile/getProfileInfo/" + id, this.authService.getHttpOptionsWithToken());
+
+
+
+  }
+  constructor(private http: HttpClient, private authService:AuthService) {}
 }

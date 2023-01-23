@@ -78,17 +78,18 @@ VALUES (13, false, 'Novi Sad', false, 'uspavanalepotica@gmail.com', true, null,'
 
 INSERT INTO public.role(
     id, name)
-VALUES (1, 'ROLE_ADMIN');
+VALUES (1, 'ADMIN');
 
 INSERT INTO public.role(
     id, name)
-VALUES (2, 'ROLE_CUSTOMER');
+VALUES (2, 'CLIENT');
 
 INSERT INTO public.role(
     id, name)
 VALUES (3, 'DRIVER');
 
 
+/*
 
 INSERT INTO public.user_role(
     user_id, role_id)
@@ -135,7 +136,7 @@ VALUES (13, 3);
 
 
 
-
+*/
 
 
 INSERT INTO public.message(
