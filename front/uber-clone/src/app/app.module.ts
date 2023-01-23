@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { MapSearchService } from './services/map-search.service';
+import { MapSearchService } from './services/map-search/map-search.service';
 import { GuestModule } from './guest/guest.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,12 +22,13 @@ import {
 import { ClientModule } from './client/client.module';
 import { SharedModule } from './shared/shared.module';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { DriverModule } from './driver/driver.module';
 
 @NgModule({
   declarations: [AppComponent, NotFoundComponent],
   imports: [
     BrowserModule,
-
+    DriverModule,
     FormsModule,
     LeafletModule,
     HttpClientModule,

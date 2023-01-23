@@ -1,23 +1,31 @@
 <div class="card-body">
   <div class="d-flex flex-column align-items-center text-center">
-    <img
-      src="{{ user.profilePicture }}"
-      alt=".."
-      class="rounded-circle"
-      width="150"
-    />
-    <div class="mt-3">
-      <h4>{{ user.name + " " + user.surname }}</h4>
-      <p class="text-secondary mb-1">{{ user.email }}</p>
-      <p class="text-muted font-size-sm">
-        {{ user.phoneNumber }}
-      </p>
-      <p class="text-muted font-size-sm">
-        {{ user.city }}
-      </p>
-      <p class="text-muted font-size-sm">
-        {{ user.role.toUpperCase() }}
-      </p>
+    <div class="row">
+      <div>
+        <div class="section-title">
+          <h2>{{ user.role.toUpperCase() }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="d-flex flex-column align-items-center text-center">
+        <img
+          src="{{ user.profilePicture }}"
+          alt=".."
+          class="rounded-circle"
+          width="150"
+        />
+        <div class="mt-3">
+          <h4>{{ user.name + " " + user.surname }}</h4>
+          <p class="text-secondary mb-1">{{ user.email }}</p>
+          <p class="text-secondary mb-1">
+            {{ user.phoneNumber }}
+          </p>
+          <p class="text-secondary mb-1">
+            {{ user.city }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

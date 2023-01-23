@@ -5,10 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './edit-client-profile.component.html',
   styleUrls: ['./edit-client-profile.component.scss'],
 })
-export class EditClientProfileComponent {
-  edit = 'personal';
-
-  editClick(update: string) {
-    this.edit = update;
-  }
-}
+export class EditClientProfileComponent {}

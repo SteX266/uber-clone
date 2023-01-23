@@ -13,6 +13,7 @@ import { FooterComponent } from './footer/footer.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
+import { UserService } from '../services/user/user.service';
 @NgModule({
   declarations: [
     HomePageComponent,

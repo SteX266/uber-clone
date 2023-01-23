@@ -20,7 +20,6 @@ export class UserProfileComponent {
     this.route.params.subscribe((params) => {
       this.selectedId = Number(params['id']);
       this.user = this.userService.getUserById(this.selectedId);
-      console.log(this.user.email);
     });
   }
 }

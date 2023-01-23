@@ -1,11 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Vehicle } from 'src/app/models/car';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  updateCar(car: Vehicle) {
+    throw new Error('Method not implemented.');
+  }
+  getCarByUserId(selectedId: number): Vehicle {
+    return new Vehicle();
+  }
   updateUser(user: UserProfileInfo) {
     console.log(user);
   }
