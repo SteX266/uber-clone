@@ -19,11 +19,11 @@ export class ForgotPasswordComponent {
         }
         else{
 
-          this.snackBarService.openFailureSnackBar("Error! ovdije sam");
+          this.snackBarService.openFailureSnackBar("Error!");
         }
     },error:(err) =>{
       console.log(err);
-      this.snackBarService.openFailureSnackBar("Error! ipak sam ovdije" + err);
+      this.snackBarService.openFailureSnackBar("Error! User doesn't exist!" + err);
     }});
   }
 }

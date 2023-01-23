@@ -64,10 +64,16 @@ public class AuthentificationController {
     }
 
     @PostMapping("/resetPassword")
-    public ResponseEntity<String> processResetPassword(){
+    public ResponseEntity<SuccessResponseDTO> processResetPassword(@RequestBody ResetPasswordDTO resetPasswordRequest){
+        User user = userService.getByResetPasswordToken(resetPasswordRequest.getToken());
 
-        return new ResponseEntity<>("Neuspesna aktivacija!", HttpStatus.NOT_FOUND);
+        if (user == null) {
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
 
+        } else {
+            userService.updatePassword(user, resetPasswordRequest.getNewPassword());
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+        }
     }
     @PostMapping("/loginSocial")
     public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody SocialUserCredentialsDTO socialUserCredentialsDTO){

@@ -17,12 +17,14 @@ export class AuthService {
   private readonly loginSocialUrl:string;
   private readonly registrationUrl:string;
   private readonly forgotPasswordUrl:string;
+  private readonly resetPasswordUrl:string;
   constructor(private http: HttpClient) {
       this.loginUrl = environment.apiEndpoint + 'auth/login';
       this.signUpUrl = environment.apiEndpoint + 'auth/usersignup';
       this.loginSocialUrl = environment.apiEndpoint + 'auth/loginSocial';
       this.registrationUrl = environment.apiEndpoint + "auth/usersignup";
       this.forgotPasswordUrl = environment.apiEndpoint + "auth/forgotPassword";
+      this.resetPasswordUrl = environment.apiEndpoint + "auth/resetPassword";
 
     
    }
@@ -120,6 +122,14 @@ export class AuthService {
     return this.http.post<any>(this.forgotPasswordUrl, body, this.getHttpOptions());
   }
 
+  sendResetPasswordRequest(token:string, newPassword:string):Observable<string>{
+    let body = {
+      "token":token,
+      "newPassword":newPassword
+    }
+
+    return this.http.post<any>(this.resetPasswordUrl, body, this.getHttpOptions());
+  }
 
 
 }
