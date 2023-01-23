@@ -1,2 +1,15 @@
-package com.backend.uberclone.dto;public class ForgotPasswordRequestDTO {
+package com.backend.uberclone.dto;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ForgotPasswordRequestDTO {
+    private String email;
 }

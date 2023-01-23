@@ -13,4 +13,6 @@ public interface UserRepository<T extends User> extends JpaRepository<T, Integer
     User findUserByEmailAndBannedFalseAndEnabledTrueAndDeletedFalse(String email);
 
     User findOneByEmail(String email);
+
+    User findByResetPasswordToken(String token);
 }
