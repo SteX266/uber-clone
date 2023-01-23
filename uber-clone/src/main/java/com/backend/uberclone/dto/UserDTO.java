@@ -22,6 +22,8 @@ public class UserDTO {
 
     private String profilePicture;
 
+    private String role;
+
     public UserDTO(User u){
         email = u.getEmail();
         name = u.getName();
@@ -29,6 +31,7 @@ public class UserDTO {
         city = u.getCity();
         phoneNumber = u.getPhoneNumber();
         profilePicture = u.getProfilePicture();
+        role = "client";
     }
 }
 

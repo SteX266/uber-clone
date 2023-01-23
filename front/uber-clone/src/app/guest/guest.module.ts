@@ -13,6 +13,10 @@ import { FooterComponent } from './footer/footer.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { MatInputModule } from '@angular/material/input';
+import { RouterModule } from '@angular/router';
+import { UserService } from '../services/user/user.service';
+
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -26,7 +30,14 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ForgotPasswordComponent,
     ResetPasswordComponent,
   ],
-  imports: [CommonModule, ModelModule, FormsModule, LeafletModule],
+  imports: [
+    RouterModule,
+    CommonModule,
+    ModelModule,
+    FormsModule,
+    LeafletModule,
+    MatInputModule,
+  ],
   exports: [HomePageComponent],
 })
 export class GuestModule {}

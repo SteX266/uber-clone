@@ -19,10 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity(name="user_table")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User implements UserDetails {
+public abstract class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer id;
 
     @Column

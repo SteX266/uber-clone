@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="main-body">
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <app-user-profile> </app-user-profile>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div>
+            <div>
+              <div class="card h-100">
+                <div class="card-body">
+                  <container-element [ngSwitch]="userType">
+                    <app-edit-client-profile
+                      *ngSwitchCase="'current-client'"
+                    ></app-edit-client-profile>
+                    <app-edit-driver-profile
+                      *ngSwitchCase="'current-driver'"
+                    ></app-edit-driver-profile>
+                    <h1 *ngSwitchCase="'other-client'">Othet client Page</h1>
+                    <h1 *ngSwitchCase="'other-driver'">Other Driver Page</h1>
+                    <h1 *ngSwitchCase="'client'">client Page</h1>
+                    <h1 *ngSwitchCase="'driver'">Driver Page</h1>
+                  </container-element>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
