@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { MapPoint } from '../models/map-point.model';
+import { MapPoint } from '../../models/map-point.model';
 @Injectable({
   providedIn: 'root',
 })

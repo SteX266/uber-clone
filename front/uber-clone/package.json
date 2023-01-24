@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@abacritt/angularx-social-login": "^1.2.5",
     "@angular/animations": "^15.0.0",
     "@angular/common": "^15.0.0",
     "@angular/compiler": "^15.0.0",
@@ -20,12 +21,9 @@
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "@asymmetrik/ngx-leaflet": "^15.0.1",
-    "@mapbox/polyline": "^1.1.1",
     "bootstrap": "^5.2.3",
     "font-awesome": "^4.7.0",
     "leaflet": "^1.9.3",
-    "leaflet-routing-machine": "^3.2.12",
-    "polyline": "^0.2.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

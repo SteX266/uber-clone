@@ -1,0 +1,114 @@
+<div class="main-body">
+  <div class="row gutters-sm">
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <app-user-profile> </app-user-profile>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card mb-3">
+        <div>
+          <div>
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-12">
+                      <!-- Form START -->
+                      <form
+                        #editProfileForm="ngForm"
+                        class="file-upload"
+                        (ngSubmit)="submitProfileChanges()"
+                      >
+                        <div class="row mb-5 gx-5">
+                          <!-- Contact detail -->
+                          <div>
+                            <div class="bg-secondary-soft px-4 py-5 rounded">
+                              <div class="row g-3">
+                                <h4 class="mb-4 mt-0">Contact detail</h4>
+                                <!-- First Name -->
+                                <div class="col-md-6">
+                                  <label class="form-label">First Name *</label>
+                                  <input
+                                    required
+                                    type="text"
+                                    class="form-control"
+                                    placeholder=""
+                                    aria-label="First name"
+                                    [(ngModel)]="user.name"
+                                    name="name"
+                                  />
+                                </div>
+                                <!-- Last name -->
+                                <div class="col-md-6 form-group">
+                                  <label class="form-label">Last Name *</label>
+                                  <input
+                                    required
+                                    type="text"
+                                    class="form-control"
+                                    placeholder=""
+                                    aria-label="Last name"
+                                    [(ngModel)]="user.surname"
+                                    name="surname"
+                                  />
+                                </div>
+                                <!-- Phone number -->
+                                <div class="col-md-6">
+                                  <label class="form-label"
+                                    >Phone number *</label
+                                  >
+                                  <input
+                                    required
+                                    type="tel"
+                                    class="form-control"
+                                    placeholder=""
+                                    aria-label="Phone number"
+                                    [(ngModel)]="user.phoneNumber"
+                                    name="phone"
+                                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]+"
+                                  />
+                                </div>
+                                <!-- City -->
+                                <div class="col-md-6">
+                                  <label class="form-label">City *</label>
+                                  <input
+                                    required
+                                    type="text"
+                                    class="form-control"
+                                    placeholder=""
+                                    aria-label="Phone number"
+                                    [(ngModel)]="user.city"
+                                    name="city"
+                                  />
+                                </div>
+                              </div>
+                              <!-- Row END -->
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="gap-3 d-md-flex justify-content text-center"
+                        >
+                          <button
+                            type="button"
+                            class="btn btn-danger-soft btn-lg"
+                            (click)="back()"
+                          >
+                            Cancel
+                          </button>
+                          <button type="submit" class="btn btn-dark btn-lg">
+                            Update profile
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

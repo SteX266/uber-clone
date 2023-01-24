@@ -7,19 +7,11 @@ import {
   Map,
   icon,
   marker,
-  Marker,
   MapOptions,
-  TileLayer,
   Icon,
-  Polyline,
-  polyline,
-  control,
-  Control,
-  LatLng,
   geoJSON,
-  LeafletMouseEvent,
 } from 'leaflet';
-import { MapSearchService } from 'src/app/services/map-search.service';
+import { MapSearchService } from 'src/app/services/map-search/map-search.service';
 import { MapPoint } from '../../models/map-point.model';
 @Component({
   selector: 'app-map-small',

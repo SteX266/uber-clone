@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-
-
+import { RouterModule } from '@angular/router';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { RideCardComponent } from './ride-card/ride-card.component';
+import { BrowserModule } from '@angular/platform-browser';
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  declarations: [UserProfileComponent, RideCardComponent],
+  imports: [RouterModule, BrowserModule],
+  exports: [UserProfileComponent, RideCardComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

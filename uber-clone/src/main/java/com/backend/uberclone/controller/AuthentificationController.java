@@ -1,13 +1,12 @@
 package com.backend.uberclone.controller;
 
-import com.backend.uberclone.dto.UserCredentialsDTO;
-import com.backend.uberclone.dto.UserRequest;
-import com.backend.uberclone.dto.UserTokenState;
+import com.backend.uberclone.dto.*;
 import com.backend.uberclone.exception.ResourceConflictException;
 import com.backend.uberclone.model.User;
 import com.backend.uberclone.service.EmailService;
 import com.backend.uberclone.service.UserService;
 import com.backend.uberclone.util.TokenUtils;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +15,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -39,6 +41,65 @@ public class AuthentificationController {
     private EmailService emailService;
 
 
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<SuccessResponseDTO> processForgotPassword(@RequestBody ForgotPasswordRequestDTO request){
+        System.out.println(request.getEmail());
+
+
+        String token = RandomString.make(30);
+
+        try {
+            userService.updateResetPasswordToken(token, request.getEmail());
+            String resetPasswordLink =  "http://localhost:4200/reset_password?token=" + token;
+            emailService.sendResetPasswordEmail(request.getEmail(),resetPasswordLink);
+
+        } catch (UsernameNotFoundException ex) {
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+
+
+
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<SuccessResponseDTO> processResetPassword(@RequestBody ResetPasswordDTO resetPasswordRequest){
+        User user = userService.getByResetPasswordToken(resetPasswordRequest.getToken());
+
+        if (user == null) {
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+
+        } else {
+            userService.updatePassword(user, resetPasswordRequest.getNewPassword());
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+        }
+    }
+    @PostMapping("/loginSocial")
+    public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody SocialUserCredentialsDTO socialUserCredentialsDTO){
+        System.out.println("EMAIIASLSGLALAS");
+        System.out.println(socialUserCredentialsDTO.getEmail());
+        User user = userService.findByUsername(socialUserCredentialsDTO.getEmail());
+
+        if(user == null){
+            user = userService.saveSocialUser(socialUserCredentialsDTO);
+        }
+        if (!user.isEnabled()){
+            return new ResponseEntity<>(new UserTokenState(), HttpStatus.NOT_FOUND);
+
+        }
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,user.getRoles());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenUtils.generateToken(user.getUsername());
+        int expiresIn = tokenUtils.getExpiredIn();
+        String role = user.getRoles().get(0).getName();
+        System.out.println("ULOGOVAN" + user.getUsername());
+
+        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);
+    }
+
+
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(
             @RequestBody UserCredentialsDTO authenticationRequest, HttpServletResponse response) {
@@ -46,8 +107,6 @@ public class AuthentificationController {
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
 
-        System.out.println(authenticationRequest.getEmail());
-        System.out.println(authenticationRequest.getPassword());
         Authentication authentication;
         try{
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -55,7 +114,6 @@ public class AuthentificationController {
 
         }
         catch(AuthenticationException ae){
-            System.out.println("USAOOOOOOOOOO");
             return new ResponseEntity<>(new UserTokenState(), HttpStatus.NOT_FOUND);
         }
 
@@ -73,7 +131,7 @@ public class AuthentificationController {
 
         String role = user.getRoles().get(0).getName();
         // Vrati token kao odgovor na uspesnu autentifikaciju
-        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
+        return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);
     }
 
 

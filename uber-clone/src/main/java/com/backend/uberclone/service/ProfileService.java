@@ -15,9 +15,12 @@ public class ProfileService {
         this.userRepository = userRepository;
     }
 
-    public UserDTO getProfileInfo(String email) {
+    public UserDTO getUserByEmail(String email) {
         return new UserDTO(userRepository.findUserByEmailAndBannedFalseAndEnabledTrueAndDeletedFalse(email));
     }
 
+    public UserDTO getUserById(Integer id){
+        return new UserDTO(userRepository.findOneById(id));
+    }
 
 }

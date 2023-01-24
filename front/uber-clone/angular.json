@@ -34,8 +34,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "./node_modules/leaflet/dist/leaflet.css",
-              "./node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css"
+              "./node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           },
@@ -108,5 +107,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "5e023b45-997f-4648-a71e-49804d55b28c"
   }
 }

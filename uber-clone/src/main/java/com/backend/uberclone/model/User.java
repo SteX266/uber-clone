@@ -19,10 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity(name="user_table")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User implements UserDetails {
+public abstract class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer id;
 
     @Column
@@ -34,6 +33,9 @@ public class User implements UserDetails {
 
     @Column(name="last_password_reset_date")
     private Timestamp lastPasswordResetDate;
+
+    @Column
+    private String resetPasswordToken;
 
     @Column
     private String name;
