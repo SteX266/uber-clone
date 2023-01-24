@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { delay } from 'rxjs';
 import { MapPoint } from 'src/app/models/map-point.model';
 import { MapSearchService } from 'src/app/services/map-search.service';
 
@@ -7,63 +8,49 @@ import { MapSearchService } from 'src/app/services/map-search.service';
   templateUrl: './geocoding.component.html',
   styleUrls: ['./geocoding.component.scss'],
 })
-export class GeocodingComponent implements OnInit {
+export class GeocodingComponent {
   constructor(private mapSearchService: MapSearchService) {}
-  ngOnInit(): void {
-    this.resultsStart = new Array<MapPoint>();
-    this.resultsDest = new Array<MapPoint>();
-  }
 
-  start!: string;
-  destination!: string;
-  resultsStart!: Array<MapPoint>;
-  resultsDest!: Array<MapPoint>;
+  start: string = '';
+  destination: string = '';
+  timerId: any = undefined;
 
-  resultStart!: MapPoint;
-  resultDest!: MapPoint;
+  @Output() onShowResults = new EventEmitter();
 
-  searchStart(text: string) {
-    let results: Array<MapPoint> = new Array<MapPoint>();
-    if (text.length > 3) {
-      this.mapSearchService.search(text).subscribe((data: any) => {
-        console.log(data);
-        data.forEach((element: any) => {
-          let address = element.display_name.split(',');
-          results.push(
-            new MapPoint(
-              this.prettyDisplayAddress(address),
-              element.lat,
-              element.lon
-            )
-          );
+  resultsForStart: Array<MapPoint> = new Array<MapPoint>();
+  resultsForDestination: Array<MapPoint> = new Array<MapPoint>();
+
+  @Output() onSearch = new EventEmitter();
+
+  autocomplete(text: string, type: string) {
+    if (text.length < 3) return;
+    if (type === 'start')
+      this.mapSearchService
+        .autocomplete(text)
+        .subscribe((points: MapPoint[]) => {
+          this.resultsForStart = points;
         });
-        console.log(results);
-      });
-    }
-    this.resultsStart = results;
-  }
-
-  prettyDisplayAddress(address: Array<string>): string {
-    return address[1] + ' ' + address[0];
-  }
-
-  searchDestination(text: string) {
-    let results: Array<MapPoint> = new Array<MapPoint>();
-    if (text.length > 5) {
-      this.mapSearchService.search(text).subscribe((data: any) => {
-        console.log(data);
-        data.forEach((element: any) => {
-          results.push(
-            new MapPoint(element.display_name, element.lat, element.lon)
-          );
+    else
+      this.mapSearchService
+        .autocomplete(text)
+        .subscribe((points: MapPoint[]) => {
+          this.resultsForDestination = points;
         });
-        console.log(results);
-      });
-    }
-    this.resultsDest = results;
   }
 
-  calculate() {
-    console.log(this.resultsStart);
+  trottleAutocomplete(text: string, type: string, timeDelay: number) {
+    if (this.timerId) {
+      return;
+    }
+    this.timerId = setTimeout(() => {
+      this.autocomplete(text, type);
+      this.timerId = undefined;
+    }, timeDelay);
+  }
+
+  showResults() {
+    this.onShowResults.emit(
+      this.resultsForStart.concat(this.resultsForDestination)
+    );
   }
 }

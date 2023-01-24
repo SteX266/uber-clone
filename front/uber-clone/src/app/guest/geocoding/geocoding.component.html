@@ -1,37 +1,37 @@
 <form #searchForm="ngForm" class="search">
   <input
     type="text"
-    placeholder="Start"
+    placeholder="Start..."
     [(ngModel)]="start"
     id="start"
-    (keyup)="searchStart(start)"
     name="start"
     class="form-control control"
     list="startDatalist"
+    (keyup)="trottleAutocomplete(start, 'start', 300)"
   />
-  <datalist id="startDatalist">
-    <option *ngFor="let result of resultsStart" [value]="result.name">
+  <datalist id="startDatalist" *ngFor="let result of resultsForStart">
+    <option [value]="result.name">
       {{ result.name }}
     </option>
   </datalist>
   <input
     type="text"
-    placeholder="Destination"
+    placeholder="Destination..."
     [(ngModel)]="destination"
-    id="start"
-    (ngModelChange)="searchDestination(destination)"
-    name="start"
+    id="destination"
+    name="destination"
     class="form-control control"
     list="destinationDatalist"
+    (keyup)="trottleAutocomplete(destination, 'destination', 300)"
   />
-  <datalist id="destinationDatalist">
-    <option *ngFor="let result of resultsDest" [value]="result.name">
+  <datalist
+    id="destinationDatalist"
+    *ngFor="let result of resultsForDestination"
+  >
+    <option [value]="result.name">
       {{ result.name }}
     </option>
   </datalist>
-  <button class="btn btn-dark button" (click)="calculate()">Calculate</button>
+
+  <button class="btn btn-dark button" (click)="showResults()">Calculate</button>
 </form>
-<div class="list-group" *ngIf="start && destination">
-  <li class="list-group-item">{{ start }}</li>
-  <li class="list-group-item">{{ destination }}</li>
-</div>

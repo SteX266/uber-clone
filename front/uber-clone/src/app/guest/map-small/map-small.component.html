@@ -1,7 +1,19 @@
 <div class="container map-container">
   <div class="row map-container">
     <div class="col">
-      <app-geocoding></app-geocoding>
+      <app-geocoding
+        (onShowResults)="refreshDirections($event)"
+      ></app-geocoding>
+      <ul class="list-group">
+        <button
+          class="list-group-item"
+          (click)="selectRoute(i)"
+          *ngFor="let route of routes; index as i"
+        >
+          {{ i + 1 }}. Route {{ route.properties.summary.distance }}m,
+          {{ route.properties.summary.duration }}s
+        </button>
+      </ul>
     </div>
     <div
       class="col-9 map"
