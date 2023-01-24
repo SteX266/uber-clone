@@ -38,6 +38,8 @@ INSERT INTO public.customer(
 VALUES (1, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','picture 1', 'Serfeze', false);
 
 
+
+
 INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (1, 2);

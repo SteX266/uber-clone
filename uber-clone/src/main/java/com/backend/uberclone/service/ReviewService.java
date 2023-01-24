@@ -30,15 +30,15 @@ public class ReviewService {
 
 
     public boolean createReview(ReviewDTO reviewDTO) {
-        Customer reviewer = customerRepository.findOneByEmail(reviewDTO.getCustomerEmail());
+        Customer reviewer = customerRepository.findOneByEmail(reviewDTO.getReviewerEmail());
         Ride ride = rideRepository.findOneById(reviewDTO.getRideId());
         if (ride == null){
             System.out.println("ALOOO9OOOGADSOAOSOGSOASGOGAS");
             return false;
         }
-        if (isRatingValid(reviewDTO.getCarRating(), reviewDTO.getDriverRating()) && isRideDateValid(ride.getStartTime())){
+        if (isRatingValid(reviewDTO.getVehicleRating(), reviewDTO.getDriverRating()) && isRideDateValid(ride.getStartTime())){
 
-            Review review = new Review(ride, reviewer, ride.getDriver(), reviewDTO.getCarRating(), reviewDTO.getDriverRating(), reviewDTO.getComment());
+            Review review = new Review(ride, reviewer, ride.getDriver(), reviewDTO.getVehicleRating(), reviewDTO.getDriverRating(), reviewDTO.getComment());
             reviewRepository.save(review);
             return true;
 

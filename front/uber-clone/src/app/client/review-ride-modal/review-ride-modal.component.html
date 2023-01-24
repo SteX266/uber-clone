@@ -1,0 +1,37 @@
+
+<mat-dialog-content id="review-modal">
+  <h1>Review</h1>
+
+  <p>Please review driver</p>
+
+
+<ngb-rating [(rate)]="driverScore" [max]="5">
+  <ng-template let-fill="fill" let-index="index">
+    <i
+      class="bi-star{{fill === 100 ? '-fill' : ''}}"
+      [class.filled]="fill === 100"
+      [class.low]="index < 5"
+    ></i>
+  </ng-template>
+</ngb-rating>
+<hr/>
+<p>Please review vehicle</p>
+
+<ngb-rating [(rate)]="vehicleScore" [max]="5">
+  <ng-template let-fill="fill" let-index="index">
+    <i
+      class="bi-star{{fill === 100 ? '-fill' : ''}}"
+      [class.filled]="fill === 100"
+      [class.low]="index < 5"
+    ></i>
+  </ng-template>
+</ngb-rating>
+
+<hr/>
+<p>Kindly leave a comment</p>
+
+<textarea [(ngModel)]="comment" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+<br/>
+<button (click)="createReview()" type="submit" class="btn btn-dark btn-lg su-button">Review</button>
+
+</mat-dialog-content>

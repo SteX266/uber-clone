@@ -11,6 +11,11 @@ import { EditClientProfileComponent } from './edit-client-profile/edit-client-pr
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { DriverModule } from '../driver/driver.module';
+import { ReviewRideModalComponent } from './review-ride-modal/review-ride-modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialogModule } from '@angular/material/dialog';
+
+
 @NgModule({
   declarations: [
     UserPersonalInfoUpdateComponent,
@@ -19,6 +24,7 @@ import { DriverModule } from '../driver/driver.module';
     ClientHomePageComponent,
     EditClientProfileComponent,
     ProfilePageComponent,
+    ReviewRideModalComponent,
   ],
   imports: [
     CommonModule,
@@ -27,6 +33,9 @@ import { DriverModule } from '../driver/driver.module';
     ClientRoutingModule,
     SharedModule,
     DriverModule,
+    NgbModule,
+    MatDialogModule
+
   ],
   exports: [UserPersonalInfoUpdateComponent],
 })
