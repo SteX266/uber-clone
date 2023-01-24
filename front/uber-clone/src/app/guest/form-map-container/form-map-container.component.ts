@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { SignUpDriverModalComponent } from 'src/app/admin/sign-up-driver-modal/sign-up-driver-modal.component';
 import { SignInModalComponent } from '../sign-in-modal/sign-in-modal.component';
 import { SignUpModalComponent } from '../sign-up-modal/sign-up-modal.component';
 
@@ -37,6 +38,17 @@ export class FormMapContainerComponent {
   ): void {
     this.dialog.open(SignInModalComponent, {
       width: '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+  openDriverSignUpDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    this.dialog.open(SignUpDriverModalComponent, {
+      width: '600px',
       enterAnimationDuration,
       exitAnimationDuration,
     });

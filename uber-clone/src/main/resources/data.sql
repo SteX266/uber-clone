@@ -1,22 +1,22 @@
 INSERT INTO public.vehicle(
-    id, allows_baby, allows_pet, model, number_of_seats, type)
-VALUES (1, true, false, 'Audi A4', 4, 'PREMIUM');
+     allows_baby, allows_pet, model, number_of_seats, type)
+VALUES ( true, false, 'Audi A4', 4, 'PREMIUM');
 
 INSERT INTO public.vehicle(
-    id, allows_baby, allows_pet, model, number_of_seats, type)
-VALUES (2, false, false, 'Fiat Punto', 4, 'REGULAR');
+     allows_baby, allows_pet, model, number_of_seats, type)
+VALUES ( false, false, 'Fiat Punto', 4, 'REGULAR');
 INSERT INTO public.vehicle(
-    id, allows_baby, allows_pet, model, number_of_seats, type)
-VALUES (3, false, false, 'BMW 730i', 3, 'ULTRA_PREMIUM');
+     allows_baby, allows_pet, model, number_of_seats, type)
+VALUES ( false, false, 'BMW 730i', 3, 'ECO');
 INSERT INTO public.vehicle(
-    id, allows_baby, allows_pet, model, number_of_seats, type)
-VALUES (4, true, true, 'Volkwagen Golf 2 dizel ', 4, 'ULTRA_PREMIUM');
+     allows_baby, allows_pet, model, number_of_seats, type)
+VALUES ( true, true, 'Volkwagen Golf 2 dizel ', 4, 'ECO');
 INSERT INTO public.vehicle(
-    id, allows_baby, allows_pet, model, number_of_seats, type)
-VALUES (5, true, true, 'Volvo XC90', 6, 'PREMIUM');
+     allows_baby, allows_pet, model, number_of_seats, type)
+VALUES ( true, true, 'Volvo XC90', 6, 'PREMIUM');
 INSERT INTO public.vehicle(
-    id, allows_baby, allows_pet, model, number_of_seats, type)
-VALUES (6, true, true, 'Renault Clio', 4, 'REGULAR');
+     allows_baby, allows_pet, model, number_of_seats, type)
+VALUES ( true, true, 'Renault Clio', 4, 'REGULAR');
 
 
 

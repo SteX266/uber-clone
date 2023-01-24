@@ -20,6 +20,8 @@ export class SignUpModalComponent {
   surname: string = '';
   city: string = '';
   phoneNumber: string = '';
+  userType:string = "client";
+
 
 
   private readonly registrationUrl: string;
@@ -106,12 +108,10 @@ export class SignUpModalComponent {
 
   sendRegistrationRequest(){
     
-    let userRequest = new UserRegistrationRequest(this.email, this.name, this.surname, this.city, this.password, this.phoneNumber, "client");
+    let userRequest = new UserRegistrationRequest(this.email, this.name, this.surname, this.city, this.password, this.phoneNumber, this.userType);
     this.authService.sendRegistrationRequest(userRequest).subscribe({next:(value) => {
       if (value) {
         this.snackBarService.openSuccessSnackBar('Registration successful! Check your mailbox to activate account.');
-        this.authService.saveToken("Bearer " + value.accessToken);
-        console.log(this.authService.getToken());
 
       } else {
         this.snackBarService.openFailureSnackBar('Error! Try again.');
