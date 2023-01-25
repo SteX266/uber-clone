@@ -13,6 +13,9 @@ import {
 } from 'leaflet';
 import { MapSearchService } from 'src/app/services/map-search/map-search.service';
 import { MapPoint } from '../../models/map-point.model';
+
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 @Component({
   selector: 'app-map-small',
   templateUrl: './map-small.component.html',
@@ -23,12 +26,15 @@ export class MapSmallComponent implements OnInit {
   ngOnInit(): void {
     this.initializeDirectionsLayer();
     this.initializeMapOptions();
+    this.initializeWebSocketConnection();
   }
 
   map!: Map;
   startLayer: any;
   start!: MapPoint;
   directionsLayer!: LayerGroup;
+  driversLayer: LayerGroup = new LayerGroup();
+
   end!: MapPoint;
   options!: MapOptions;
 
@@ -36,8 +42,62 @@ export class MapSmallComponent implements OnInit {
   selectedRoute!: any;
   geoJsonData!: any;
 
+  private stompClient: any;
+
+  drivers: any = {};
+
   private initializeDirectionsLayer() {
     this.directionsLayer = layerGroup();
+  }
+
+  initializeWebSocketConnection() {
+    let ws = new SockJS('http://localhost:8080/socket');
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
+    let that = this;
+    this.stompClient.connect({}, function () {
+      that.openGlobalSocket();
+    });
+  }
+
+  openGlobalSocket() {
+    this.stompClient.subscribe(
+      '/location-updates/update-driver-location',
+      (message: { body: string }) => {
+        console.log(message.body);
+        let locationDto = JSON.parse(message.body);
+        let existingDriver = this.drivers[locationDto.driverId];
+        existingDriver.setLatLng([locationDto.latitude, locationDto.longitude]);
+        existingDriver.update();
+      }
+    );
+    this.stompClient.subscribe(
+      '/location-updates/new-driver',
+      (message: { body: string }) => {
+        console.log(message.body);
+        let locationDto = JSON.parse(message.body);
+        let driverMarker = marker(
+          [locationDto.longitude, locationDto.latitude],
+          {
+            icon: icon({
+              iconUrl: 'assets/car.png',
+              iconSize: [35, 45],
+              iconAnchor: [18, 45],
+            }),
+          }
+        );
+        driverMarker.addTo(this.driversLayer);
+        this.drivers[locationDto.driverId] = driverMarker;
+      }
+    );
+    this.stompClient.subscribe(
+      '/location-updates/end-drive',
+      (message: { body: string }) => {
+        console.log(message.body);
+        let driverId = JSON.parse(message.body);
+        delete this.drivers[driverId];
+      }
+    );
   }
 
   private initializeMapOptions() {

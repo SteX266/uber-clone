@@ -42,8 +42,8 @@ public class RideService {
         rideRepository.save(ride);
     }
 
-    public void startRide(Long rideId, @NotNull Driver driver) {
-        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideId, RideStatus.ARRIVED, driver.getId());
+    public void startRide(Long rideId, Integer driverId) {
+        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideId, RideStatus.ARRIVING, driverId);
         if(ride == null) return;
         ride.startRide();
         rideRepository.save(ride);

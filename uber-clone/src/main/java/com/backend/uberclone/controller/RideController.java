@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class RideController {
 
     RideService rideService;
+
 
     @Autowired
     public void setRideService(RideService rideService) { this.rideService = rideService; }
@@ -30,9 +32,8 @@ public class RideController {
     }
 
     @PostMapping("/startRide")
-    public ResponseEntity<String> startRide(@RequestParam Long rideId) {
-        if(rideId < 0) return new ResponseEntity<>("Invalid data", HttpStatus.BAD_REQUEST);
-        rideService.startRide(rideId, new Driver()); // treba vozac da se izvuce iz tokena
+    public ResponseEntity<String> startRide(@RequestParam Long rideId, @RequestParam Integer driverId) {
+        rideService.startRide(rideId, driverId);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 

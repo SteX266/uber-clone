@@ -34,6 +34,7 @@ public class Vehicle {
     @OneToOne(mappedBy = "vehicle")
     private Driver driver;
 
+
     @Column
     @Enumerated(EnumType.STRING)
     private VehicleType type;

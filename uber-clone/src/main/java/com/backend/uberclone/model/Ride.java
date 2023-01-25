@@ -1,9 +1,12 @@
 package com.backend.uberclone.model;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@TypeDef(name = "json", typeClass = JsonType.class)
 public class Ride {
 
     @Id
@@ -34,6 +38,10 @@ public class Ride {
     @Column
     @Enumerated(EnumType.STRING)
     private RideStatus status;
+
+    @Type(type = "json")
+    @Column(columnDefinition = "json")
+    private String routeJSON;
 
     @Column
     private LocalDateTime startTime;
@@ -77,4 +85,5 @@ public class Ride {
             c.setRiding(value);
         }
     }
+
 }

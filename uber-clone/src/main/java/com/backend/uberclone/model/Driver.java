@@ -24,6 +24,9 @@ public class Driver extends User {
     @Column
     private boolean available;
 
+    @Column
+    private boolean active;
+
     @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ActivePeriod> activePeriods;
 
@@ -33,7 +36,8 @@ public class Driver extends User {
     @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ride> rides;
 
-    @Column
-    private String currentLocation;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Location currentLocation;
+
 
 }
