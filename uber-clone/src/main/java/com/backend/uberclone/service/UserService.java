@@ -125,6 +125,7 @@ public class UserService {
             d.setVehicle(v);
             roles.add(roleRepository.findOneById(3));
             d.setRoles(roles);
+            d.setEnabled(true);
             return this.userRepository.save(d);
         }
         else{
