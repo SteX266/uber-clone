@@ -67,7 +67,7 @@ export class MapSmallComponent implements OnInit {
         console.log(message.body);
         let locationDto = JSON.parse(message.body);
         let existingDriver = this.drivers[locationDto.driverId];
-        existingDriver.setLatLng([locationDto.latitude, locationDto.longitude]);
+        existingDriver.setLatLng([locationDto.longitude, locationDto.latitude]);
         existingDriver.update();
       }
     );
@@ -86,7 +86,7 @@ export class MapSmallComponent implements OnInit {
             }),
           }
         );
-        driverMarker.addTo(this.driversLayer);
+        driverMarker.addTo(this.map);
         this.drivers[locationDto.driverId] = driverMarker;
       }
     );

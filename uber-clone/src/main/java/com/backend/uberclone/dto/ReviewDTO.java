@@ -12,11 +12,10 @@ import lombok.Setter;
 
 public class ReviewDTO {
 
-    private int id;
     private Integer rideId;
-    private String customerEmail;
+    private String reviewerEmail;
     private String comment;
-    private Integer carRating;
+    private Integer vehicleRating;
     private Integer driverRating;
 }
 

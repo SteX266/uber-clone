@@ -4,6 +4,7 @@
 @import "@angular/cdk/overlay-prebuilt.css";
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 @import "../node_modules/leaflet/dist/leaflet.css";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 
 .green-snackbar {
   background: rgb(65, 252, 134);
@@ -23,3 +24,6 @@
   color: white !important;
   border: none;
 }
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';

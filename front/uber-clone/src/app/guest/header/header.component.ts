@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
+import { ReviewRideModalComponent } from 'src/app/client/review-ride-modal/review-ride-modal.component';
 import { SignInModalComponent } from '../sign-in-modal/sign-in-modal.component';
 import { SignUpModalComponent } from '../sign-up-modal/sign-up-modal.component';
 
@@ -29,6 +30,17 @@ export class HeaderComponent {
     exitAnimationDuration: string
   ): void {
     this.dialog.open(SignInModalComponent, {
+      width: '500px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+  openReviewDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    this.dialog.open(ReviewRideModalComponent, {
       width: '500px',
       enterAnimationDuration,
       exitAnimationDuration,

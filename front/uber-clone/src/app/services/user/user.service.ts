@@ -4,6 +4,7 @@ import { Vehicle } from 'src/app/models/car';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from '../auth/auth.service';
 import { environment } from 'src/environments/environment';
+import { Review } from 'src/app/models/Review';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
 
   private readonly changePasswordUrl:string;
+  private readonly createReviewUrl:string;
 
   updateCar(car: Vehicle) {
     throw new Error('Method not implemented.');
@@ -59,7 +61,22 @@ export class UserService {
     return this.http.post<any>(this.changePasswordUrl, body, this.authService.getHttpOptionsWithToken());
 
   }
+
+  createReview(review:Review){
+
+    let body={
+      "rideId":review.rideId,
+      "driverRating":review.driverRating,
+      "vehicleRating":review.vehicleRating,
+      "comment":review.comment,
+      "reviewerEmail":this.authService.getCurrentUserEmail()
+    }
+    return this.http.post<any>(this.createReviewUrl, body, this.authService.getHttpOptionsWithToken());
+
+
+  }
   constructor(private http: HttpClient, private authService:AuthService) {
     this.changePasswordUrl = environment.apiEndpoint + "profile/changePassword";
+    this.createReviewUrl = environment.apiEndpoint + "review/createReview";
   }
 }

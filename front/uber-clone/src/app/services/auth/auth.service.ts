@@ -121,13 +121,19 @@ export class AuthService {
       "surname":registrationRequest.surname,
       "city":registrationRequest.city,
       "phoneNumber":registrationRequest.phoneNumber,
-      "userType":registrationRequest.userType
+      "userType":registrationRequest.userType,
+      "carModel":registrationRequest.carModel,
+      "numberOfSeats":registrationRequest.numberOfSeats,
+      "petFriendly":registrationRequest.petFriendly,
+      "childrenFriendly":registrationRequest.childrenFriendly,
+      "vehicleType":registrationRequest.vehicleType
     }
     console.log(body);
 
     return this.http.post<any>(this.registrationUrl,body,this.getHttpOptions());
 
   }
+    
 
   sendForgotPasswordRequest(email:string):Observable<string>{
     let body = {

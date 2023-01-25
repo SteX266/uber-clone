@@ -19,5 +19,10 @@ public class UserRequest {
     private String phoneNumber;
     private String userType;
     private String registrationReason;
+    private String carModel;
+    private int numberOfSeats;
+    private boolean petFriendly;
+    private boolean childrenFriendly;
+    private String vehicleType;
 }
 

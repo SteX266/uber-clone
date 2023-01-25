@@ -38,4 +38,24 @@ public class Vehicle {
     @Column
     @Enumerated(EnumType.STRING)
     private VehicleType type;
+
+    public Vehicle(String carModel, int numberOfSeats, boolean allowsPet, boolean allowsBaby, String vehicleType){
+        this.model = carModel;
+        this.numberOfSeats = numberOfSeats;
+        this.allowsBaby = allowsBaby;
+        this.allowsPet = allowsPet;
+        if (vehicleType.equals("PREMIUM")){
+            this.type = VehicleType.PREMIUM;
+        }
+        else if(vehicleType.equals("ECO")){
+            this.type = VehicleType.ECO;
+        }
+        else{
+            this.type = VehicleType.REGULAR;
+        }
+
+
+
+
+    }
 }

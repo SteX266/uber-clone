@@ -3,10 +3,7 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserRequest;
-import com.backend.uberclone.model.Customer;
-import com.backend.uberclone.model.Driver;
-import com.backend.uberclone.model.Role;
-import com.backend.uberclone.model.User;
+import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.RoleRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,11 +93,11 @@ public class UserService {
     }
     public User save(UserRequest userRequest) {
         User u;
-        if (userRequest.getUserType().equals("client")){
-            u = new Customer();
+        if (userRequest.getUserType().equals("driver")){
+            u = new Driver();
         }
         else{
-            u = new Driver();
+            u = new Customer();
         }
         u.setEmail(userRequest.getEmail());
 
@@ -116,19 +113,26 @@ public class UserService {
         u.setCity(userRequest.getCity());
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         List<Role> roles = new ArrayList<>();
+        u.setId(this.generateNextId());
         if(userRequest.getUserType().equals("client")){
             roles.add(roleRepository.findOneById(2));
+            u.setRoles(roles);
+            return this.userRepository.save(u);
         }
         else if(userRequest.getUserType().equals("driver")){
+            Driver d = (Driver) u;
+            Vehicle v = new Vehicle(userRequest.getCarModel(), userRequest.getNumberOfSeats(), userRequest.isPetFriendly(), userRequest.isChildrenFriendly(), userRequest.getVehicleType());
+            d.setVehicle(v);
             roles.add(roleRepository.findOneById(3));
+            d.setRoles(roles);
+            return this.userRepository.save(d);
         }
         else{
             roles.add(roleRepository.findOneById(1));
+            u.setRoles(roles);
+            return this.userRepository.save(u);
         }
-        u.setRoles(roles);
-        u.setId(this.generateNextId());
 
-        return this.userRepository.save(u);
     }
 
     public User findOneById(Integer id) {
