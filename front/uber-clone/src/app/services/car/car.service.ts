@@ -8,14 +8,30 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root',
 })
 export class CarService {
-  getCarByUserId(id: number) {
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  getCarByUserById(idNumber: number): Vehicle {
+    let car = new Vehicle(0, '', 0, false, false, '');
+
+    this.sendGetCarByUserByIdRequest(idNumber).subscribe({
+      next: (val) => {
+        car.id = val.id;
+        car.allowsBaby = val.allowsBaby;
+        car.allowsPet = val.allowsPet;
+        car.model = val.model;
+        car.numberOfSeats = val.numberOfSeats;
+        car.type = val.type;
+      },
+    });
+    return car;
+  }
+
+  sendGetCarByUserByIdRequest(id: number) {
     return this.http.get<Vehicle>(
       environment.apiEndpoint + 'vehicle/getCarByUserId/' + id,
       this.authService.getHttpOptionsWithToken()
     );
   }
-
-  constructor(private http: HttpClient, private authService: AuthService) {}
 
   updateCar(car: Vehicle) {
     return this.http.post<any>(

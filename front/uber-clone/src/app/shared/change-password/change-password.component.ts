@@ -48,6 +48,7 @@ export class ChangePasswordComponent {
             this.snackBarService.openSuccessSnackBar(
               'Password changed successfully!'
             );
+            this.back();
           } else {
             this.snackBarService.openFailureSnackBar(
               'You entered wrong password!'

@@ -37,10 +37,10 @@ export class UserPersonalInfoUpdateComponent {
   }
   submitProfileChanges() {
     if (this.validateInputData()) {
-      console.log(this.user);
       this.userService.updateUser(this.user).subscribe();
+      this.snackBarService.openSuccessSnackBar('Successfully changed info');
+      this.back();
     } else {
-      console.log('aaaa');
     }
   }
 

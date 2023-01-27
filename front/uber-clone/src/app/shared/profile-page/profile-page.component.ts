@@ -26,6 +26,5 @@ export class ProfilePageComponent {
         this.userType += this.userService.getUserById(Number(id)).role;
       }
     });
-    console.log(this.userType);
   }
 }
