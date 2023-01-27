@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Vehicle } from 'src/app/models/car';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { CarService } from 'src/app/services/car/car.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -12,9 +14,11 @@ import { UserService } from 'src/app/services/user/user.service';
 export class UserProfileComponent {
   selectedId = 0;
   user = new UserProfileInfo(0, '', '', '', '', '', '', '');
+  car = new Vehicle(0, '', 0, false, false, '');
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
+    private carService: CarService,
     private auth: AuthService
   ) {}
 
@@ -26,6 +30,7 @@ export class UserProfileComponent {
       }
       this.selectedId = Number(id);
       this.user = this.userService.getUserById(this.selectedId);
+      this.car = this.carService.getCarByUserById(this.selectedId);
     });
   }
 }

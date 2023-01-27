@@ -49,7 +49,7 @@ VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', 
 
 INSERT INTO public.driver(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname, active, available, current_location_id, vehicle_id)
-VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa', '122133', '0669087659', '', null,'Stevanovic', false,false ,null, 1);
+VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0669087659', '', null,'Stevanovic', false,false ,null, 1);
 
 
 
