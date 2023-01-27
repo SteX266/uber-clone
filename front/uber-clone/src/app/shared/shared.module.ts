@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeCarComponent } from './change-car/change-car.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { AdminModule } from '../admin/admin.module';
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -29,6 +30,7 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
     ClientModule,
     FormsModule,
     NgbModule,
+    AdminModule,
   ],
   exports: [UserProfileComponent, RideCardComponent],
 })

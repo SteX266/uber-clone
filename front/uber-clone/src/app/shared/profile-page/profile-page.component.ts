@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -9,6 +10,8 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class ProfilePageComponent {
   userType = '';
+  id = '';
+  user!: UserProfileInfo;
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -17,14 +20,20 @@ export class ProfilePageComponent {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      let id = params['id'];
-      this.userType += this.authService.getCurrentUserRole();
-      if (id === this.authService.getCurrentUserId()) {
-        this.userType += '-current';
-      } else {
-        this.userType += '-other-';
-        this.userType += this.userService.getUserById(Number(id)).role;
-      }
+      this.id = params['id'];
+      this.user = this.userService.getUserById(Number(this.id));
     });
+
+    this.getUserType();
+  }
+
+  getUserType(): void {
+    this.userType += this.authService.getCurrentUserRole();
+    if (this.id === this.authService.getCurrentUserId()) {
+      this.userType += '-current';
+    } else {
+      this.userType += '-other';
+    }
+    console.log(this.userType);
   }
 }
