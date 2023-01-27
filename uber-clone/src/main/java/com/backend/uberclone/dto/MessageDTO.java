@@ -19,6 +19,15 @@ public class MessageDTO  implements Comparable<MessageDTO>{
     String senderEmail;
     String text;
     LocalDateTime date;
+    String receiverEmail;
+    int receiverId;
+
+    public MessageDTO(Integer id, String email, String text, LocalDateTime date) {
+        this.senderId = id;
+        this.senderEmail = email;
+        this.text = text;
+        this.date = date;
+    }
 
     @Override
     public int compareTo(@NotNull MessageDTO o) {

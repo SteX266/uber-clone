@@ -28,7 +28,7 @@
             <div class="channels" *ngFor="let friend of friendList">
               <div class="chat_list">
                 <div class="chat_people">
-                  <div (click)="openChat(friend)" class="chat_ib">
+                  <div (click)="openChat(friend)" class="chat_ib" >
                     <h5>
                       {{ friend.name }}
                     </h5>
@@ -50,7 +50,7 @@
         </div>
         <div class="mesgs">
 
-          <div class="msg_history">
+          <div #scroll class="msg_history">
             <li class="message" *ngFor="let message of messages">
               <div
                 *ngIf="
@@ -91,8 +91,9 @@
                 placeholder="Type a message"
                 name="newMessage"
                 [(ngModel)]="newMessage"
+                [disabled]="messageDisabled"
               />
-              <button (click)="sendMessage()" class="msg_send_btn" type="submit">
+              <button (click)="sendMessage()" class="msg_send_btn" type="submit" [disabled]="messageDisabled">
                 <i  class="fa fa-paper-plane-o" aria-hidden="true"></i>
               </button>
             </form>

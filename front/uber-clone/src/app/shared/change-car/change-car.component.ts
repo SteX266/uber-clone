@@ -28,7 +28,7 @@ export class ChangeCarComponent {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.selectedId = Number(params['id']);
-      this.car = this.carService.getCarByUserId(this.selectedId);
+      this.car = new Vehicle();
       this.car.allowsBaby = true;
       this.car.type = 'REGULAR';
       this.car.model = 'Yugo';
