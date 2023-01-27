@@ -10,6 +10,14 @@ import { Message } from 'src/app/models/Message';
 })
 export class ChatService {
 
+
+
+  
+  sendMessage(message: Message) {
+    return this.http.post<any>(environment.apiEndpoint + "messages/saveSentMessage",message,this.authService.getHttpOptionsWithToken());
+  }
+
+
   constructor(private http:HttpClient, private authService:AuthService) { }
 
   getChatList(userId:string):Friend[]{

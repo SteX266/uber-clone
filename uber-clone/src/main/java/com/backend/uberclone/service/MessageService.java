@@ -5,6 +5,7 @@ import com.backend.uberclone.dto.MessageDTO;
 import com.backend.uberclone.dto.MessageRequestDTO;
 import com.backend.uberclone.model.Message;
 import com.backend.uberclone.model.User;
+import com.backend.uberclone.repository.MessageRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class MessageService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
     public List<ChatDTO> getUserChats(Integer userId){
         List<ChatDTO> chats = new ArrayList<>();
 
@@ -119,5 +123,19 @@ public class MessageService {
         }
         Collections.sort(messages);
         return messages;
+    }
+
+    public void sendMessage(MessageDTO message) {
+        User sender = userRepository.findOneByEmail(message.getSenderEmail());
+        User receiver = userRepository.findOneByEmail(message.getReceiverEmail());
+        Message m = new Message();
+        m.setDate(LocalDateTime.now());
+        m.setRead(false);
+        m.setSender(sender);
+        m.setRecipient(receiver);
+        m.setText(message.getText());
+        messageRepository.save(m);
+
+
     }
 }
