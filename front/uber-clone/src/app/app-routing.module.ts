@@ -9,11 +9,13 @@ import { UserPersonalInfoUpdateComponent } from './client/user-personal-info-upd
 import { ChangePhotoComponent } from './client/change-photo/change-photo.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RideCardComponent } from './shared/ride-card/ride-card.component';
+import { ChatComponent } from './guest/chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset_password', component: ResetPasswordComponent },
+  {path:'chat', component:ChatComponent},
   { path: '**', component: NotFoundComponent },
 ];
 
