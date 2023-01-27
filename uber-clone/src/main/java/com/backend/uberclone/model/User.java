@@ -78,7 +78,14 @@ public abstract class User implements UserDetails {
     @OneToMany(mappedBy = "recipient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
-
+    public String getRole(){
+        try{
+            return this.getRoles().get(0).getName();
+        }
+        catch(Exception e){
+            return "";
+        }
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

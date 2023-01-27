@@ -16,6 +16,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../services/user/user.service';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { UserService } from '../services/user/user.service';
     FooterComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    ChatComponent,
   ],
   imports: [
     RouterModule,
