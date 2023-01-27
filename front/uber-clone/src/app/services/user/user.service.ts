@@ -10,73 +10,75 @@ import { Review } from 'src/app/models/Review';
   providedIn: 'root',
 })
 export class UserService {
+  private readonly changePasswordUrl: string;
+  private readonly createReviewUrl: string;
 
-  private readonly changePasswordUrl:string;
-  private readonly createReviewUrl:string;
-
-  updateCar(car: Vehicle) {
-    throw new Error('Method not implemented.');
-  }
-  getCarByUserId(selectedId: number): Vehicle {
-    return new Vehicle();
-  }
   updateUser(user: UserProfileInfo) {
-    console.log(user);
+    return this.http.post<any>(
+      environment.apiEndpoint + 'profile/updateUserProfileInfo',
+      user,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
-  profileInfoUrl = 'http://localhost:8080/profile/getProfileInfo';
-  getUserById(idNumber: number) {
 
-    let user = new UserProfileInfo(0,"","","","","","","");
-    
-    
-    this.sendGetUserRequest(idNumber).subscribe({next:(val)=>{
-      console.log(val);
-      user.city = val.city;
-      user.email = val.email;
-      user.id = idNumber;
-      user.name = val.name;
-      user.surname = val.surname;
-      user.phoneNumber = val.phoneNumber;
-      user.profilePicture = val.profilePicture;
-      user.role = val.role;
-    }});
+  getUserById(idNumber: number): UserProfileInfo {
+    let user = new UserProfileInfo(0, '', '', '', '', '', '', '');
 
-    console.log(user);
+    this.sendGetUserRequest(idNumber).subscribe({
+      next: (val) => {
+        user.city = val.city;
+        user.email = val.email;
+        user.id = val.id;
+        user.name = val.name;
+        user.surname = val.surname;
+        user.phoneNumber = val.phoneNumber;
+        user.profilePicture = val.profilePicture;
+        user.role = val.role;
+      },
+    });
     return user;
   }
 
-  sendGetUserRequest(id:number){
-    return this.http.get<UserProfileInfo>(environment.apiEndpoint + "profile/getProfileInfo/" + id, this.authService.getHttpOptionsWithToken());
-
-
-
+  sendGetUserRequest(id: number) {
+    return this.http.get<UserProfileInfo>(
+      environment.apiEndpoint + 'profile/getProfileInfo/' + id,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 
-  sendChangePasswordRequest(id:string, oldPassword:string, newPassword:string){
+  sendChangePasswordRequest(
+    id: string,
+    oldPassword: string,
+    newPassword: string
+  ) {
     let body = {
-      "userId":id,
-      "oldPassword":oldPassword,
-      "newPassword":newPassword
-    }
-    return this.http.post<any>(this.changePasswordUrl, body, this.authService.getHttpOptionsWithToken());
-
+      userId: id,
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    };
+    return this.http.post<any>(
+      this.changePasswordUrl,
+      body,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 
-  createReview(review:Review){
-
-    let body={
-      "rideId":review.rideId,
-      "driverRating":review.driverRating,
-      "vehicleRating":review.vehicleRating,
-      "comment":review.comment,
-      "reviewerEmail":this.authService.getCurrentUserEmail()
-    }
-    return this.http.post<any>(this.createReviewUrl, body, this.authService.getHttpOptionsWithToken());
-
-
+  createReview(review: Review) {
+    let body = {
+      rideId: review.rideId,
+      driverRating: review.driverRating,
+      vehicleRating: review.vehicleRating,
+      comment: review.comment,
+      reviewerEmail: this.authService.getCurrentUserEmail(),
+    };
+    return this.http.post<any>(
+      this.createReviewUrl,
+      body,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
-  constructor(private http: HttpClient, private authService:AuthService) {
-    this.changePasswordUrl = environment.apiEndpoint + "profile/changePassword";
-    this.createReviewUrl = environment.apiEndpoint + "review/createReview";
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
+    this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
   }
 }

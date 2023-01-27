@@ -17,7 +17,7 @@ export class ChangeCarComponent {
   car!: Vehicle;
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService,
+    private carService: CarService,
     private snackBarService: SnackBarService,
     private location: Location
   ) {}
@@ -28,7 +28,7 @@ export class ChangeCarComponent {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.selectedId = Number(params['id']);
-      this.car = this.userService.getCarByUserId(this.selectedId);
+      this.car = this.carService.getCarByUserId(this.selectedId);
       this.car.allowsBaby = true;
       this.car.type = 'REGULAR';
       this.car.model = 'Yugo';
@@ -38,7 +38,7 @@ export class ChangeCarComponent {
   }
   submitProfileChanges() {
     if (this.validateInputData()) {
-      this.userService.updateCar(this.car);
+      this.carService.updateCar(this.car).subscribe();
     }
   }
 

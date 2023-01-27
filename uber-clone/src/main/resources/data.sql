@@ -5,6 +5,7 @@ VALUES ( true, false, 'Audi A4', 4, 'PREMIUM');
 INSERT INTO public.vehicle(
      allows_baby, allows_pet, model, number_of_seats, type)
 VALUES ( false, false, 'Fiat Punto', 4, 'REGULAR');
+
 INSERT INTO public.vehicle(
      allows_baby, allows_pet, model, number_of_seats, type)
 VALUES ( false, false, 'BMW 730i', 3, 'ECO');

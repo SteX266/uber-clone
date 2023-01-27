@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -10,15 +11,20 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class UserProfileComponent {
   selectedId = 0;
-  user = new UserProfileInfo(0,"","","","","","","");
+  user = new UserProfileInfo(0, '', '', '', '', '', '', '');
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.selectedId = Number(params['id']);
+      let id = params['id'];
+      if (id == undefined) {
+        id = this.auth.getCurrentUserId();
+      }
+      this.selectedId = Number(id);
       this.user = this.userService.getUserById(this.selectedId);
     });
   }
