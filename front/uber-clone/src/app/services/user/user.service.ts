@@ -5,6 +5,7 @@ import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from '../auth/auth.service';
 import { environment } from 'src/environments/environment';
 import { Review } from 'src/app/models/Review';
+import { Image } from 'src/app/models/Image';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,11 @@ import { Review } from 'src/app/models/Review';
 export class UserService {
   private readonly changePasswordUrl: string;
   private readonly createReviewUrl: string;
+  private readonly addImageUrl:string;
 
+  addImage(image: Image) {
+    return this.http.post<any>(this.addImageUrl, image, this.authService.getHttpOptionsWithToken());
+  }
   updateUser(user: UserProfileInfo) {
     return this.http.post<any>(
       environment.apiEndpoint + 'profile/updateUserProfileInfo',
@@ -80,5 +85,6 @@ export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) {
     this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
     this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
+    this.addImageUrl = environment.apiEndpoint + 'profile/addImage';
   }
 }

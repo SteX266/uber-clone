@@ -1,19 +1,24 @@
 package com.backend.uberclone.controller;
 
 
-import com.backend.uberclone.dto.ChangePasswordDTO;
-import com.backend.uberclone.dto.ResetPasswordDTO;
-import com.backend.uberclone.dto.SuccessResponseDTO;
-import com.backend.uberclone.dto.UserDTO;
+import com.backend.uberclone.dto.*;
 import com.backend.uberclone.model.User;
 import com.backend.uberclone.service.ProfileService;
 import com.backend.uberclone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Base64;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -62,5 +67,26 @@ public class ProfileController {
                 return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
             }
         }
+    }
+
+    @PostMapping("/addImage")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<InputStreamResource> addImage(@RequestBody ImageDTO imageDTO) throws IOException {
+        byte[] data;
+        try {
+            data = Base64.getDecoder().decode(imageDTO.getData().split(",")[1]);
+        } catch(Exception e) {
+            return null;
+        }
+        String imageName = imageDTO.getPath();
+        String picturePath = "src\\main\\resources\\static\\images\\"+imageName;
+        try (OutputStream stream = new FileOutputStream(new File(picturePath).getCanonicalFile())) {
+            stream.write(data);
+            FileSystemResource imgFile = new FileSystemResource("src/main/resources/static/images/" + imageName);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(imgFile.getInputStream()));
+        }
+
     }
 }
