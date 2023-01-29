@@ -70,7 +70,7 @@ public class UserService {
         u.setSurname(userRequest.getLastName());
         u.setEnabled(true);
         List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findOneById(1));
+        roles.add(roleRepository.findOneById(2));
         u.setRoles(roles);
         u.setId(this.generateNextId());
 

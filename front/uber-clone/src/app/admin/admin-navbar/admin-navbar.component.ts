@@ -9,9 +9,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class AdminNavbarComponent {
   userId = '';
 
-  constructor(private auth: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.userId = this.auth.getCurrentUserId();
+    this.userId = this.authService.getCurrentUserId();
+  }
+
+  logOut() {
+    this.authService.logout();
   }
 }

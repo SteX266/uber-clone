@@ -43,7 +43,7 @@
           <a class="nav-link" [routerLink]="['/driver/support']">Support </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/driver/sign-out']">Sign out</a>
+          <a (click)="logOut()" class="nav-link" >Sign out</a>
         </li>
       </ul>
     </div>
