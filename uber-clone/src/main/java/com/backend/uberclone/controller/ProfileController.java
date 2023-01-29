@@ -28,9 +28,19 @@ public class ProfileController {
 
     @GetMapping(value = "/getProfileInfo/{id}")
     public ResponseEntity<UserDTO> getProfileInfo(@PathVariable("id") String id){
-        System.out.println("USAOO SAM BRAPOOOOO");
             return new ResponseEntity<>(profileService.getUserById(Integer.valueOf(id)), HttpStatus.OK);
     }
+
+    @PostMapping("/updateUserProfileInfo")
+    public ResponseEntity<SuccessResponseDTO> updateUserProfile(@RequestBody UserDTO user){
+        System.out.println(user);
+        if (userService.updateUser(user)) {
+                return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+            }
+        }
 
     @PostMapping("/changePassword")
     public ResponseEntity<SuccessResponseDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordRequest){

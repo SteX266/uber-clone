@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { CarService } from 'src/app/services/car/car.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import { Location } from '@angular/common';
-import { UserService } from 'src/app/services/user/user.service';
 import { Vehicle } from 'src/app/models/car';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-change-car',
@@ -17,9 +16,10 @@ export class ChangeCarComponent {
   car!: Vehicle;
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService,
+    private carService: CarService,
     private snackBarService: SnackBarService,
-    private location: Location
+    private location: Location,
+    private auth: AuthService
   ) {}
 
   back(): void {
@@ -27,18 +27,16 @@ export class ChangeCarComponent {
   }
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.selectedId = Number(params['id']);
-      this.car = this.userService.getCarByUserId(this.selectedId);
-      this.car.allowsBaby = true;
-      this.car.type = 'REGULAR';
-      this.car.model = 'Yugo';
-      this.car.numberOfSeats = 4;
-      console.log(this.car);
+
+      let id = Number(this.auth.getCurrentUserId());
+      this.car = this.carService.getCarByUserById(id);
     });
   }
   submitProfileChanges() {
     if (this.validateInputData()) {
-      this.userService.updateCar(this.car);
+      this.carService.updateCar(this.car).subscribe();
+      this.snackBarService.openSuccessSnackBar('Successfully changed info');
+      this.back();
     }
   }
 

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HeaderComponent } from '../guest/header/header.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ChangePhotoComponent } from './change-photo/change-photo.component';
+import { ChangePasswordComponent } from '../shared/change-password/change-password.component';
+import { ChangePhotoComponent } from '../shared/change-photo/change-photo.component';
 import { ClientHomePageComponent } from './client-home-page/client-home-page.component';
-import { ProfilePageComponent } from './profile-page/profile-page.component';
-import { UserPersonalInfoUpdateComponent } from './user-personal-info-update/user-personal-info-update.component';
+import { ProfilePageComponent } from '../shared/profile-page/profile-page.component';
+import { UserPersonalInfoUpdateComponent } from '../shared/user-personal-info-update/user-personal-info-update.component';
 
 const routes: Routes = [
   {

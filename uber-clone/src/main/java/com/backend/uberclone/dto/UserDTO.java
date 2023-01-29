@@ -2,14 +2,19 @@ package com.backend.uberclone.dto;
 
 import com.backend.uberclone.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
 import java.sql.Timestamp;
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
+    private int id;
     private String email;
 
     private String name;
@@ -31,7 +36,8 @@ public class UserDTO {
         city = u.getCity();
         phoneNumber = u.getPhoneNumber();
         profilePicture = u.getProfilePicture();
-        role = "client";
+        role = u.getRoles().get(0).getName();
+        id = u.getId();
     }
 }
 

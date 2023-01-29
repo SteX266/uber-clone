@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { DriverRoutingModule } from './driver-routing.module';
 import { EditDriverProfileComponent } from './edit-driver-profile/edit-driver-profile.component';
-import { ChangeCarComponent } from './change-car/change-car.component';
-import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { OtherProfileComponent } from './other-profile/other-profile.component';
 
 @NgModule({
-  declarations: [EditDriverProfileComponent, ChangeCarComponent],
-  imports: [CommonModule, DriverRoutingModule, SharedModule, FormsModule],
-  exports: [EditDriverProfileComponent],
+  declarations: [EditDriverProfileComponent, OtherProfileComponent],
+  imports: [CommonModule, DriverRoutingModule, FormsModule],
+  exports: [EditDriverProfileComponent, OtherProfileComponent],
 })
 export class DriverModule {}

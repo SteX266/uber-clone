@@ -26,6 +26,7 @@ import { DriverModule } from './driver/driver.module';
 import { SignUpDriverModalComponent } from './admin/sign-up-driver-modal/sign-up-driver-modal.component';
 import { LocationService } from './services/location/location.service';
 import { PriceService } from './services/price/price.service';
+import { AdminModule } from './admin/admin.module';
 
 @NgModule({
   declarations: [AppComponent, NotFoundComponent, SignUpDriverModalComponent],
@@ -43,6 +44,7 @@ import { PriceService } from './services/price/price.service';
     SocialLoginModule,
     SharedModule,
     AppRoutingModule,
+    AdminModule,
   ],
   providers: [
     MapSearchService,

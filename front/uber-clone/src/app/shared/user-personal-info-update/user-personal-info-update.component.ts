@@ -4,6 +4,7 @@ import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { Location } from '@angular/common';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-user-personal-info-update',
@@ -17,7 +18,8 @@ export class UserPersonalInfoUpdateComponent {
     private route: ActivatedRoute,
     private userService: UserService,
     private snackBarService: SnackBarService,
-    private location: Location
+    private location: Location,
+    private auth: AuthService
   ) {}
 
   back(): void {
@@ -25,9 +27,9 @@ export class UserPersonalInfoUpdateComponent {
   }
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.selectedId = Number(params['id']);
-      this.user = this.userService.getUserById(this.selectedId);
-      console.log(this.user.email);
+      this.user = this.userService.getUserById(
+        Number(this.auth.getCurrentUserId())
+      );
     });
   }
   removePhoto() {
@@ -35,7 +37,10 @@ export class UserPersonalInfoUpdateComponent {
   }
   submitProfileChanges() {
     if (this.validateInputData()) {
-      this.userService.updateUser(this.user);
+      this.userService.updateUser(this.user).subscribe();
+      this.snackBarService.openSuccessSnackBar('Successfully changed info');
+      this.back();
+    } else {
     }
   }
 

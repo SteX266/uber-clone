@@ -14,6 +14,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ChatComponent } from './chat/chat.component';
+
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -25,6 +27,7 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    ChatComponent,
   ],
   imports: [
     RouterModule,

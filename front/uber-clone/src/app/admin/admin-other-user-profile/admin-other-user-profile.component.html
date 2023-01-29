@@ -1,0 +1,62 @@
+<section class="section services-section" id="services">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="section-title">
+        <h2>Interact with user</h2>
+        <p>
+          Here you can make complaint, or ban user if needed or chat wit him
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-lg-4" [routerLink]="['../../edit-personal-info']">
+      <div class="feature-box-1">
+        <div class="icon">
+          <i class="fa fa-comments"></i>
+        </div>
+        <div class="feature-content">
+          <h5>Chat</h5>
+          <p>
+            Here you can contact user if needed. You should help our users to
+            have best possible expiriance using our services
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4" [routerLink]="['../../edit-picture']">
+      <div class="feature-box-1">
+        <div class="icon">
+          <i class="fa fa-exclamation-circle"></i>
+        </div>
+        <div class="feature-content">
+          <h5>Complaint</h5>
+          <p>
+            If user is acting improperly on our platform you shoul let him know
+            how to behave
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- / -->
+    <div class="col-sm-6 col-lg-4" [routerLink]="['../../edit-password']">
+      <div class="feature-box-1">
+        <div class="icon">
+          <i class="fa fa-ban"></i>
+        </div>
+        <div class="feature-content">
+          <h5>Ban</h5>
+          <p>
+            If user is acting improperly repeatedly you shoud ban him from using
+            our services
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- / -->
+  </div>
+</section>
