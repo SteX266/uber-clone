@@ -10,6 +10,7 @@ import {
   FacebookLoginProvider,
 } from '@abacritt/angularx-social-login';
 import { ThisReceiver } from '@angular/compiler';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -24,7 +25,8 @@ export class SignInModalComponent {
     public dialogRef: MatDialogRef<SignInModalComponent>,
     private authService: AuthService,
     private snackBarService: SnackBarService,
-    private socialAuthService: SocialAuthService
+    private socialAuthService: SocialAuthService,
+    private router: Router
   ) {}
 
   facebookLogin() {
@@ -71,6 +73,7 @@ export class SignInModalComponent {
             this.authService.saveCurrentUserId(value.id);
             this.authService.saveCurrentUserRole(value.userRole);
             console.log(this.authService.getToken());
+            this.Redirect(value.userRole);
           } else {
             this.snackBarService.openFailureSnackBar(
               'Wrong credentials! Try again.'
@@ -83,5 +86,10 @@ export class SignInModalComponent {
           );
         },
       });
+  }
+  Redirect(userRole: string) {
+    let route = '/' + userRole.toLowerCase();
+    this.router.navigate([route]);
+    console.log(route);
   }
 }

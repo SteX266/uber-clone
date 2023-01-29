@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChangePasswordComponent } from '../shared/change-password/change-password.component';
-import { ChangePhotoComponent } from '../shared/change-photo/change-photo.component';
+import { ChangePasswordComponent } from '../profile/change-password/change-password.component';
+import { ChangePhotoComponent } from '../profile/change-photo/change-photo.component';
 import { ClientHomePageComponent } from '../client/client-home-page/client-home-page.component';
-import { ProfilePageComponent } from '../shared/profile-page/profile-page.component';
-import { UserPersonalInfoUpdateComponent } from '../shared/user-personal-info-update/user-personal-info-update.component';
+import { ProfilePageComponent } from '../profile/profile-page/profile-page.component';
+import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
 import { HeaderComponent } from '../guest/header/header.component';
-import { ChangeCarComponent } from '../shared/change-car/change-car.component';
+import { ChangeCarComponent } from '../profile/change-car/change-car.component';
+import { DriverNavbarComponent } from './driver-navbar/driver-navbar.component';
+import { ChatComponent } from '../shared/chat/chat.component';
 
 const routes: Routes = [
   {
     path: 'driver',
-    component: HeaderComponent,
+    component: DriverNavbarComponent,
     children: [
       { path: 'profile/:id', component: ProfilePageComponent },
       {
@@ -21,6 +23,7 @@ const routes: Routes = [
       { path: 'edit-password', component: ChangePasswordComponent },
       { path: 'edit-picture', component: ChangePhotoComponent },
       { path: 'edit-car', component: ChangeCarComponent },
+      { path: 'support', component: ChatComponent },
       { path: '', component: ClientHomePageComponent },
     ],
   },
