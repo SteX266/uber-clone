@@ -1,0 +1,75 @@
+<div class="row map-container">
+  <div class="col">
+    <ul class="nav flex-column">
+      <app-map-sidebar
+        (onShowResults)="refreshDirections($event)"
+      ></app-map-sidebar>
+    </ul>
+    <div class="container">
+      <div
+        class="row dropdown button"
+        *ngFor="let routes of routes; index as i"
+      >
+        <button
+          class="btn btn-dark dropdown-toggle text-align-left"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <h5>Selected Route {{ i + 1 }}</h5>
+          <small>Distance ≈{{ distanceInKm(selectedRoutes[i]) }}km</small><br />
+          <small>Time ≈{{ timeInMinutesRounded(selectedRoutes[i]) }}m</small>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li *ngFor="let route of routes; index as j">
+            <a class="dropdown-item" (click)="selectRoute(route, i)"
+              ><h5>Route {{ j + 1 }}</h5>
+              <small>Distance ≈{{ distanceInKm(route) }}km</small><br />
+              <small>Time ≈{{ timeInMinutesRounded(route) }}m</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" *ngIf="gotRoutes">
+      <div class="row">
+        <div class="col">
+          <select
+            class="form-select bg-dark text-white button"
+            aria-label="Default select example"
+            [(ngModel)]="selectedVehicleType"
+          >
+            <option selected value="REGULAR">Vehicle type</option>
+            <option value="REGULAR">REGULAR</option>
+            <option value="PREMIUM">PREMIUM</option>
+          </select>
+        </div>
+        <div class="col">
+          <button class="btn btn-dark button">Split Fare</button>
+        </div>
+      </div>
+      <div class="row button">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" />
+          <label class="form-check-label">Pet</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" />
+          <label class="form-check-label">Baby</label>
+        </div>
+      </div>
+      <div class="row button">
+        <button class="btn btn-dark">Make Reservation</button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-9 map"
+    leaflet
+    [leafletOptions]="options"
+    (leafletMapReady)="initializeMap($event)"
+  >
+    >
+  </div>
+</div>

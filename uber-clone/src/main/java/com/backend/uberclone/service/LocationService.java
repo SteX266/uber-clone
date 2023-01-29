@@ -3,18 +3,23 @@ package com.backend.uberclone.service;
 import com.backend.uberclone.dto.LocationDTO;
 import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Location;
+import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LocationService {
 
 
-    private UserRepository<Driver> driverRepository;
+    private DriverRepository driverRepository;
+
 
     @Autowired
-    public void setDriverRepository(UserRepository<Driver> driverRepository) {
+    public void setDriverRepository(DriverRepository driverRepository) {
         this.driverRepository = driverRepository;
     }
 
@@ -43,5 +48,15 @@ public class LocationService {
         driver.setCurrentLocation(new Location(locationDTO.getLatitude(), locationDTO.getLongitude()));
         driverRepository.save(driver);
         return true;
+    }
+
+    public List<LocationDTO> getActiveDriverLocations() {
+        List<LocationDTO> locationDTOS = new ArrayList<>();
+        List<Driver> activeDrivers = driverRepository.findAllByActive(true);
+        for (Driver d: activeDrivers) {
+            Location location = d.getCurrentLocation();
+            locationDTOS.add(new LocationDTO(location.getLatitude(), location.getLongitude(), d.getId()));
+        }
+        return locationDTOS;
     }
 }

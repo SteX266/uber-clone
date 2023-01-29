@@ -14,7 +14,9 @@ import { DriverModule } from '../driver/driver.module';
 import { ReviewRideModalComponent } from './review-ride-modal/review-ride-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { ClientMapComponent } from './client-map/client-map.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     EditClientProfileComponent,
     ProfilePageComponent,
     ReviewRideModalComponent,
+    ClientMapComponent,
+    MapSidebarComponent,
   ],
   imports: [
     CommonModule,
@@ -34,8 +38,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     SharedModule,
     DriverModule,
     NgbModule,
-    MatDialogModule
-
+    MatDialogModule,
+    LeafletModule,
   ],
   exports: [UserPersonalInfoUpdateComponent],
 })
