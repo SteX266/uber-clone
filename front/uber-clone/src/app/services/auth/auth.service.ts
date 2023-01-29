@@ -67,10 +67,16 @@ export class AuthService {
 
   invalidateToken(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUserId');
+    localStorage.removeItem('currentUserEmail');
+    localStorage.removeItem('currentUserRole');
+
   }
 
   logout() {
     this.invalidateToken();
+    window.location.href = '/';
+
   }
 
   getHttpOptions() {
