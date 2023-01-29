@@ -33,6 +33,7 @@ import { ProfileModule } from './profile/profile.module';
   declarations: [AppComponent, NotFoundComponent, SignUpDriverModalComponent],
   imports: [
     BrowserModule,
+    AdminModule,
     DriverModule,
     FormsModule,
     LeafletModule,
@@ -45,7 +46,7 @@ import { ProfileModule } from './profile/profile.module';
     SocialLoginModule,
     SharedModule,
     AppRoutingModule,
-    AdminModule,
+
     ProfileModule,
   ],
   providers: [
