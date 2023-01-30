@@ -98,6 +98,9 @@ public class ProfileController {
     public ResponseEntity<InputStreamResource> getImage(@PathVariable("userId") Integer userId) {
         try {
             User u = userService.findOneById(userId);
+            if(u.getProfilePicture().equals("") || u.isSocialLogin()){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             FileSystemResource imgFile = new FileSystemResource(u.getProfilePicture());
             System.out.println("NASAOOOOO SLIKUUUU");
             return ResponseEntity.ok()

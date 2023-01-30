@@ -18,6 +18,8 @@ export class UserProfileComponent {
   selectedId = 0;
   user = new UserProfileInfo(0, '', '', '', '', '', '', '');
   srcData: SafeResourceUrl | undefined;
+  defaultAvatar: string = 'assets/default-avatar.png';
+
   imageUrl: string = '';
   car = new Vehicle(0, '', 0, false, false, '', 0);
   constructor(
@@ -40,12 +42,14 @@ export class UserProfileComponent {
       this.setUserCar();
     });
 
-    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe((data)=>{
+    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe({next:(data)=>{
 
       this.imageUrl = URL.createObjectURL(data);
       this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.imageUrl);
+    },error:(err)=>{
 
-    });
+      this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.defaultAvatar);
+    }});
   }
 
   setUserCar() {
