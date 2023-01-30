@@ -9,6 +9,7 @@ import { EditAdminProfileComponent } from './edit-admin-profile/edit-admin-profi
 import { UpdateProfileRequestsComponent } from './update-profile-requests/update-profile-requests.component';
 import { FormsModule } from '@angular/forms';
 import { UpdateRequestComponent } from './update-request/update-request.component';
+import { NotesComponent } from './notes/notes.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { UpdateRequestComponent } from './update-request/update-request.componen
     EditAdminProfileComponent,
     UpdateProfileRequestsComponent,
     UpdateRequestComponent,
+    NotesComponent,
   ],
   imports: [CommonModule, AdminRoutingModule, SharedModule, FormsModule],
   exports: [AdminOtherUserProfileComponent, EditAdminProfileComponent],

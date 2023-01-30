@@ -7,6 +7,7 @@ import { ProfilePageComponent } from '../profile/profile-page/profile-page.compo
 import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
 import { ChatComponent } from '../shared/chat/chat.component';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
+import { NotesComponent } from './notes/notes.component';
 import { UpdateProfileRequestsComponent } from './update-profile-requests/update-profile-requests.component';
 import { UpdateRequestComponent } from './update-request/update-request.component';
 
@@ -30,6 +31,10 @@ const routes: Routes = [
       {
         path: 'profile-change-request/:id',
         component: UpdateRequestComponent,
+      },
+      {
+        path: 'notes/:id',
+        component: NotesComponent,
       },
       { path: '', component: ClientHomePageComponent },
     ],

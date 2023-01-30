@@ -13,7 +13,6 @@ export class RideCardComponent {
     [
       new UserProfileInfo(1, '', 'Vanja', 'Serfeze', '', '', '', ''),
       new UserProfileInfo(2, '', 'Mali', 'Slavko', '', '', '', ''),
-
       new UserProfileInfo(1, '', 'Petar', 'Markovic', '', '', '', ''),
       new UserProfileInfo(2, '', 'Milos', 'Bojanic', '', '', '', ''),
     ],
