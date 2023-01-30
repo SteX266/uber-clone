@@ -78,6 +78,10 @@ public abstract class User implements UserDetails {
     @OneToMany(mappedBy = "recipient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UpdateUserRequest> updateRequests;
+
+
     public String getRole(){
         try{
             return this.getRoles().get(0).getName();

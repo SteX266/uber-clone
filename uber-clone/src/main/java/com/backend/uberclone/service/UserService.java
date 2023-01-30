@@ -6,12 +6,17 @@ import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.RoleRepository;
+import com.backend.uberclone.repository.UpdateUserRequestRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +32,9 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UpdateUserRequestRepository updateUserRequestRepository;
 
     public User findByUsername(String email) {
         return userRepository.findOneByEmail(email);
@@ -147,9 +155,14 @@ public class UserService {
     }
 
     public boolean updateUser(UserDTO u) {
+
         User oldUser = userRepository.findOneByEmail(u.getEmail());
         if (oldUser == null){
             return false;
+        }
+        if (u.getRole().equals("DRIVER")){
+            return createUpdateUserRequest(u,(Driver)oldUser);
+
         }
         oldUser.setName(u.getName());
         oldUser.setSurname(u.getSurname());
@@ -160,4 +173,20 @@ public class UserService {
         return true;
         }
 
+    private boolean createUpdateUserRequest(UserDTO u,Driver oldUser) {
+        UpdateUserRequest updateRequest  = new UpdateUserRequest();
+        updateRequest.setUser(oldUser);
+        updateRequest.setCity(u.getCity());
+        updateRequest.setName(u.getName());
+        updateRequest.setSurname(u.getSurname());
+        updateRequest.setPhoneNumber(u.getPhoneNumber());
+        updateRequest.setProfilePicture(u.getProfilePicture());
+        updateRequest.setAnswered(false);
+        updateRequest.setEmail(u.getEmail());
+        updateRequest.setVehicle(oldUser.getVehicle());
+        updateUserRequestRepository.save(updateRequest);
+        return true;
+
     }
+
+}

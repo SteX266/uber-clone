@@ -11,7 +11,7 @@ export class CarService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getCarByUserById(idNumber: number): Vehicle {
-    let car = new Vehicle(0, '', 0, false, false, '');
+    let car = new Vehicle(0, '', 0, false, false, '', 0);
 
     this.sendGetCarByUserByIdRequest(idNumber).subscribe({
       next: (val) => {
@@ -21,6 +21,7 @@ export class CarService {
         car.model = val.model;
         car.numberOfSeats = val.numberOfSeats;
         car.type = val.type;
+        car.driver = val.driver;
       },
     });
     return car;
@@ -33,7 +34,15 @@ export class CarService {
     );
   }
 
+  getCarByRequestId(id: number) {
+    return this.http.get<Vehicle>(
+      environment.apiEndpoint + 'vehicle/getCarByRequestId/' + id,
+      this.authService.getHttpOptionsWithToken()
+    );
+  }
+
   updateCar(car: Vehicle) {
+    console.log(car);
     return this.http.post<any>(
       environment.apiEndpoint + 'vehicle/updateVehicle',
       car,

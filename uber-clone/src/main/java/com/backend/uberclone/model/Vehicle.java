@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,9 +36,26 @@ public class Vehicle {
     private Driver driver;
 
 
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UpdateUserRequest> updateRequest;
+
     @Column
     @Enumerated(EnumType.STRING)
     private VehicleType type;
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", model='" + model + '\'' +
+                ", numberOfSeats=" + numberOfSeats +
+                ", allowsPet=" + allowsPet +
+                ", allowsBaby=" + allowsBaby +
+                ", driver=" + driver +
+                ", updateRequest=" + updateRequest +
+                ", type=" + type +
+                '}';
+    }
 
     public Vehicle(String carModel, int numberOfSeats, boolean allowsPet, boolean allowsBaby, String vehicleType){
         this.model = carModel;

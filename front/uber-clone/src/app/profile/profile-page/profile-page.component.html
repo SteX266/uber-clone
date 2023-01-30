@@ -20,6 +20,10 @@
                       *ngSwitchCase="'DRIVER-current'"
                     ></app-edit-driver-profile>
 
+                    <app-edit-admin-profile
+                      *ngSwitchCase="'ADMIN-current'"
+                    ></app-edit-admin-profile>
+
                     <div *ngSwitchCase="'CLIENT-other'">
                       <div *ngIf="user.role === 'CLIENT'" class="row">
                         <div class="col-lg-6">
