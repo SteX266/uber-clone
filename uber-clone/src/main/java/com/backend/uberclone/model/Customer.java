@@ -25,6 +25,8 @@ public class Customer extends User {
 
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> given_reviews;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Payment> payments;
 
     @Column
     private double coins;
@@ -40,5 +42,4 @@ public class Customer extends User {
             inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
     private Set<Reservation> reservations;
 
-    // ovde treba da postoji payment method
 }

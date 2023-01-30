@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="row padding-top-bottom">
+    <div class="col-9 padding-left">
+      <div class="form-floating">
+        <input
+          type="text"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="Email..."
+          [(ngModel)]="field"
+          class="form-control control"
+          id="splitFare"
+        />
+        <label for="splitFare" class="padding-top">Split fare with:</label>
+      </div>
+    </div>
+    <div class="col padding-left-more">
+      <button class="btn plus-button" (click)="addPerson()">
+        <i class="fa fa-solid fa-plus"></i>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="row padding-top-bottom"
+    *ngFor="let person of people; let i = index; trackBy: customTrackBy"
+  >
+    <div class="col-9 padding-left">
+      <div class="form-floating">
+        <input
+          type="text"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="Email..."
+          [(ngModel)]="people[i]"
+          class="form-control control"
+          [id]="'person' + i"
+        />
+        <label [htmlFor]="'person' + i" class="padding-top"
+          >Person {{ i + 1 }}:</label
+        >
+      </div>
+    </div>
+    <div class="col padding-left-more">
+      <button class="btn plus-button" (click)="removePerson(i)">
+        <i class="fa fa-solid fa-minus"></i>
+      </button>
+    </div>
+  </div>
+</div>

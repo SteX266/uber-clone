@@ -12,17 +12,19 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class UserService {
-
   private readonly changePasswordUrl: string;
   private readonly createReviewUrl: string;
-  private readonly getCoinAmountUrl:string;
-  private readonly addImageUrl:string;
+  private readonly getCoinAmountUrl: string;
+  private readonly addImageUrl: string;
 
   srcData: SafeResourceUrl | undefined;
 
-
   addImage(image: Image) {
-    return this.http.post<any>(this.addImageUrl, image, this.authService.getHttpOptionsWithBlob());
+    return this.http.post<any>(
+      this.addImageUrl,
+      image,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
   updateUser(user: UserProfileInfo) {
     return this.http.post<any>(
@@ -50,9 +52,11 @@ export class UserService {
     return user;
   }
 
-  getImage(id:number){
-    return this.http.get<any>(environment.apiEndpoint+"profile/getImage/"+id, this.authService.getHttpOptionsWithBlob());
-
+  getImage(id: number) {
+    return this.http.get<any>(
+      environment.apiEndpoint + 'profile/getImage/' + id,
+      this.authService.getHttpOptionsWithBlob()
+    );
   }
   sendGetUserRequest(id: number) {
     return this.http.get<UserProfileInfo>(
@@ -93,14 +97,41 @@ export class UserService {
     );
   }
 
-
-  sendGetCurrentUserCoinAmountRequest(){
-    return this.http.get<number>(this.getCoinAmountUrl,this.authService.getHttpOptionsWithToken());
+  getCurrentUserCoinAmount(): number {
+    let coins = 0;
+    this.sendGetCurrentUserCoinAmountRequest().subscribe({
+      next: (val) => {
+        coins = val;
+      },
+      error: (err) => {},
+    });
+    return coins;
   }
-  constructor(private http: HttpClient, private authService: AuthService, private sanitizer:DomSanitizer) {
+
+  sendGetCurrentUserCoinAmountRequest() {
+    return this.http.get<number>(
+      this.getCoinAmountUrl,
+      this.authService.getHttpOptionsWithToken()
+    );
+  }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private sanitizer: DomSanitizer
+  ) {
     this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
     this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
-    this.getCoinAmountUrl = environment.apiEndpoint + 'customer/getCustomerCoinAmount/' + authService.getCurrentUserId();
+    this.getCoinAmountUrl =
+      environment.apiEndpoint +
+      'customer/getCustomerCoinAmount/' +
+      authService.getCurrentUserId();
     this.addImageUrl = environment.apiEndpoint + 'profile/addImage';
+  }
+
+  banUser(id: Number) {
+    return this.http.get<UserProfileInfo>(
+      environment.apiEndpoint + 'profile/banUser/' + id,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 }

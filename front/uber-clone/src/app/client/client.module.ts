@@ -17,7 +17,10 @@ import { BalanceComponent } from './balance/balance.component';
 import { ClientMapComponent } from './client-map/client-map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
+import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
+import { SplitFareComponent } from './split-fare/split-fare.component';
 import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
+import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
     BalanceComponent,
     ClientMapComponent,
     MapSidebarComponent,
+    ReservationPreviewComponent,
+    SplitFareComponent,
     ClinetNavbarComponent,
+    PaymentModalComponent,
   ],
   imports: [
     CommonModule,

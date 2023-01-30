@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-header">Reservation Preview</div>
+  <div class="card-body">
+    <h5 class="card-title">Stops</h5>
+
+    <div class="card-text" *ngFor="let stop of data.stops; index as i">
+      <h6>{{ i + 1 }}. Stop:</h6>
+      {{ stop }}
+    </div>
+    <h5 class="card-title">Details</h5>
+    <p class="card-text">Price: {{ data.estimatedCost.toFixed(2) }} coins</p>
+    <p class="card-text">Distance: {{ data.distance.toFixed(2) }}km</p>
+    <p class="card-text">Estimated duration: {{ time }}minutes</p>
+    <p class="card-text">Reservation type: {{ data.reservationType }}</p>
+    <p class="card-text">Reservation time: {{ data.reservationTime }}</p>
+    <p class="card-text">Vehicle type: {{ data.vehicleType }}</p>
+    <p class="card-text">Baby: {{ data.hasBaby }}</p>
+    <p class="card-text">Pet: {{ data.hasPet }}</p>
+    <h5 class="card-title" *ngIf="data.customers.length">Customers</h5>
+    <p class="card-text" *ngFor="let person of data.customers">{{ person }}</p>
+    <button class="btn btn-dark" (click)="confirmReservation()">
+      Confirm reservation
+    </button>
+  </div>
+</div>
