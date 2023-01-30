@@ -14,5 +14,7 @@ public class PaymentDTO {
 
     String customerEmail;
 
+    boolean canceled;
+
 
 }

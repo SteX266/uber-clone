@@ -28,8 +28,6 @@ public class Ride {
     @JoinColumn(name="reservation")
     private Reservation reservation;
 
-    @ManyToMany(mappedBy = "rides")
-    private Set<Customer> customers;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "driver_id")
@@ -39,9 +37,7 @@ public class Ride {
     @Enumerated(EnumType.STRING)
     private RideStatus status;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json")
-    private String routeJSON;
+
 
     @Column
     private LocalDateTime startTime;
@@ -81,7 +77,7 @@ public class Ride {
     }
 
     private void toggleCustomers(boolean value) {
-        for (Customer c: customers) {
+        for (Customer c: reservation.getCustomers()) {
             c.setRiding(value);
         }
     }

@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static java.lang.Math.sqrt;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,12 +18,18 @@ public class Location {
     private Long id;
 
     @Column
-    Double latitude;
+    private Double latitude;
     @Column
-    Double longitude;
+    private Double longitude;
 
     public Location(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public double calculateDistance(Location location){
+        double distance = sqrt(Math.pow(this.latitude - location.getLatitude(),2) + Math.pow(this.longitude - location.getLongitude(),2));
+
+        return distance;
     }
 }

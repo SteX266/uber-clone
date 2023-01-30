@@ -2,14 +2,11 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.PaymentDTO;
 import com.backend.uberclone.dto.ReservationDTO;
-import com.backend.uberclone.model.Payment;
-import com.backend.uberclone.model.Reservation;
-import com.backend.uberclone.model.ReservationType;
+import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.backend.uberclone.model.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +18,7 @@ public class ReservationService {
     CustomerRepository customerRepository;
 
     ReservationRepository reservationRepository;
+
 
     @Autowired
     public void setCustomerRepository(CustomerRepository customerRepository) {
@@ -67,7 +65,7 @@ public class ReservationService {
     private List<PaymentDTO> createPaymentDTOS(List<Payment> payments, Integer reservationId) {
         List<PaymentDTO> paymentDTOS = new ArrayList<>();
         for (Payment p: payments) {
-            paymentDTOS.add(new PaymentDTO(p.getAmount(), reservationId, p.getCustomer().getEmail()));
+            paymentDTOS.add(new PaymentDTO(p.getAmount(), reservationId, p.getCustomer().getEmail(),false));
         }
         return paymentDTOS;
     }
@@ -83,5 +81,40 @@ public class ReservationService {
     }
 
 
+    public boolean confirmPayment(PaymentDTO paymentDTO) {
+        Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
+        Customer c = customerRepository.findOneByEmail(paymentDTO.getCustomerEmail());
 
+        for(Payment p:r.getPayments()){
+
+            if (p.getCustomer().getEmail().equals(c.getEmail())){
+                if(c.getCoins() >= paymentDTO.getAmount()){
+                    c.setCoins(c.getCoins() - paymentDTO.getAmount());
+                    p.setPaid(true);
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        return isPaymentDone(r.getPayments());
+    }
+
+    public Reservation findOneById(Integer id){
+        return reservationRepository.findOneById(id);
+    }
+    private boolean isPaymentDone(List<Payment> payments) {
+        boolean isPaid = true;
+        for(Payment p:payments){
+            if(!p.isPaid()){
+                isPaid = false;
+            }
+        }
+        return isPaid;
+    }
+
+    public void cancelPayment(PaymentDTO paymentDTO) {
+        Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
+        r.setStatus(ReservationStatus.DECLINED);
+    }
 }
