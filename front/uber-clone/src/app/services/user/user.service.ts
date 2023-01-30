@@ -11,8 +11,10 @@ import { Image } from 'src/app/models/Image';
   providedIn: 'root',
 })
 export class UserService {
+
   private readonly changePasswordUrl: string;
   private readonly createReviewUrl: string;
+  private readonly getCoinAmountUrl:string;
   private readonly addImageUrl:string;
 
   addImage(image: Image) {
@@ -82,9 +84,24 @@ export class UserService {
       this.authService.getHttpOptionsWithToken()
     );
   }
+
+  getCurrentUserCoinAmount(): number {
+    let coins = 0;
+    this.sendGetCurrentUserCoinAmountRequest().subscribe({next:(val)=>{
+      coins = val;
+    },error:(err)=>{
+      
+    }});
+    return coins;
+  }
+
+  sendGetCurrentUserCoinAmountRequest(){
+    return this.http.get<number>(this.getCoinAmountUrl,this.authService.getHttpOptionsWithToken());
+  }
   constructor(private http: HttpClient, private authService: AuthService) {
     this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
     this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
+    this.getCoinAmountUrl = environment.apiEndpoint + 'customer/getCustomerCoinAmount/' + authService.getCurrentUserId();
     this.addImageUrl = environment.apiEndpoint + 'profile/addImage';
   }
 }

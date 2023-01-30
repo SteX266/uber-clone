@@ -5,6 +5,7 @@ import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.*;
+import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.RoleRepository;
 import com.backend.uberclone.repository.UpdateUserRequestRepository;
 import com.backend.uberclone.repository.UserRepository;
@@ -13,10 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +32,11 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
+
     private UpdateUserRequestRepository updateUserRequestRepository;
+
+    private CustomerRepository customerRepository;
+
 
     public User findByUsername(String email) {
         return userRepository.findOneByEmail(email);
@@ -173,6 +175,7 @@ public class UserService {
         return true;
         }
 
+
     private boolean createUpdateUserRequest(UserDTO u,Driver oldUser) {
         UpdateUserRequest updateRequest  = new UpdateUserRequest();
         updateRequest.setUser(oldUser);
@@ -186,6 +189,13 @@ public class UserService {
         updateRequest.setVehicle(oldUser.getVehicle());
         updateUserRequestRepository.save(updateRequest);
         return true;
+
+    }
+
+
+    public Double getCustomerCoinAmount(Integer id) {
+        Customer c = customerRepository.findOneById(id);
+        return c.getCoins();
 
     }
 

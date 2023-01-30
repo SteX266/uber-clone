@@ -13,6 +13,7 @@ import { ProfilePageComponent } from '../profile/profile-page/profile-page.compo
 import { ReviewRideModalComponent } from './review-ride-modal/review-ride-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogModule } from '@angular/material/dialog';
+import { BalanceComponent } from './balance/balance.component';
 import { ClientMapComponent } from './client-map/client-map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
@@ -23,6 +24,7 @@ import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
     ClientHomePageComponent,
     EditClientProfileComponent,
     ReviewRideModalComponent,
+    BalanceComponent,
     ClientMapComponent,
     MapSidebarComponent,
     ClinetNavbarComponent,
