@@ -42,6 +42,14 @@ public class Route {
     @Column
     private double distanceInKm;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Location startCoordinates;
+
+
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Location endCoordinates;
+
 
     @OneToMany(mappedBy = "route", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
