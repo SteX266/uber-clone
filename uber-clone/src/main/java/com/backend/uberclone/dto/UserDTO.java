@@ -1,5 +1,6 @@
 package com.backend.uberclone.dto;
 
+import com.backend.uberclone.model.UpdateUserRequest;
 import com.backend.uberclone.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,17 @@ public class UserDTO {
         role = u.getRoles().get(0).getName();
         id = u.getId();
     }
+
+    public UserDTO(UpdateUserRequest u){
+        email = u.getEmail();
+        name = u.getName();
+        surname = u.getSurname();
+        city = u.getCity();
+        phoneNumber = u.getPhoneNumber();
+        profilePicture = u.getProfilePicture();
+        role = "DRIVER";
+        id = u.getId();
+    }
 }
+
 

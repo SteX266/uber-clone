@@ -38,7 +38,6 @@ public class ProfileController {
 
     @PostMapping("/updateUserProfileInfo")
     public ResponseEntity<SuccessResponseDTO> updateUserProfile(@RequestBody UserDTO user){
-        System.out.println(user);
         if (userService.updateUser(user)) {
                 return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
             }

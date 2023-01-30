@@ -38,9 +38,13 @@ export class UserPersonalInfoUpdateComponent {
   submitProfileChanges() {
     if (this.validateInputData()) {
       this.userService.updateUser(this.user).subscribe();
-      this.snackBarService.openSuccessSnackBar('Successfully changed info');
+      if (this.auth.getCurrentUserRole() === 'DRIVER')
+        this.snackBarService.openSuccessSnackBar(
+          'Request for change successfully sent'
+        );
+      else
+        this.snackBarService.openSuccessSnackBar('Successfully changed info');
       this.back();
-    } else {
     }
   }
 

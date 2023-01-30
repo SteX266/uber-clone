@@ -17,11 +17,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class UserProfileComponent {
   selectedId = 0;
   user = new UserProfileInfo(0, '', '', '', '', '', '', '');
-  car = new Vehicle(0, '', 0, false, false, '');
   srcData: SafeResourceUrl | undefined;
   imageUrl: string = '';
-
-
+  car = new Vehicle(0, '', 0, false, false, '', 0);
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,

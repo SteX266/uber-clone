@@ -8,5 +8,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
     Vehicle findOneById(int id);
     Vehicle getVehicleByDriverId(int id);
 
+    Vehicle getVehicleByUpdateRequestId(int id);
+
 
 }
