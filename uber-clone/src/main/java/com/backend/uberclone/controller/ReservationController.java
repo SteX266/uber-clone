@@ -58,10 +58,12 @@ public class ReservationController {
             r.setStatus(ReservationStatus.FINISHED);
             boolean driverExists = rideService.createRide(r);
             if (!driverExists){
-
+                for(Payment p:r.getPayments()){
+                    simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true));
+                }
+                return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
             }
             for(Payment p:r.getPayments()){
-                System.out.println("SALJEM ROCKET");
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),false));
             }
         }
@@ -71,8 +73,11 @@ public class ReservationController {
     @PostMapping("/cancelPayment")
     public ResponseEntity<SuccessResponseDTO> cancelPayment(@RequestBody PaymentDTO paymentDTO) {
         this.reservationService.cancelPayment(paymentDTO);
-        paymentDTO.setCanceled(true);
-        simpMessagingTemplate.convertAndSend("/payment/all-confirmed",paymentDTO);
+        Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
+        for(Payment p:r.getPayments()){
+            p.setPaid(false);
+            simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true));
+        }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
 
     }

@@ -99,7 +99,7 @@ public class ReservationService {
             if (p.getCustomer().getEmail().equals(c.getEmail())){
                 if(c.getCoins() >= paymentDTO.getAmount()){
                     p.setPaid(true);
-
+                    paymentRepository.save(p);
                 }
                 else{
                     return false;
@@ -119,13 +119,19 @@ public class ReservationService {
                 isPaid = false;
             }
         }
-        System.out.println("IS PAID JEBEM TI SEMEEE");
-        System.out.println(isPaid);
+        if(isPaid){
+            for(Payment p:payments){
+                Customer c = p.getCustomer();
+                c.setCoins(c.getCoins()-p.getAmount());
+                customerRepository.save(c);
+            }
+        }
         return isPaid;
     }
 
     public void cancelPayment(PaymentDTO paymentDTO) {
         Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
         r.setStatus(ReservationStatus.DECLINED);
+        reservationRepository.save(r);
     }
 }
