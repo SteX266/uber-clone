@@ -15,6 +15,10 @@ export class PaymentModalComponent {
     private paymentService: PaymentService
   ) {}
   confirmPayment() {
-    this.paymentService.confirmPayment(this.data);
+    this.paymentService.confirmPayment(this.data).subscribe({
+      next: (data: any) => {
+        this.dialogRef.close();
+      },
+    });
   }
 }

@@ -165,12 +165,13 @@ export class ClientMapComponent implements OnInit {
       '/payment/all-confirmed',
       (message: { body: string }) => {
         let dto: any = JSON.parse(message.body);
-
+        console.log(dto);
         if (dto.customerEmail === this.authService.getCurrentUserEmail()) {
           if (dto.canceled) {
             this.snackbar.openFailureSnackBar('Payment canceled');
           }
           this.snackbar.openSuccessSnackBar('Reservation confirmer.');
+          this.Redirect(dto.reservationId);
         }
       }
     );
@@ -393,7 +394,7 @@ export class ClientMapComponent implements OnInit {
         this.totalEstimatedTimeInMinutes(),
         this.price(),
         this.stops[0].getCoordinates(),
-        this.stops[-1].getCoordinates()
+        this.stops[this.stops.length - 1].getCoordinates()
       ),
     });
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
+  geoJSON,
   icon,
   latLng,
   Map,
@@ -78,7 +79,22 @@ export class RideMapComponent implements OnInit {
       .getGeoJsonRouteById(rideId)
       .subscribe((routeGeoJsonData: any) => {
         this.routeGeoJson = JSON.parse(routeGeoJsonData);
+        this.createRoute(this.routeGeoJson);
+        console.log(this.routeGeoJson);
       });
+  }
+
+  createRoute(route: any) {
+    let geoJson = geoJSON(route, { style: this.routeStyle() });
+    geoJson.addTo(this.map);
+    this.map.fitBounds(geoJson.getBounds());
+  }
+
+  routeStyle() {
+    return {
+      color: 'black',
+      weight: 6,
+    };
   }
 
   getDriverLocation(rideId: number) {
