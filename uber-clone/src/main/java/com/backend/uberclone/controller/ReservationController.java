@@ -56,7 +56,10 @@ public class ReservationController {
 
             Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
             r.setStatus(ReservationStatus.FINISHED);
-            rideService.createRide(r);
+            boolean driverExists = rideService.createRide(r);
+            if (!driverExists){
+
+            }
             for(Payment p:r.getPayments()){
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),false));
             }

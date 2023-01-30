@@ -56,9 +56,11 @@ public class RideService {
         rideRepository.save(ride);
     }
 
-    public void createRide(Reservation r) {
+    public boolean createRide(Reservation r) {
         Driver d = findClosestAvailableDriver(r.getRoute().getStartCoordinates());
-
+        if (d == null){
+            return false;
+        }
         Ride ride = new Ride();
         ride.setDriver(d);
         ride.setReservation(r);
@@ -66,7 +68,7 @@ public class RideService {
         ride.setEstimatedArrivalTimeInMinutes(5);
 
         rideRepository.save(ride);
-
+        return true;
     }
 
     private Driver findClosestAvailableDriver(Location startCoordinates) {
@@ -77,6 +79,7 @@ public class RideService {
         Driver closestDriver = null;
 
         for (Driver d:allDrivers){
+            int numberOfRides = 0;
             double distance = 0;
             if(d.isAvailable()){
                  distance = d.getCurrentLocation().calculateDistance(startCoordinates);
@@ -84,15 +87,20 @@ public class RideService {
             else{
                 for(Ride ride : rideRepository.findRidesByDriver(d)){
                     if (ride.getStatus() == RideStatus.ARRIVING){
-                         distance = d.getCurrentLocation().calculateDistance(ride.getReservation().getRoute().getStartCoordinates());
-                         distance+=  ride.getReservation().getRoute().getStartCoordinates().calculateDistance(ride.getReservation().getRoute().getEndCoordinates());
-                         distance+=    ride.getReservation().getRoute().getEndCoordinates().calculateDistance(startCoordinates);
+                        numberOfRides++;
+                        distance = d.getCurrentLocation().calculateDistance(ride.getReservation().getRoute().getStartCoordinates());
+                        distance +=  ride.getReservation().getRoute().getStartCoordinates().calculateDistance(ride.getReservation().getRoute().getEndCoordinates());
+                        distance +=  ride.getReservation().getRoute().getEndCoordinates().calculateDistance(startCoordinates);
                     }
                     if (ride.getStatus() == RideStatus.ARRIVED || ride.getStatus() == RideStatus.ONGOING){
+                        numberOfRides++;
                         distance = d.getCurrentLocation().calculateDistance(ride.getReservation().getRoute().getEndCoordinates());
-                        distance+=    ride.getReservation().getRoute().getEndCoordinates().calculateDistance(startCoordinates);
+                        distance +=    ride.getReservation().getRoute().getEndCoordinates().calculateDistance(startCoordinates);
                     }
                 }
+            }
+            if(numberOfRides > 1){
+                continue;
             }
             if(distance < minDistance){
                 minDistance = distance;

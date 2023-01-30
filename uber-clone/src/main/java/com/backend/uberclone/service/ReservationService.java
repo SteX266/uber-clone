@@ -89,8 +89,8 @@ public class ReservationService {
 
             if (p.getCustomer().getEmail().equals(c.getEmail())){
                 if(c.getCoins() >= paymentDTO.getAmount()){
-                    c.setCoins(c.getCoins() - paymentDTO.getAmount());
                     p.setPaid(true);
+
                 }
                 else{
                     return false;
