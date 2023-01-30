@@ -107,4 +107,9 @@ public class ProfileController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(value = "/banUser/{id}")
+    public ResponseEntity<Boolean> banUser(@PathVariable("id") String id){
+        return new ResponseEntity<>(profileService.banUser(Integer.valueOf(id)), HttpStatus.OK);
+    }
 }

@@ -23,4 +23,12 @@ public class ProfileService {
         return new UserDTO(userRepository.findOneById(id));
     }
 
+    public boolean banUser(Integer id) {
+        User u = userRepository.findOneById(id);
+        u.setBanned(true);
+        userRepository.save(u);
+        u = userRepository.findOneById(id);
+        return u.isBanned();
+
+    }
 }
