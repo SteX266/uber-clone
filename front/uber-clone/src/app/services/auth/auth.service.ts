@@ -98,6 +98,18 @@ export class AuthService {
     };
   }
 
+  public getHttpOptionsWithBlob():Object{
+    return{
+      responseType:'blob',
+
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        Authorization: this.getToken(),
+        'Content-Type': 'application/json',
+      }),
+    };
+  }
+
   sendLoginRequest(credentials: UserCredentials): Observable<any> {
     let body = {
       email: credentials.email,

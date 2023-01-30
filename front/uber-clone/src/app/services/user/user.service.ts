@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 import { environment } from 'src/environments/environment';
 import { Review } from 'src/app/models/Review';
 import { Image } from 'src/app/models/Image';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,9 @@ export class UserService {
   private readonly createReviewUrl: string;
   private readonly getCoinAmountUrl:string;
   private readonly addImageUrl:string;
+
+  srcData: SafeResourceUrl | undefined;
+
 
   addImage(image: Image) {
     return this.http.post<any>(this.addImageUrl, image, this.authService.getHttpOptionsWithToken());
@@ -39,13 +43,17 @@ export class UserService {
         user.name = val.name;
         user.surname = val.surname;
         user.phoneNumber = val.phoneNumber;
-        user.profilePicture = val.profilePicture;
         user.role = val.role;
       },
     });
+
     return user;
   }
 
+  getImage(id:number){
+    return this.http.get<any>(environment.apiEndpoint+"profile/getImage/"+id, this.authService.getHttpOptionsWithBlob());
+
+  }
   sendGetUserRequest(id: number) {
     return this.http.get<UserProfileInfo>(
       environment.apiEndpoint + 'profile/getProfileInfo/' + id,
@@ -98,7 +106,7 @@ export class UserService {
   sendGetCurrentUserCoinAmountRequest(){
     return this.http.get<number>(this.getCoinAmountUrl,this.authService.getHttpOptionsWithToken());
   }
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient, private authService: AuthService, private sanitizer:DomSanitizer) {
     this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
     this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
     this.getCoinAmountUrl = environment.apiEndpoint + 'customer/getCustomerCoinAmount/' + authService.getCurrentUserId();

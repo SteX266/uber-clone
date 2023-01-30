@@ -70,7 +70,6 @@ public class ProfileController {
     }
 
     @PostMapping("/addImage")
-    @PreAuthorize("hasRole('client')")
     public ResponseEntity<InputStreamResource> addImage(@RequestBody ImageDTO imageDTO) throws IOException {
         byte[] data;
         try {
@@ -78,15 +77,35 @@ public class ProfileController {
         } catch(Exception e) {
             return null;
         }
-        String imageName = imageDTO.getPath();
-        String picturePath = "src\\main\\resources\\static\\images\\"+imageName;
+        String imageName = imageDTO.getUserId();
+
+        String[] tokens = imageDTO.getPath().split("\\.");
+        String extension = tokens[tokens.length-1];
+
+        System.out.println(imageDTO.getPath());
+        String picturePath = "src\\main\\resources\\static\\images\\"+imageName +"."+ extension;
+        userService.setUserPicture(picturePath, imageDTO.getUserId());
         try (OutputStream stream = new FileOutputStream(new File(picturePath).getCanonicalFile())) {
             stream.write(data);
-            FileSystemResource imgFile = new FileSystemResource("src/main/resources/static/images/" + imageName);
+            FileSystemResource imgFile = new FileSystemResource("src/main/resources/static/images/" + imageName+"."+extension);
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(new InputStreamResource(imgFile.getInputStream()));
         }
 
+    }
+
+    @GetMapping(value = "/getImage/{userId}")
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable("userId") Integer userId) {
+        try {
+            User u = userService.findOneById(userId);
+            FileSystemResource imgFile = new FileSystemResource(u.getProfilePicture());
+            System.out.println("NASAOOOOO SLIKUUUU");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(imgFile.getInputStream()));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

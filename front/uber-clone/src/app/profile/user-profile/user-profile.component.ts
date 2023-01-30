@@ -6,6 +6,8 @@ import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CarService } from 'src/app/services/car/car.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-profile',
@@ -16,11 +18,17 @@ export class UserProfileComponent {
   selectedId = 0;
   user = new UserProfileInfo(0, '', '', '', '', '', '', '');
   car = new Vehicle(0, '', 0, false, false, '');
+  srcData: SafeResourceUrl | undefined;
+  imageUrl: string = '';
+
+
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
     private carService: CarService,
-    private auth: AuthService
+    private auth: AuthService,
+    private sanitizer: DomSanitizer
+
   ) {}
 
   ngOnInit() {
@@ -32,6 +40,13 @@ export class UserProfileComponent {
       this.selectedId = Number(id);
       this.user = this.userService.getUserById(this.selectedId);
       this.setUserCar();
+    });
+
+    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe((data)=>{
+
+      this.imageUrl = URL.createObjectURL(data);
+      this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.imageUrl);
+
     });
   }
 

@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Image } from 'src/app/models/Image';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from 'src/app/services/user/user.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-change-photo',
   templateUrl: './change-photo.component.html',
@@ -11,7 +12,7 @@ import { UserService } from 'src/app/services/user/user.service';
 export class ChangePhotoComponent {
   @Input() srcData: SafeResourceUrl | undefined;
 
-    constructor(private location: Location, private userService:UserService,private sanitizer: DomSanitizer ) {}
+    constructor(private location: Location, private userService:UserService,private sanitizer: DomSanitizer, private authService:AuthService ) {}
 
   back(): void {
     this.location.back();
@@ -26,7 +27,7 @@ export class ChangePhotoComponent {
     let that = this;
     picturePath.onload = (e) => {
       if (e.target != null) {
-        let i = new Image(e.target.result as string, fileRead.name);
+        let i = new Image(e.target.result as string, fileRead.name, this.authService.getCurrentUserId());
         that.userService.addImage(i).subscribe({
           next: (data) => {
             this.picture = URL.createObjectURL(data);

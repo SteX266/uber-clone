@@ -159,7 +159,6 @@ public class UserService {
         oldUser.setSurname(u.getSurname());
         oldUser.setCity(u.getCity());
         oldUser.setPhoneNumber( u.getPhoneNumber());
-        oldUser.setProfilePicture( u.getProfilePicture());
         userRepository.save(oldUser);
         return true;
         }
@@ -167,6 +166,14 @@ public class UserService {
     public Double getCustomerCoinAmount(Integer id) {
         Customer c = customerRepository.findOneById(id);
         return c.getCoins();
+
+    }
+
+    public void setUserPicture(String picturePath, String userId) {
+        Integer id = Integer.parseInt(userId);
+        User u = userRepository.findOneById(id);
+        u.setProfilePicture(picturePath);
+        userRepository.save(u);
 
     }
 }

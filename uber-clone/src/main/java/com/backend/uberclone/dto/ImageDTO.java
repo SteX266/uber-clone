@@ -14,4 +14,5 @@ public class ImageDTO {
 
     private String data;
     private String path;
+    private String userId;
 }
