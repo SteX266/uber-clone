@@ -109,5 +109,10 @@ public class RideService {
         }
         return closestDriver;
     }
+
+    public List<String> getGeoJsonRoute(Integer rideId) {
+        Ride ride = rideRepository.findOneById(rideId);
+        return ride.getReservation().getRoute().getRouteGeoJson();
+    }
 }
 

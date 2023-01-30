@@ -61,6 +61,7 @@ public class ReservationController {
 
             }
             for(Payment p:r.getPayments()){
+                System.out.println("SALJEM ROCKET");
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),false));
             }
         }
