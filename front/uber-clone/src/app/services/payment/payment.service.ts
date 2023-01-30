@@ -12,9 +12,18 @@ export class PaymentService {
 
   confirmPayment(paymentDTO: PaymentDTO) {
     let url = environment.apiEndpoint + 'reservation/confirmPayment';
-    this.http.post(url, paymentDTO, this.authService.getHttpOptionsWithToken());
+    return this.http.post(
+      url,
+      paymentDTO,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
   cancelPayment(paymentDTO: PaymentDTO) {
     let url = environment.apiEndpoint + 'reservation/cancelPayment';
+    return this.http.post(
+      url,
+      paymentDTO,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 }

@@ -21,6 +21,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ReservationDTO } from 'src/app/models/reservation-dto.model';
 import { PaymentDTO } from 'src/app/models/payment-dto.model';
 import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
+import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-client-map',
   templateUrl: './client-map.component.html',
@@ -31,7 +33,9 @@ export class ClientMapComponent implements OnInit {
     private mapService: MapSearchService,
     private locationService: LocationService,
     public modal: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackbar: SnackBarService,
+    private router: Router
   ) {}
 
   openReservationPreviewModal(
@@ -157,7 +161,28 @@ export class ClientMapComponent implements OnInit {
         }
       }
     );
+    this.stompClient.subscribe(
+      '/payment/all-confirmed',
+      (message: { body: string }) => {
+        let dto: any = JSON.parse(message.body);
+        console.log(dto);
+        if (dto.customerEmail === this.authService.getCurrentUserEmail()) {
+          if (dto.canceled) {
+            this.snackbar.openFailureSnackBar('Payment canceled');
+          }
+          this.snackbar.openSuccessSnackBar('Reservation confirmer.');
+          this.Redirect(dto.reservationId);
+        }
+      }
+    );
   }
+
+  Redirect(reservationId: number) {
+    let route = '/client/ride/' + reservationId;
+    this.router.navigate([route]);
+    console.log(route);
+  }
+
   openPaymentDialog(paymentDTO: PaymentDTO) {
     this.modal.open(PaymentModalComponent, {
       width: '300px',
@@ -367,7 +392,9 @@ export class ClientMapComponent implements OnInit {
         this.hasPet,
         this.totalDistance(this.selectedRoutes),
         this.totalEstimatedTimeInMinutes(),
-        this.price()
+        this.price(),
+        this.stops[0].getCoordinates(),
+        this.stops[this.stops.length - 1].getCoordinates()
       ),
     });
   }

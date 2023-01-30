@@ -13,4 +13,9 @@ export class LocationService {
     let path = environment.apiEndpoint + 'location/getActiveDriverLocations';
     return this.http.get<any>(path);
   }
+  getDriverLocationByRideId(rideId: number) {
+    let path =
+      environment.apiEndpoint + 'location/getDriverLocationByRideId/' + rideId;
+    return this.http.get(path);
+  }
 }

@@ -4,6 +4,7 @@ import com.backend.uberclone.dto.PaymentDTO;
 import com.backend.uberclone.dto.ReservationDTO;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.CustomerRepository;
+import com.backend.uberclone.repository.PaymentRepository;
 import com.backend.uberclone.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class ReservationService {
     CustomerRepository customerRepository;
 
     ReservationRepository reservationRepository;
+
+    @Autowired
+    PaymentRepository paymentRepository;
 
 
     @Autowired
@@ -45,6 +49,11 @@ public class ReservationService {
         List<Payment> payments = createPayments(customers, reservationDTO.getEstimatedCost());
         Reservation reservation = new Reservation(reservationDTO, customers, payments);
         reservation = reservationRepository.save(reservation);
+
+        for (Payment p:payments){
+            p.setReservation(reservation);
+            this.paymentRepository.save(p);
+        }
 
         return createPaymentDTOS(reservation.getPayments(), reservation.getId());
         // socket.convertAndSend(paymentDto, putanja)
@@ -89,8 +98,8 @@ public class ReservationService {
 
             if (p.getCustomer().getEmail().equals(c.getEmail())){
                 if(c.getCoins() >= paymentDTO.getAmount()){
-                    c.setCoins(c.getCoins() - paymentDTO.getAmount());
                     p.setPaid(true);
+                    paymentRepository.save(p);
                 }
                 else{
                     return false;
@@ -110,11 +119,19 @@ public class ReservationService {
                 isPaid = false;
             }
         }
+        if(isPaid){
+            for(Payment p:payments){
+                Customer c = p.getCustomer();
+                c.setCoins(c.getCoins()-p.getAmount());
+                customerRepository.save(c);
+            }
+        }
         return isPaid;
     }
 
     public void cancelPayment(PaymentDTO paymentDTO) {
         Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
         r.setStatus(ReservationStatus.DECLINED);
+        reservationRepository.save(r);
     }
 }

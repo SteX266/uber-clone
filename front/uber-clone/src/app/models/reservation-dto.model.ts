@@ -20,6 +20,8 @@ export class ReservationDTO {
   estimatedTime: number;
 
   estimatedCost: number;
+  startCoordinates: number[];
+  endCoordinates: number[];
 
   constructor(
     stops: Array<string>,
@@ -32,7 +34,9 @@ export class ReservationDTO {
     hasPet: boolean,
     distance: number,
     estimatedTime: number,
-    estimatedCost: number
+    estimatedCost: number,
+    startCoordinates: number[],
+    endCoordinates: number[]
   ) {
     this.stops = stops;
     this.reservationTime = reservationTime;
@@ -46,5 +50,7 @@ export class ReservationDTO {
     this.estimatedTime = estimatedTime;
 
     this.estimatedCost = estimatedCost;
+    this.startCoordinates = startCoordinates;
+    this.endCoordinates = endCoordinates;
   }
 }
