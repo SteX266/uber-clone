@@ -22,7 +22,7 @@ export class UserService {
 
 
   addImage(image: Image) {
-    return this.http.post<any>(this.addImageUrl, image, this.authService.getHttpOptionsWithToken());
+    return this.http.post<any>(this.addImageUrl, image, this.authService.getHttpOptionsWithBlob());
   }
   updateUser(user: UserProfileInfo) {
     return this.http.post<any>(

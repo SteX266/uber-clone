@@ -78,7 +78,9 @@ public class UserService {
         u.setEmail(userRequest.getEmail());
         u.setName(userRequest.getFirstName());
         u.setSurname(userRequest.getLastName());
+        u.setProfilePicture(userRequest.getPhotoUrl());
         u.setEnabled(true);
+        u.setSocialLogin(true);
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findOneById(2));
         u.setRoles(roles);
@@ -121,6 +123,8 @@ public class UserService {
         u.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setCity(userRequest.getCity());
+        u.setProfilePicture("");
+        u.setSocialLogin(false);
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         List<Role> roles = new ArrayList<>();
         u.setId(this.generateNextId());

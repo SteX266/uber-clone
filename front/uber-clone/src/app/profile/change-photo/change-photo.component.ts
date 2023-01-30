@@ -4,6 +4,7 @@ import { Image } from 'src/app/models/Image';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from 'src/app/services/user/user.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 @Component({
   selector: 'app-change-photo',
   templateUrl: './change-photo.component.html',
@@ -12,7 +13,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class ChangePhotoComponent {
   @Input() srcData: SafeResourceUrl | undefined;
 
-    constructor(private location: Location, private userService:UserService,private sanitizer: DomSanitizer, private authService:AuthService ) {}
+    constructor(private location: Location, private userService:UserService,private sanitizer: DomSanitizer, private authService:AuthService, private snackBarService:SnackBarService ) {}
 
   back(): void {
     this.location.back();
@@ -32,6 +33,8 @@ export class ChangePhotoComponent {
           next: (data) => {
             this.picture = URL.createObjectURL(data);
             this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.picture);
+            this.snackBarService.openSuccessSnackBar("Change of photo successful!");
+            this.back();
           },
         });
 

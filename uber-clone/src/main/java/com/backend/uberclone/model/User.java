@@ -61,6 +61,9 @@ public abstract class User implements UserDetails {
     @Column
     private boolean enabled;
 
+    @Column
+    private boolean socialLogin;
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
