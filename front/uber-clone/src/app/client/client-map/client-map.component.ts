@@ -18,6 +18,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReservationPreviewComponent } from '../reservation-preview/reservation-preview.component';
 import { PreviewData } from 'src/app/models/preview-data.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ReservationDTO } from 'src/app/models/reservation-dto.model';
+import { PaymentDTO } from 'src/app/models/payment-dto.model';
+import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
 @Component({
   selector: 'app-client-map',
   templateUrl: './client-map.component.html',
@@ -35,11 +38,12 @@ export class ClientMapComponent implements OnInit {
     enterAnimationDuration: string,
     exitAnimationDuration: string
   ): void {}
+
   ngOnInit(): void {
     this.initializeMapOptions();
     this.getActiveDriverLocations();
     this.initializeWebSocketConnection();
-    this.people.push(this.authService.getCurrentUserEmail());
+    this.customers.push(this.authService.getCurrentUserEmail());
   }
 
   map!: Map;
@@ -53,7 +57,7 @@ export class ClientMapComponent implements OnInit {
   PRICE_COEF = 120;
   CAR_PRICE_MAP = {
     ANY: 100,
-    REGULAR: 100,
+    REGULAR: 50,
     PREMIUM: 200,
     ECO: 150,
   };
@@ -67,7 +71,7 @@ export class ClientMapComponent implements OnInit {
   hasPet: boolean = false;
   hasBaby: boolean = false;
 
-  people: string[] = [];
+  customers: string[] = [];
 
   routes: any[] = [];
   selectedRoutes: any[] = [];
@@ -142,6 +146,23 @@ export class ClientMapComponent implements OnInit {
         delete this.drivers[driverId];
       }
     );
+    this.stompClient.subscribe(
+      '/payment/payment-made',
+      (message: { body: string }) => {
+        let paymentDto: PaymentDTO = JSON.parse(message.body);
+        if (
+          paymentDto.customerEmail === this.authService.getCurrentUserEmail()
+        ) {
+          this.openPaymentDialog(paymentDto);
+        }
+      }
+    );
+  }
+  openPaymentDialog(paymentDTO: PaymentDTO) {
+    this.modal.open(PaymentModalComponent, {
+      width: '300px',
+      data: paymentDTO,
+    });
   }
 
   getActiveDriverLocations() {
@@ -291,12 +312,12 @@ export class ClientMapComponent implements OnInit {
 
   addPerson(person: string) {
     console.log(person);
-    this.people.push(person);
+    this.customers.push(person);
   }
 
   removePerson(index: number) {
-    console.log(this.people[index]);
-    this.people.splice(index, 1);
+    console.log(this.customers[index]);
+    this.customers.splice(index, 1);
   }
   clearMap() {
     this.clearRouteLayer();
@@ -312,19 +333,41 @@ export class ClientMapComponent implements OnInit {
     if (this.map.hasLayer(this.markerLayer))
       this.map.removeLayer(this.markerLayer);
   }
+
+  getStops() {
+    let strings: string[] = [];
+    this.stops.forEach((stop: MapPoint) => {
+      let arr = stop.name.split(', ');
+      arr.splice(-7, 8);
+      let stopName = arr.join(', ');
+      strings.push(stopName);
+    });
+    return strings;
+  }
+
+  getGeoJsonStringRoutes() {
+    let geoJsonData: string[] = [];
+    this.selectedRoutes.forEach((route: any) => {
+      geoJsonData.push(JSON.stringify(route));
+    });
+    return geoJsonData;
+  }
+
   openPreview() {
     this.modal.open(ReservationPreviewComponent, {
       width: '500px',
-      data: new PreviewData(
-        this.stops,
-        this.totalDistance(this.selectedRoutes),
-        this.totalEstimatedTimeInMinutes(),
-        this.price(),
+      data: new ReservationDTO(
+        this.getStops(),
+        '',
+        this.getGeoJsonStringRoutes(),
+        this.customers,
+        this.selectedVehicleType,
+        'INSTANT',
         this.hasBaby,
         this.hasPet,
-        this.people,
-        this.selectedVehicleType,
-        this.selectedRoutes
+        this.totalDistance(this.selectedRoutes),
+        this.totalEstimatedTimeInMinutes(),
+        this.price()
       ),
     });
   }

@@ -28,9 +28,9 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping("/make-reservation")
+    @PostMapping("/makeReservation")
     public ResponseEntity<SuccessResponseDTO> makeReservation(@RequestBody ReservationDTO reservationDTO) {
-
+        System.out.println(reservationDTO.getRouteGeoJson().get(0));
         List<PaymentDTO> paymentDTOS = reservationService.makeReservation(reservationDTO);
         if(paymentDTOS.size() < 1) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         for (PaymentDTO p:

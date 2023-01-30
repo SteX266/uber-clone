@@ -20,6 +20,7 @@ import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
 import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
 import { SplitFareComponent } from './split-fare/split-fare.component';
 import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
+import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
     ReservationPreviewComponent,
     SplitFareComponent,
     ClinetNavbarComponent,
+    PaymentModalComponent,
   ],
   imports: [
     CommonModule,

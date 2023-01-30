@@ -22,7 +22,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="route_id")
     private Route route;
 
@@ -70,6 +70,7 @@ public class Reservation {
         this.hasPet = reservationDTO.isHasPet();
         this.type = reservationDTO.getReservationType();
         this.status = ReservationStatus.PAYMENT;
+        this.estimatedCost = reservationDTO.getEstimatedCost();
 
     }
 

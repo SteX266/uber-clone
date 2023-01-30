@@ -57,6 +57,8 @@ public class ReservationService {
         double amount = totalAmount / customers.size();
         for (Customer c:
              customers) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println(c.getCoins());
             if (c.getCoins() < amount) return false;
         }
         return true;

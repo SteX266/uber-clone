@@ -7,7 +7,7 @@ export class PreviewData {
   price: number;
   hasBaby: boolean;
   hasPet: boolean;
-  people: Array<string>;
+  customers: Array<string>;
   vehicleType: string;
   routeGeoJson: any;
 
@@ -28,7 +28,7 @@ export class PreviewData {
     this.price = priceInTokens;
     this.hasBaby = hasBaby;
     this.hasPet = hasPet;
-    this.people = people;
+    this.customers = people;
     this.vehicleType = vehicleType;
     this.routeGeoJson = routeGeoJson;
   }
