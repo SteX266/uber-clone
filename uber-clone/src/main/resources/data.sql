@@ -43,8 +43,8 @@ INSERT INTO public.admin(
 VALUES (1, false, 'Sremska Mitrovica', false, 'bubibubisa@gmail.com', true, null,'Bubi', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '066333555', '',null , 'Bubisa');
 
 INSERT INTO public.customer(
-    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding)
-VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','picture 1', 'Serfeze', false);
+    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins)
+VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','picture 1', 'Serfeze', false, 100);
 
 
 INSERT INTO public.driver(

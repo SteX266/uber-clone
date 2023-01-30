@@ -5,6 +5,7 @@ import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.*;
+import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.RoleRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public User findByUsername(String email) {
         return userRepository.findOneByEmail(email);
@@ -161,4 +165,9 @@ public class UserService {
         return true;
         }
 
+    public Double getCustomerCoinAmount(Integer id) {
+        Customer c = customerRepository.findOneById(id);
+        return c.getCoins();
+
     }
+}

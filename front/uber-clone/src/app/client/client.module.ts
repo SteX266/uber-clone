@@ -13,12 +13,14 @@ import { ProfilePageComponent } from '../shared/profile-page/profile-page.compon
 import { ReviewRideModalComponent } from './review-ride-modal/review-ride-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogModule } from '@angular/material/dialog';
+import { BalanceComponent } from './balance/balance.component';
 
 @NgModule({
   declarations: [
     ClientHomePageComponent,
     EditClientProfileComponent,
     ReviewRideModalComponent,
+    BalanceComponent,
   ],
   imports: [
     CommonModule,

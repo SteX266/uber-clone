@@ -10,8 +10,10 @@ import { Review } from 'src/app/models/Review';
   providedIn: 'root',
 })
 export class UserService {
+
   private readonly changePasswordUrl: string;
   private readonly createReviewUrl: string;
+  private readonly getCoinAmountUrl:string;
 
   updateUser(user: UserProfileInfo) {
     return this.http.post<any>(
@@ -77,8 +79,23 @@ export class UserService {
       this.authService.getHttpOptionsWithToken()
     );
   }
+
+  getCurrentUserCoinAmount(): number {
+    let coins = 0;
+    this.sendGetCurrentUserCoinAmountRequest().subscribe({next:(val)=>{
+      coins = val;
+    },error:(err)=>{
+      
+    }});
+    return coins;
+  }
+
+  sendGetCurrentUserCoinAmountRequest(){
+    return this.http.get<number>(this.getCoinAmountUrl,this.authService.getHttpOptionsWithToken());
+  }
   constructor(private http: HttpClient, private authService: AuthService) {
     this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
     this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
+    this.getCoinAmountUrl = environment.apiEndpoint + 'customer/getCustomerCoinAmount/' + authService.getCurrentUserId();
   }
 }
