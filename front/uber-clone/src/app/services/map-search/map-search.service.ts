@@ -47,4 +47,26 @@ export class MapSearchService {
       'https://api.openrouteservice.org/v2/directions/driving-car/geojson';
     return this.httpClient.post(url, body, requestOptions);
   }
+
+  directionsWithAlternativesForMorePoints(points: Array<MapPoint>) {
+    let coordinates: any[] = [];
+    points.forEach((point: MapPoint) => {
+      coordinates.push(point.getCoordinates());
+    });
+    let headers = new HttpHeaders({
+      Authorization: this.API_KEY,
+    });
+    headers.append('Content-Type', 'application/json');
+    headers.append(
+      'Accept',
+      'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8'
+    );
+    let body = {
+      coordinates: coordinates,
+    };
+    let requestOptions = { headers: headers };
+    let url =
+      'https://api.openrouteservice.org/v2/directions/driving-car/geojson';
+    return this.httpClient.post(url, body, requestOptions);
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { delay } from 'rxjs';
+
 import { MapPoint } from 'src/app/models/map-point.model';
 import { MapSearchService } from 'src/app/services/map-search/map-search.service';
 

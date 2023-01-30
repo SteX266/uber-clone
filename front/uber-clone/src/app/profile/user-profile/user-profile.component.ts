@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ParseSourceFile } from '@angular/compiler';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Vehicle } from 'src/app/models/car';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
@@ -30,7 +31,11 @@ export class UserProfileComponent {
       }
       this.selectedId = Number(id);
       this.user = this.userService.getUserById(this.selectedId);
-      this.car = this.carService.getCarByUserById(this.selectedId);
+      this.setUserCar();
     });
+  }
+
+  setUserCar() {
+    this.car = this.carService.getCarByUserById(this.selectedId);
   }
 }

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/location", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +38,6 @@ public class LocationController {
         if(!locationService.updateUserLocation(locationDTO)) return new ResponseEntity<>("Couldn't get driver by id!", HttpStatus.BAD_REQUEST);
         simpMessagingTemplate.convertAndSend("/location-updates/new-driver", locationDTO);
         return new ResponseEntity<>("Successfully started shift!", HttpStatus.OK);
-
     }
 
     @PostMapping("/updateLocation")
@@ -53,6 +54,12 @@ public class LocationController {
         if(!locationService.endShift(driverId))  return new ResponseEntity<>("Couldn't get driver by id!", HttpStatus.BAD_REQUEST);
         simpMessagingTemplate.convertAndSend("/location-updates/end-drive", driverId);
         return new ResponseEntity<>("Successfully ended shift!", HttpStatus.OK);
+    }
+
+    @GetMapping("/getActiveDriverLocations")
+    public ResponseEntity<List<LocationDTO>> getActiveDriverLocations() {
+        System.out.println("Usao u dobavljanje lokacija svih korisnika");
+        return new ResponseEntity<>(locationService.getActiveDriverLocations(), HttpStatus.OK);
     }
 
 

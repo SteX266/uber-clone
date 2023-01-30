@@ -74,7 +74,7 @@ public class UserService {
         u.setSurname(userRequest.getLastName());
         u.setEnabled(true);
         List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findOneById(1));
+        roles.add(roleRepository.findOneById(2));
         u.setRoles(roles);
         u.setId(this.generateNextId());
 
@@ -83,7 +83,7 @@ public class UserService {
     }
 
     public Integer generateNextId(){
-        Integer id = 0;
+        Integer id;
         List<User> users = userRepository.findAll();
         int numberOfUsers = users.size();
         if ( numberOfUsers == 0){
@@ -92,7 +92,6 @@ public class UserService {
         else{
             id = users.get(numberOfUsers - 1).getId() + 1;
         }
-        System.out.println("SLEDECI ID JE" + id);
 
         return id;
     }

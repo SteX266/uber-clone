@@ -27,7 +27,6 @@ export class ChangeCarComponent {
   }
   ngOnInit() {
     this.route.params.subscribe((params) => {
-
       let id = Number(this.auth.getCurrentUserId());
       this.car = this.carService.getCarByUserById(id);
     });
