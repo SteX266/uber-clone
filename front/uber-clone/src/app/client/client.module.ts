@@ -16,6 +16,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClientMapComponent } from './client-map/client-map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
+import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
+import { SplitFareComponent } from './split-fare/split-fare.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { MapSidebarComponent } from './map-sidebar/map-sidebar.component';
     ReviewRideModalComponent,
     ClientMapComponent,
     MapSidebarComponent,
+    ReservationPreviewComponent,
+    SplitFareComponent,
   ],
   imports: [
     CommonModule,

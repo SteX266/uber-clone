@@ -14,7 +14,10 @@ import { MapPoint } from '../../models/map-point.model';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { LocationService } from 'src/app/services/location/location.service';
-
+import { MatDialog } from '@angular/material/dialog';
+import { ReservationPreviewComponent } from '../reservation-preview/reservation-preview.component';
+import { PreviewData } from 'src/app/models/preview-data.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-client-map',
   templateUrl: './client-map.component.html',
@@ -23,12 +26,20 @@ import { LocationService } from 'src/app/services/location/location.service';
 export class ClientMapComponent implements OnInit {
   constructor(
     private mapService: MapSearchService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    public modal: MatDialog,
+    private authService: AuthService
   ) {}
+
+  openReservationPreviewModal(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {}
   ngOnInit(): void {
     this.initializeMapOptions();
     this.getActiveDriverLocations();
     this.initializeWebSocketConnection();
+    this.people.push(this.authService.getCurrentUserEmail());
   }
 
   map!: Map;
@@ -37,17 +48,26 @@ export class ClientMapComponent implements OnInit {
   markerLayer: FeatureGroup = new FeatureGroup();
   routeLayer: FeatureGroup = new FeatureGroup();
 
-  selectedVehicleType: string = 'REGULAR';
+  selectedVehicleType: string = 'ANY';
 
   PRICE_COEF = 120;
   CAR_PRICE_MAP = {
+    ANY: 100,
     REGULAR: 100,
     PREMIUM: 200,
+    ECO: 150,
   };
+
+  time: Date = new Date();
 
   stops: Array<MapPoint> = new Array<MapPoint>();
 
   gotRoutes: boolean = false;
+
+  hasPet: boolean = false;
+  hasBaby: boolean = false;
+
+  people: string[] = [];
 
   routes: any[] = [];
   selectedRoutes: any[] = [];
@@ -70,10 +90,14 @@ export class ClientMapComponent implements OnInit {
     this.options = {
       zoom: 14,
       layers: [
-        tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          attribution: 'OSM',
-        }),
+        tileLayer(
+          'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+          {
+            maxZoom: 18,
+            attribution:
+              '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+          }
+        ),
       ],
       center: latLng(45.253434, 19.831323),
     };
@@ -144,7 +168,7 @@ export class ClientMapComponent implements OnInit {
   routeStyle() {
     return {
       color: 'black',
-      weight: 2,
+      weight: 6,
     };
   }
 
@@ -176,7 +200,6 @@ export class ClientMapComponent implements OnInit {
           let selectedRoute = rts.at(0);
           this.selectedRoutes.push(selectedRoute);
           this.routes.push(rts);
-          console.log(this.routes);
           this.createRoute(selectedRoute);
         });
     }
@@ -232,8 +255,49 @@ export class ClientMapComponent implements OnInit {
     return kilometers.toFixed(2);
   }
 
-  price(route: any) {}
+  price() {
+    let totalDistance = this.totalDistance(this.selectedRoutes);
+    let totalPrice =
+      this.getPriceCoeficient(this.selectedVehicleType) + totalDistance * 120;
+    return totalPrice;
+  }
 
+  getPriceCoeficient(vehicleType: string) {
+    if (vehicleType === 'ANY') return this.CAR_PRICE_MAP.ANY;
+    if (vehicleType === 'REGULAR') return this.CAR_PRICE_MAP.REGULAR;
+    if (vehicleType === 'PREMIUM') return this.CAR_PRICE_MAP.PREMIUM;
+    if (vehicleType === 'ECO') return this.CAR_PRICE_MAP.ECO;
+    return this.CAR_PRICE_MAP.ANY;
+  }
+
+  totalDistance(routes: any[]) {
+    let totalDistance = 0;
+    routes.forEach((route: any) => {
+      totalDistance += route.properties.summary.distance;
+    });
+    let kilometers = totalDistance / 1000;
+
+    return kilometers;
+  }
+
+  totalEstimatedTimeInMinutes() {
+    let totalEstimatedTime = 0;
+    this.selectedRoutes.forEach((route: any) => {
+      totalEstimatedTime += route.properties.summary.duration;
+    });
+    var minutes = totalEstimatedTime / 60;
+    return minutes;
+  }
+
+  addPerson(person: string) {
+    console.log(person);
+    this.people.push(person);
+  }
+
+  removePerson(index: number) {
+    console.log(this.people[index]);
+    this.people.splice(index, 1);
+  }
   clearMap() {
     this.clearRouteLayer();
     this.clearMarkerLayer();
@@ -247,5 +311,21 @@ export class ClientMapComponent implements OnInit {
   clearMarkerLayer() {
     if (this.map.hasLayer(this.markerLayer))
       this.map.removeLayer(this.markerLayer);
+  }
+  openPreview() {
+    this.modal.open(ReservationPreviewComponent, {
+      width: '500px',
+      data: new PreviewData(
+        this.stops,
+        this.totalDistance(this.selectedRoutes),
+        this.totalEstimatedTimeInMinutes(),
+        this.price(),
+        this.hasBaby,
+        this.hasPet,
+        this.people,
+        this.selectedVehicleType,
+        this.selectedRoutes
+      ),
+    });
   }
 }

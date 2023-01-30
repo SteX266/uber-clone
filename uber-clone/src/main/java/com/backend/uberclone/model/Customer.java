@@ -26,6 +26,9 @@ public class Customer extends User {
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> given_reviews;
 
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Payment> payments;
+
     @ManyToMany
     @JoinTable(name = "rides",
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),

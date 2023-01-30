@@ -31,8 +31,13 @@ public class Route {
     @Column
     private List<String> stops;
 
+    @ElementCollection
+    @CollectionTable(name="routeGeoJson", joinColumns = @JoinColumn(name="route_id"))
     @Column
-    private int estimatedTimeInMinutes; // ovo mozda bude promenjeno u zavisnosti od fronta
+    private List<String> routeGeoJson;
+
+    @Column
+    private double estimatedTimeInMinutes;
 
     @Column
     private double distanceInKm;
@@ -40,5 +45,12 @@ public class Route {
 
     @OneToMany(mappedBy = "route", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
+
+    public Route(List<String> stops, List<String> routeGeoJson, double estimatedTimeInMinutes, double distanceInKm) {
+        this.stops = stops;
+        this.routeGeoJson = routeGeoJson;
+        this.estimatedTimeInMinutes = estimatedTimeInMinutes;
+        this.distanceInKm = distanceInKm;
+    }
 
 }
