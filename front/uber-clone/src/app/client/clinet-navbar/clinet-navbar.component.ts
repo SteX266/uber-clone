@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { BalanceComponent } from '../balance/balance.component';
 
 @Component({
   selector: 'app-clinet-navbar',
@@ -9,7 +11,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class ClinetNavbarComponent {
   userId = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, public dialog:MatDialog) {}
 
   ngOnInit() {
     this.userId = this.authService.getCurrentUserId();
@@ -17,5 +19,16 @@ export class ClinetNavbarComponent {
 
   logOut() {
     this.authService.logout();
+  }
+
+  openBalanceDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    this.dialog.open(BalanceComponent, {
+      width: '300px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
   }
 }

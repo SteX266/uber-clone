@@ -93,15 +93,6 @@ export class UserService {
     );
   }
 
-  getCurrentUserCoinAmount(): number {
-    let coins = 0;
-    this.sendGetCurrentUserCoinAmountRequest().subscribe({next:(val)=>{
-      coins = val;
-    },error:(err)=>{
-      
-    }});
-    return coins;
-  }
 
   sendGetCurrentUserCoinAmountRequest(){
     return this.http.get<number>(this.getCoinAmountUrl,this.authService.getHttpOptionsWithToken());
