@@ -5,12 +5,15 @@ import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.*;
+import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.RoleRepository;
+import com.backend.uberclone.repository.UpdateUserRequestRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -27,6 +30,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+
+    private UpdateUserRequestRepository updateUserRequestRepository;
+
+    private CustomerRepository customerRepository;
+
 
     public User findByUsername(String email) {
         return userRepository.findOneByEmail(email);
@@ -68,9 +78,11 @@ public class UserService {
         u.setEmail(userRequest.getEmail());
         u.setName(userRequest.getFirstName());
         u.setSurname(userRequest.getLastName());
+        u.setProfilePicture(userRequest.getPhotoUrl());
         u.setEnabled(true);
+        u.setSocialLogin(true);
         List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findOneById(1));
+        roles.add(roleRepository.findOneById(2));
         u.setRoles(roles);
         u.setId(this.generateNextId());
 
@@ -79,7 +91,7 @@ public class UserService {
     }
 
     public Integer generateNextId(){
-        Integer id = 0;
+        Integer id;
         List<User> users = userRepository.findAll();
         int numberOfUsers = users.size();
         if ( numberOfUsers == 0){
@@ -88,7 +100,6 @@ public class UserService {
         else{
             id = users.get(numberOfUsers - 1).getId() + 1;
         }
-        System.out.println("SLEDECI ID JE" + id);
 
         return id;
     }
@@ -112,6 +123,8 @@ public class UserService {
         u.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setCity(userRequest.getCity());
+        u.setProfilePicture("");
+        u.setSocialLogin(false);
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         List<Role> roles = new ArrayList<>();
         u.setId(this.generateNextId());
@@ -148,17 +161,52 @@ public class UserService {
     }
 
     public boolean updateUser(UserDTO u) {
+
         User oldUser = userRepository.findOneByEmail(u.getEmail());
         if (oldUser == null){
             return false;
+        }
+        if (u.getRole().equals("DRIVER")){
+            return createUpdateUserRequest(u,(Driver)oldUser);
+
         }
         oldUser.setName(u.getName());
         oldUser.setSurname(u.getSurname());
         oldUser.setCity(u.getCity());
         oldUser.setPhoneNumber( u.getPhoneNumber());
-        oldUser.setProfilePicture( u.getProfilePicture());
         userRepository.save(oldUser);
         return true;
         }
 
+
+    private boolean createUpdateUserRequest(UserDTO u,Driver oldUser) {
+        UpdateUserRequest updateRequest  = new UpdateUserRequest();
+        updateRequest.setUser(oldUser);
+        updateRequest.setCity(u.getCity());
+        updateRequest.setName(u.getName());
+        updateRequest.setSurname(u.getSurname());
+        updateRequest.setPhoneNumber(u.getPhoneNumber());
+        updateRequest.setProfilePicture(u.getProfilePicture());
+        updateRequest.setAnswered(false);
+        updateRequest.setEmail(u.getEmail());
+        updateRequest.setVehicle(oldUser.getVehicle());
+        updateUserRequestRepository.save(updateRequest);
+        return true;
+
     }
+
+
+    public Double getCustomerCoinAmount(Integer id) {
+        Customer c = customerRepository.findOneById(id);
+        return c.getCoins();
+
+    }
+
+    public void setUserPicture(String picturePath, String userId) {
+        Integer id = Integer.parseInt(userId);
+        User u = userRepository.findOneById(id);
+        u.setProfilePicture(picturePath);
+        userRepository.save(u);
+
+    }
+}

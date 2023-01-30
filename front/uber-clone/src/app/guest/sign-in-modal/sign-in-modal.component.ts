@@ -1,4 +1,3 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserCredentials } from 'src/app/models/UserCredentials';
@@ -9,7 +8,7 @@ import {
   SocialAuthService,
   FacebookLoginProvider,
 } from '@abacritt/angularx-social-login';
-import { ThisReceiver } from '@angular/compiler';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in-modal',
@@ -24,7 +23,8 @@ export class SignInModalComponent {
     public dialogRef: MatDialogRef<SignInModalComponent>,
     private authService: AuthService,
     private snackBarService: SnackBarService,
-    private socialAuthService: SocialAuthService
+    private socialAuthService: SocialAuthService,
+    private router: Router
   ) {}
 
   facebookLogin() {
@@ -35,9 +35,13 @@ export class SignInModalComponent {
           next: (value) => {
             if (value) {
               this.snackBarService.openSuccessSnackBar('Login successful!');
-              console.log(value);
               this.authService.saveToken('Bearer ' + value.accessToken);
+              this.authService.saveCurrentUserEmail(value.email);
+              this.authService.saveCurrentUserId(value.id);
+              this.authService.saveCurrentUserRole(value.userRole);
               console.log(this.authService.getToken());
+              this.dialogRef.close();
+              this.Redirect(value.userRole);
             } else {
               this.snackBarService.openFailureSnackBar(
                 'Wrong credentials! Try again.'
@@ -71,6 +75,8 @@ export class SignInModalComponent {
             this.authService.saveCurrentUserId(value.id);
             this.authService.saveCurrentUserRole(value.userRole);
             console.log(this.authService.getToken());
+            this.dialogRef.close();
+            this.Redirect(value.userRole);
           } else {
             this.snackBarService.openFailureSnackBar(
               'Wrong credentials! Try again.'
@@ -83,5 +89,10 @@ export class SignInModalComponent {
           );
         },
       });
+  }
+  Redirect(userRole: string) {
+    let route = '/' + userRole.toLowerCase();
+    this.router.navigate([route]);
+    console.log(route);
   }
 }

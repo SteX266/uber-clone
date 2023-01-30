@@ -39,17 +39,17 @@ VALUES (3, 'DRIVER');
 
 
 INSERT INTO public.admin(
-    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname)
-VALUES (1, false, 'Sremska Mitrovica', false, 'bubibubisa@gmail.com', true, null,'Bubi', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '066333555', '',null , 'Bubisa');
+    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname, social_login)
+VALUES (1, false, 'Sremska Mitrovica', false, 'bubibubisa@gmail.com', true, null,'Bubi', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '066333555', '',null , 'Bubisa', false);
 
 INSERT INTO public.customer(
-    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding)
-VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','picture 1', 'Serfeze', false);
+    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins, social_login)
+VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','picture 1', 'Serfeze', false, 100, false);
 
 
 INSERT INTO public.driver(
-    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname, active, available, current_location_id, vehicle_id)
-VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0669087659', '', null,'Stevanovic', false,false ,null, 1);
+    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname, active, available, current_location_id, vehicle_id, social_login)
+VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0669087659', '', null,'Stevanovic', false,false ,null, 1, false);
 
 
 

@@ -32,6 +32,7 @@ public class ReservationController {
     public ResponseEntity<SuccessResponseDTO> makeReservation(@RequestBody ReservationDTO reservationDTO) {
 
         List<PaymentDTO> paymentDTOS = reservationService.makeReservation(reservationDTO);
+        if(paymentDTOS.size() < 1) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         for (PaymentDTO p:
              paymentDTOS) {
             simpMessagingTemplate.convertAndSend("/payment/payment-made",p);

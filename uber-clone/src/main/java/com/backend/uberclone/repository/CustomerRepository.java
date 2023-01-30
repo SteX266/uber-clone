@@ -12,4 +12,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Set<Customer> findAllByEmailIn(List<String> emails);
 
+    Customer findOneById(Integer id);
 }

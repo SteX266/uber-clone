@@ -61,6 +61,9 @@ public abstract class User implements UserDetails {
     @Column
     private boolean enabled;
 
+    @Column
+    private boolean socialLogin;
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
@@ -77,6 +80,10 @@ public abstract class User implements UserDetails {
     private List<Message> recievedMessages;
     @OneToMany(mappedBy = "recipient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UpdateUserRequest> updateRequests;
+
 
     public String getRole(){
         try{

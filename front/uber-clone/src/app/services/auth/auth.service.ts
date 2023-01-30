@@ -67,10 +67,16 @@ export class AuthService {
 
   invalidateToken(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUserId');
+    localStorage.removeItem('currentUserEmail');
+    localStorage.removeItem('currentUserRole');
+
   }
 
   logout() {
     this.invalidateToken();
+    window.location.href = '/';
+
   }
 
   getHttpOptions() {
@@ -84,6 +90,18 @@ export class AuthService {
 
   public getHttpOptionsWithToken() {
     return {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        Authorization: this.getToken(),
+        'Content-Type': 'application/json',
+      }),
+    };
+  }
+
+  public getHttpOptionsWithBlob():Object{
+    return{
+      responseType:'blob',
+
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
         Authorization: this.getToken(),

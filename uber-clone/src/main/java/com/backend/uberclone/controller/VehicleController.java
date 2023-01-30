@@ -28,6 +28,11 @@ public class VehicleController {
         return new ResponseEntity<>(vehicleService.getCarByUserId(Integer.valueOf(id)), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/getCarByRequestId/{id}")
+    public ResponseEntity<CarDTO> getCarByRequestId(@PathVariable("id") String id){
+        return new ResponseEntity<>(vehicleService.getCarByRequestId(Integer.valueOf(id)), HttpStatus.OK);
+    }
+
     @PostMapping("/updateVehicle")
     public ResponseEntity<SuccessResponseDTO> updateVehicle(@RequestBody CarDTO car){
 

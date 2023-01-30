@@ -1,3 +1,5 @@
+import { SafeResourceUrl } from "@angular/platform-browser";
+
 export class UserProfileInfo {
   id!: number;
   email!: string;
@@ -7,6 +9,7 @@ export class UserProfileInfo {
   phoneNumber!: string;
   profilePicture!: string;
   role!: string;
+  srcData!:SafeResourceUrl;
 
   constructor(id:number, email:string,name:string,surname:string,city:string, phoneNumber:string,profilePicture:string,role:string){
     this.id = id;

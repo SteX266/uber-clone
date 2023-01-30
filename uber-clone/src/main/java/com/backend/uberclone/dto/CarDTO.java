@@ -42,4 +42,14 @@ public class CarDTO {
         this.type = v.getType().toString();
         this.numberOfSeats = v.getNumberOfSeats();
     }
+    public CarDTO(Vehicle v, int id){
+        this.allowsBaby = v.isAllowsBaby();
+        this.allowsPet = v.isAllowsPet();
+        this.driver = id;
+        this.id = v.getId();
+        this.model = v.getModel();
+        this.type = v.getType().toString();
+        this.numberOfSeats = v.getNumberOfSeats();
+    }
+
 }

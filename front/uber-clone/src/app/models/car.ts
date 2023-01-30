@@ -5,6 +5,7 @@ export class Vehicle {
   allowsPet!: boolean;
   allowsBaby!: boolean;
   type!: string;
+  driver!: number;
 
   constructor(
     id: number,
@@ -12,7 +13,8 @@ export class Vehicle {
     numberOfSeats: number,
     allowsPet: boolean,
     baby: boolean,
-    type: string
+    type: string,
+    driver: number
   ) {
     this.id = id;
     this.model = model;
@@ -20,5 +22,6 @@ export class Vehicle {
     this.allowsPet = allowsPet;
     this.allowsBaby = baby;
     this.type = type;
+    this.driver = driver;
   }
 }

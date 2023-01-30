@@ -5,6 +5,8 @@ import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from '../auth/auth.service';
 import { environment } from 'src/environments/environment';
 import { Review } from 'src/app/models/Review';
+import { Image } from 'src/app/models/Image';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +14,18 @@ import { Review } from 'src/app/models/Review';
 export class UserService {
   private readonly changePasswordUrl: string;
   private readonly createReviewUrl: string;
+  private readonly getCoinAmountUrl: string;
+  private readonly addImageUrl: string;
 
+  srcData: SafeResourceUrl | undefined;
+
+  addImage(image: Image) {
+    return this.http.post<any>(
+      this.addImageUrl,
+      image,
+      this.authService.getHttpOptionsWithToken()
+    );
+  }
   updateUser(user: UserProfileInfo) {
     return this.http.post<any>(
       environment.apiEndpoint + 'profile/updateUserProfileInfo',
@@ -32,13 +45,19 @@ export class UserService {
         user.name = val.name;
         user.surname = val.surname;
         user.phoneNumber = val.phoneNumber;
-        user.profilePicture = val.profilePicture;
         user.role = val.role;
       },
     });
+
     return user;
   }
 
+  getImage(id: number) {
+    return this.http.get<any>(
+      environment.apiEndpoint + 'profile/getImage/' + id,
+      this.authService.getHttpOptionsWithBlob()
+    );
+  }
   sendGetUserRequest(id: number) {
     return this.http.get<UserProfileInfo>(
       environment.apiEndpoint + 'profile/getProfileInfo/' + id,
@@ -77,8 +96,42 @@ export class UserService {
       this.authService.getHttpOptionsWithToken()
     );
   }
-  constructor(private http: HttpClient, private authService: AuthService) {
+
+  getCurrentUserCoinAmount(): number {
+    let coins = 0;
+    this.sendGetCurrentUserCoinAmountRequest().subscribe({
+      next: (val) => {
+        coins = val;
+      },
+      error: (err) => {},
+    });
+    return coins;
+  }
+
+  sendGetCurrentUserCoinAmountRequest() {
+    return this.http.get<number>(
+      this.getCoinAmountUrl,
+      this.authService.getHttpOptionsWithToken()
+    );
+  }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private sanitizer: DomSanitizer
+  ) {
     this.changePasswordUrl = environment.apiEndpoint + 'profile/changePassword';
     this.createReviewUrl = environment.apiEndpoint + 'review/createReview';
+    this.getCoinAmountUrl =
+      environment.apiEndpoint +
+      'customer/getCustomerCoinAmount/' +
+      authService.getCurrentUserId();
+    this.addImageUrl = environment.apiEndpoint + 'profile/addImage';
+  }
+
+  banUser(id: Number) {
+    return this.http.get<UserProfileInfo>(
+      environment.apiEndpoint + 'profile/banUser/' + id,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 }
