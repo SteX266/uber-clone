@@ -62,6 +62,12 @@ public class LocationController {
         return new ResponseEntity<>(locationService.getActiveDriverLocations(), HttpStatus.OK);
     }
 
+    @GetMapping("/getDriverLocationByRideId/{id}")
+    public ResponseEntity<LocationDTO> getDriverLocationByRideId(@PathVariable("id") String id) {
+        System.out.println("Usao u dobavljanje lokacija jednog korisnika");
+        return new ResponseEntity<>(locationService.getDriverLocationByRideId(Integer.valueOf(id)), HttpStatus.OK);
+    }
+
 
 
 

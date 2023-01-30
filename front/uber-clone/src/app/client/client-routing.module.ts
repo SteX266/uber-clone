@@ -7,6 +7,7 @@ import { ProfilePageComponent } from '../profile/profile-page/profile-page.compo
 import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
 import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
 import { ChatComponent } from '../shared/chat/chat.component';
+import { RideMapComponent } from './ride-map/ride-map.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: 'edit-picture', component: ChangePhotoComponent },
       { path: 'edit-payment', component: ChangePasswordComponent },
       { path: 'support', component: ChatComponent },
+      { path: 'ride/:id', component: RideMapComponent },
       { path: '', component: ClientHomePageComponent },
     ],
   },

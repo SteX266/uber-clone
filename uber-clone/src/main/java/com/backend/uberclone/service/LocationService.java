@@ -3,7 +3,9 @@ package com.backend.uberclone.service;
 import com.backend.uberclone.dto.LocationDTO;
 import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Location;
+import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.repository.DriverRepository;
+import com.backend.uberclone.repository.RideRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,16 @@ public class LocationService {
 
     private DriverRepository driverRepository;
 
+    private RideRepository rideRepository;
 
     @Autowired
     public void setDriverRepository(DriverRepository driverRepository) {
         this.driverRepository = driverRepository;
+    }
+
+    @Autowired
+    public void setRideRepository(RideRepository rideRepository) {
+        this.rideRepository = rideRepository;
     }
 
     // ovo treba da se nalazi u nekom driver servisu
@@ -58,5 +66,11 @@ public class LocationService {
             locationDTOS.add(new LocationDTO(location.getLatitude(), location.getLongitude(), d.getId()));
         }
         return locationDTOS;
+    }
+
+    public LocationDTO getDriverLocationByRideId(Integer rideId) {
+        Ride ride = rideRepository.findOneById(rideId);
+        Driver driver = ride.getDriver();
+        return new LocationDTO(driver.getCurrentLocation().getLatitude(), driver.getCurrentLocation().getLongitude(), driver.getId());
     }
 }

@@ -16,5 +16,6 @@ export class PaymentService {
   }
   cancelPayment(paymentDTO: PaymentDTO) {
     let url = environment.apiEndpoint + 'reservation/cancelPayment';
+    this.http.post(url, paymentDTO, this.authService.getHttpOptionsWithToken());
   }
 }

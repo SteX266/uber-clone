@@ -21,6 +21,7 @@ import { ReservationPreviewComponent } from './reservation-preview/reservation-p
 import { SplitFareComponent } from './split-fare/split-fare.component';
 import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
+import { RideMapComponent } from './ride-map/ride-map.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PaymentModalComponent } from './payment-modal/payment-modal.component';
     SplitFareComponent,
     ClinetNavbarComponent,
     PaymentModalComponent,
+    RideMapComponent,
   ],
   imports: [
     CommonModule,
