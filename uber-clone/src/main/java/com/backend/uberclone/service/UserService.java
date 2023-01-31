@@ -5,10 +5,7 @@ import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.*;
-import com.backend.uberclone.repository.CustomerRepository;
-import com.backend.uberclone.repository.RoleRepository;
-import com.backend.uberclone.repository.UpdateUserRequestRepository;
-import com.backend.uberclone.repository.UserRepository;
+import com.backend.uberclone.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +31,8 @@ public class UserService {
     private UpdateUserRequestRepository updateUserRequestRepository;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private DriverRepository driverRepository;
 
 
     public User findByUsername(String email) {
@@ -206,5 +205,12 @@ public class UserService {
         u.setProfilePicture(picturePath);
         userRepository.save(u);
 
+    }
+
+    public void setDriverActive(Integer id) {
+        Driver d = driverRepository.findOneById(id);
+        d.setActive(true);
+        d.setAvailable(true);
+        driverRepository.save(d);
     }
 }
