@@ -9,6 +9,7 @@ import { HeaderComponent } from '../guest/header/header.component';
 import { ChangeCarComponent } from '../profile/change-car/change-car.component';
 import { DriverNavbarComponent } from './driver-navbar/driver-navbar.component';
 import { ChatComponent } from '../shared/chat/chat.component';
+import { DriverHomePageComponent } from './driver-home-page/driver-home-page.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
       { path: 'edit-picture', component: ChangePhotoComponent },
       { path: 'edit-car', component: ChangeCarComponent },
       { path: 'support', component: ChatComponent },
-      { path: '', component: ClientHomePageComponent },
+      { path: '', component: DriverHomePageComponent },
     ],
   },
 ];

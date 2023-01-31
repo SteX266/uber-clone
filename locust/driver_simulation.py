@@ -3,6 +3,7 @@ import json
 
 from locust import HttpUser, task, between, events
 from random import randrange
+from locust_plugins.users import SocketIOUser
 
 
 taxi_stops = [

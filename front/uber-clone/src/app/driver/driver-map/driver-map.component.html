@@ -1,0 +1,9 @@
+<div class="container map-container">
+  <div class="col"></div>
+  <div
+    class="col-9 map"
+    leaflet
+    [leafletOptions]="options"
+    (leafletMapReady)="initializeMap($event)"
+  ></div>
+</div>
