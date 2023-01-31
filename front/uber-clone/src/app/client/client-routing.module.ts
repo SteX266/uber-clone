@@ -9,6 +9,7 @@ import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
 import { ChatComponent } from '../shared/chat/chat.component';
 import { RideCardComponent } from '../shared/ride-card/ride-card.component';
 import { RideMapComponent } from './ride-map/ride-map.component';
+import { PaymentMethodComponent } from '../profile/payment-method/payment-method.component';
 const routes: Routes = [
   {
     path: 'client',
@@ -21,7 +22,7 @@ const routes: Routes = [
       },
       { path: 'edit-password', component: ChangePasswordComponent },
       { path: 'edit-picture', component: ChangePhotoComponent },
-      { path: 'edit-payment', component: ChangePasswordComponent },
+      { path: 'edit-payment', component: PaymentMethodComponent },
       { path: 'history', component: RideCardComponent },
 
       { path: 'support', component: ChatComponent },

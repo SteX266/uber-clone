@@ -1,6 +1,7 @@
 package com.backend.uberclone.service;
 
 
+import com.backend.uberclone.dto.CoinDTO;
 import com.backend.uberclone.dto.SocialUserCredentialsDTO;
 import com.backend.uberclone.dto.UserDTO;
 import com.backend.uberclone.dto.UserRequest;
@@ -212,5 +213,12 @@ public class UserService {
         d.setActive(true);
         d.setAvailable(true);
         driverRepository.save(d);
+    }
+
+    public void addCoins(CoinDTO coins) {
+        Customer c = customerRepository.findOneByEmail(coins.getEmail());
+        c.setCoins(c.getCoins() + coins.getCoinAmount());
+        customerRepository.save(c);
+
     }
 }
