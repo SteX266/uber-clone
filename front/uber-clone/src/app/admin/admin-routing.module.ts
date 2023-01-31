@@ -6,6 +6,7 @@ import { ChangePhotoComponent } from '../profile/change-photo/change-photo.compo
 import { ProfilePageComponent } from '../profile/profile-page/profile-page.component';
 import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
 import { ChatComponent } from '../shared/chat/chat.component';
+import { RidesHistoryPageComponent } from '../shared/rides-history-page/rides-history-page.component';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 import { NotesComponent } from './notes/notes.component';
 import { UpdateProfileRequestsComponent } from './update-profile-requests/update-profile-requests.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
         path: 'profile-change-request/:id',
         component: UpdateRequestComponent,
       },
+      { path: 'history', component: RidesHistoryPageComponent },
       {
         path: 'notes/:id',
         component: NotesComponent,
