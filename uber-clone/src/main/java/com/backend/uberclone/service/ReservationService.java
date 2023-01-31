@@ -119,13 +119,6 @@ public class ReservationService {
                 isPaid = false;
             }
         }
-        if(isPaid){
-            for(Payment p:payments){
-                Customer c = p.getCustomer();
-                c.setCoins(c.getCoins()-p.getAmount());
-                customerRepository.save(c);
-            }
-        }
         return isPaid;
     }
 
@@ -133,5 +126,14 @@ public class ReservationService {
         Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
         r.setStatus(ReservationStatus.DECLINED);
         reservationRepository.save(r);
+    }
+
+    public void chargeUsers(Reservation r) {
+        for(Payment p:r.getPayments()){
+            Customer c = p.getCustomer();
+            c.setCoins(c.getCoins()-p.getAmount());
+            customerRepository.save(c);
+        }
+
     }
 }

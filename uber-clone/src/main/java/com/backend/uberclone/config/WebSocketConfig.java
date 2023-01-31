@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/location-updates","/chat","/payment");
+        registry.enableSimpleBroker("/location-updates","/chat","/payment","/ride");
     }
 
 

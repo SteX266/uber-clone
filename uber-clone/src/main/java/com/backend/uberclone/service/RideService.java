@@ -56,19 +56,15 @@ public class RideService {
         rideRepository.save(ride);
     }
 
-    public boolean createRide(Reservation r) {
+    public Ride createRide(Reservation r) {
         Driver d = findClosestAvailableDriver(r.getRoute().getStartCoordinates());
-        if (d == null){
-            return false;
-        }
         Ride ride = new Ride();
         ride.setDriver(d);
         ride.setReservation(r);
         ride.setStatus(RideStatus.ARRIVING);
         ride.setEstimatedArrivalTimeInMinutes(5);
 
-        rideRepository.save(ride);
-        return true;
+        return rideRepository.save(ride);
     }
 
     private Driver findClosestAvailableDriver(Location startCoordinates) {
