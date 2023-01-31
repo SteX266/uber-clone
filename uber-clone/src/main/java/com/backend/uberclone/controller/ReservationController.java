@@ -1,11 +1,13 @@
 package com.backend.uberclone.controller;
 
+import com.backend.uberclone.dto.DriverNewRideNotificationDTO;
 import com.backend.uberclone.dto.PaymentDTO;
 import com.backend.uberclone.dto.ReservationDTO;
 import com.backend.uberclone.dto.SuccessResponseDTO;
 import com.backend.uberclone.model.Payment;
 import com.backend.uberclone.model.Reservation;
 import com.backend.uberclone.model.ReservationStatus;
+import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.service.ReservationService;
 import com.backend.uberclone.service.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +58,18 @@ public class ReservationController {
 
             Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
             r.setStatus(ReservationStatus.FINISHED);
-            rideService.createRide(r);
+            Ride newRide = rideService.createRide(r);
+
+            if (newRide.getDriver() == null){
+                for(Payment p:r.getPayments()){
+                    simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true));
+                }
+                return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+            }
+            reservationService.chargeUsers(r);
+
+            simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(),newRide.getDriver().getEmail()));
             for(Payment p:r.getPayments()){
-                System.out.println("SALJEM ROCKET");
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),false));
             }
         }
@@ -68,8 +79,11 @@ public class ReservationController {
     @PostMapping("/cancelPayment")
     public ResponseEntity<SuccessResponseDTO> cancelPayment(@RequestBody PaymentDTO paymentDTO) {
         this.reservationService.cancelPayment(paymentDTO);
-        paymentDTO.setCanceled(true);
-        simpMessagingTemplate.convertAndSend("/payment/all-confirmed",paymentDTO);
+        Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
+        for(Payment p:r.getPayments()){
+            p.setPaid(false);
+            simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true));
+        }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
 
     }
