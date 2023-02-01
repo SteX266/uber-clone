@@ -8,6 +8,8 @@ import com.backend.uberclone.dto.UserRequest;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -220,5 +222,16 @@ public class UserService {
         c.setCoins(c.getCoins() + coins.getCoinAmount());
         customerRepository.save(c);
 
+    }
+
+    public void setDriverAvailable(Driver driver) {
+        driver.setAvailable(true);
+        driverRepository.save(driver);
+    }
+
+    private User getCurrentUser() {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        return userRepository.findOneByEmail(user.getUsername());
     }
 }

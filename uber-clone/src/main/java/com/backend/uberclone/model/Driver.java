@@ -41,4 +41,12 @@ public class Driver extends User {
     private Location currentLocation;
 
 
+    public boolean hasNextRide() {
+        for (Ride r:rides){
+            if (r.getStatus() == RideStatus.ARRIVING){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -2,7 +2,9 @@ package com.backend.uberclone.controller;
 
 
 import com.backend.uberclone.dto.RejectionDTO;
+import com.backend.uberclone.dto.RideDTO;
 import com.backend.uberclone.model.Driver;
+import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.service.RideService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,30 +29,20 @@ public class RideController {
     public void setRideService(RideService rideService) { this.rideService = rideService; }
 
     @PostMapping("/rejectRide")
-    public ResponseEntity<String> rejectRide(@RequestBody @NotNull RejectionDTO rejectionDTO) {
-        System.out.println(rejectionDTO.getReason());
-        if(!rejectionDTO.hasValidFields()) return new ResponseEntity<>("Invalid data", HttpStatus.BAD_REQUEST);
-        rideService.rejectRide(rejectionDTO, new Driver()); // treba vozac da se izvuce iz tokena
+    public ResponseEntity<String> rejectRide(@RequestBody  RejectionDTO rejectionDTO) {
+        rideService.rejectRide(rejectionDTO); // treba vozac da se izvuce iz tokena
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     @PostMapping("/startRide")
-    public ResponseEntity<String> startRide(@RequestParam Long rideId, @RequestParam Integer driverId) {
-        rideService.startRide(rideId, driverId);
+    public ResponseEntity<String> startRide(@RequestBody RideDTO rideDTO) {
+        rideService.startRide(rideDTO);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     @PostMapping("/endRide")
-    public ResponseEntity<String> endRide(@RequestParam Long rideId) {
-        if(rideId < 0) return new ResponseEntity<>("Invalid data", HttpStatus.BAD_REQUEST);
-        rideService.endRide(rideId, new Driver());
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
-
-    @PostMapping("/abortRide")
-    public ResponseEntity<String> abortRide(@RequestParam Long rideId) {
-        if(rideId < 0) return new ResponseEntity<>("Invalid data", HttpStatus.BAD_REQUEST);
-        rideService.abortRide(rideId, new Driver());
+    public ResponseEntity<String> endRide(@RequestBody RideDTO rideDTO) {
+        rideService.endRide(rideDTO);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 

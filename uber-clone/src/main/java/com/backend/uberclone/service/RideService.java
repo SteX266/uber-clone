@@ -1,6 +1,7 @@
 package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.RejectionDTO;
+import com.backend.uberclone.dto.RideDTO;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.RideRepository;
@@ -29,32 +30,37 @@ public class RideService {
     public void setRideRepository(RideRepository rideRepository) { this.rideRepository = rideRepository; }
 
 
-    public void rejectRide(@NotNull RejectionDTO rejectionDTO, @NotNull Driver driver) {
-        Ride ride = rideRepository.findByIdAndStatusInAndDriverId(rejectionDTO.getRideId(), Arrays.asList(RideStatus.ARRIVED, RideStatus.ARRIVING), driver.getId());
+    public void rejectRide(@NotNull RejectionDTO rejectionDTO) {
+        Driver driver = driverRepository.findOneById(rejectionDTO.getDriverId());
+        Ride ride = rideRepository.findByIdAndDriverId(rejectionDTO.getRideId(), driver.getId());
         if(ride == null) return;
         ride.setRejection(rejectionDTO.createRejection(ride));
         ride.cancelRide();
+        if (!driver.hasNextRide()){
+            driver.setAvailable(true);
+            driverRepository.save(driver);
+        }
         rideRepository.save(ride);
     }
 
-    public void startRide(Long rideId, Integer driverId) {
-        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideId, RideStatus.ARRIVING, driverId);
+    public void startRide(RideDTO rideDTO) {
+        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ARRIVING, rideDTO.getDriverId());
         if(ride == null) return;
         ride.startRide();
         rideRepository.save(ride);
     }
 
-    public void endRide(Long rideId, @NotNull Driver driver) {
-        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideId, RideStatus.ONGOING, driver.getId());
+    public void endRide(RideDTO rideDTO) {
+        Driver driver = driverRepository.findOneById(rideDTO.getDriverId());
+        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ONGOING, driver.getId());
         ride.endRide();
+        if (!driver.hasNextRide()){
+            driver.setAvailable(true);
+            driverRepository.save(driver);
+        }
         rideRepository.save(ride);
     }
 
-    public void abortRide(Long rideId, @NotNull Driver driver) {
-        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideId, RideStatus.ONGOING, driver.getId());
-        ride.abortRide();
-        rideRepository.save(ride);
-    }
 
     public Ride createRide(Reservation r) {
         Driver d = findClosestAvailableDriver(r.getRoute().getStartCoordinates());
