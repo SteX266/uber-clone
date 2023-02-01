@@ -1,5 +1,6 @@
 package com.backend.uberclone.service;
 
+import com.backend.uberclone.dto.DriverNewRideNotificationDTO;
 import com.backend.uberclone.dto.RejectionDTO;
 import com.backend.uberclone.dto.RideDTO;
 import com.backend.uberclone.model.*;
@@ -8,6 +9,7 @@ import com.backend.uberclone.repository.RideRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class RideService {
     @Autowired
     DriverRepository driverRepository;
 
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
 
 
     @Autowired
@@ -36,11 +41,19 @@ public class RideService {
         if(ride == null) return;
         ride.setRejection(rejectionDTO.createRejection(ride));
         ride.cancelRide();
-        if (!driver.hasNextRide()){
+        setUpDriver(driver);
+        rideRepository.save(ride);
+    }
+
+    private void setUpDriver(Driver driver) {
+        Ride ride = driver.getNextRide();
+        if (ride == null){
             driver.setAvailable(true);
             driverRepository.save(driver);
         }
-        rideRepository.save(ride);
+        else{
+            simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(ride.getId(),ride.getDriver().getEmail()));
+        }
     }
 
     public void startRide(RideDTO rideDTO) {
@@ -54,10 +67,7 @@ public class RideService {
         Driver driver = driverRepository.findOneById(rideDTO.getDriverId());
         Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ONGOING, driver.getId());
         ride.endRide();
-        if (!driver.hasNextRide()){
-            driver.setAvailable(true);
-            driverRepository.save(driver);
-        }
+        setUpDriver(driver);
         rideRepository.save(ride);
     }
 
