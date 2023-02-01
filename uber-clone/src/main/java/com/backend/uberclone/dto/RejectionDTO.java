@@ -14,7 +14,9 @@ import lombok.Setter;
 @Setter
 public class RejectionDTO {
     private String reason;
-    private Long rideId;
+    private Integer rideId;
+
+    private Integer driverId;
 
     public Rejection createRejection(Ride ride) {
         Rejection rejection = new Rejection();

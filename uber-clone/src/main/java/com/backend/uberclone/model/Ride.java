@@ -54,9 +54,13 @@ public class Ride {
 
 
     public void cancelRide() {
-        this.status = RideStatus.CANCELED;
+        if (this.status == RideStatus.ARRIVING || this.status == RideStatus.ARRIVED){
+            this.status = RideStatus.CANCELED;
+        }
+        if(this.status == RideStatus.ONGOING){
+            this.status = RideStatus.ABORTED;
+        }
         toggleCustomers(false); // ovo mozda i nije potrebno
-        this.driver.setAvailable(true);
     }
 
     public void startRide() {
@@ -67,13 +71,11 @@ public class Ride {
     public void endRide() {
         this.status = RideStatus.FINISHED;
         toggleCustomers(false);
-        this.driver.setAvailable(true);
     }
 
     public void abortRide() {
         this.status = RideStatus.ABORTED;
         toggleCustomers(false);
-        this.driver.setAvailable(true);
     }
 
     private void toggleCustomers(boolean value) {

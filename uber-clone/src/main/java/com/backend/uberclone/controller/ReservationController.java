@@ -10,6 +10,7 @@ import com.backend.uberclone.model.ReservationStatus;
 import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.service.ReservationService;
 import com.backend.uberclone.service.RideService;
+import com.backend.uberclone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,6 +33,9 @@ public class ReservationController {
     RideService rideService;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public void setReservationService(ReservationService reservationService) {
@@ -67,8 +71,11 @@ public class ReservationController {
                 return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
             }
             reservationService.chargeUsers(r);
+            if (newRide.getDriver().isAvailable()){
+                simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(),newRide.getDriver().getEmail()));
+                this.userService.setDriverAvailable(newRide.getDriver());
+            }
 
-            simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(),newRide.getDriver().getEmail()));
             for(Payment p:r.getPayments()){
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),false));
             }
