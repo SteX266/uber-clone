@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="main-body">
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="form-floating button">
+          <select
+            id="selectVehicle"
+            class="form-select bg-dark text-white"
+            aria-label="Default select example"
+            [(ngModel)]="selectedCriteria"
+            (click)="sorted()"
+          >
+            <option selected value="Date asc">Date asc</option>
+            <option value="Date dsc">Date dsc</option>
+            <option value="Price asc">Price asc</option>
+            <option value="Price dsc">Price dsc</option>
+          </select>
+          <label for="selectVehicle" class="text-white">Vehicle type</label>
+        </div>
+      </div>
+
+      <div *ngFor="let ride of rides">
+        <app-ride-card [ride]="ride"></app-ride-card>
+      </div>
+    </div>
+  </div>
+</div>

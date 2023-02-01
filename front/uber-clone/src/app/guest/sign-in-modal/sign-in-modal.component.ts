@@ -58,8 +58,14 @@ export class SignInModalComponent {
   }
 
   googleLogin() {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
+      console.log(res);
+      this.snackBarService.openSuccessSnackBar('Login successful!');
+
       console.log('GUGUL');
+    }).catch((err)=>{
+
+      console.log(err);
     });
   }
 

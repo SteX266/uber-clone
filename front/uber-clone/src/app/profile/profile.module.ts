@@ -12,6 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminModule } from '../admin/admin.module';
 import { ClientModule } from '../client/client.module';
 import { DriverModule } from '../driver/driver.module';
+import { PaymentMethodComponent } from './payment-method/payment-method.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DriverModule } from '../driver/driver.module';
     ProfilePageComponent,
     UserPersonalInfoUpdateComponent,
     UserProfileComponent,
+    PaymentMethodComponent
   ],
   imports: [
     RouterModule,

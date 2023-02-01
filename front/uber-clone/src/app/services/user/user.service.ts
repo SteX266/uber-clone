@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Review } from 'src/app/models/Review';
 import { Image } from 'src/app/models/Image';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AddCoin } from 'src/app/models/add-coin.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class UserService {
   private readonly createReviewUrl: string;
   private readonly getCoinAmountUrl: string;
   private readonly addImageUrl: string;
+  private readonly addCoinsUrl:string;
 
   srcData: SafeResourceUrl | undefined;
 
@@ -23,7 +25,7 @@ export class UserService {
     return this.http.post<any>(
       this.addImageUrl,
       image,
-      this.authService.getHttpOptionsWithToken()
+      this.authService.getHttpOptionsWithBlob()
     );
   }
   updateUser(user: UserProfileInfo) {
@@ -114,6 +116,12 @@ export class UserService {
       this.authService.getHttpOptionsWithToken()
     );
   }
+
+  addCoins(coins:number){
+    let coinDTO = new AddCoin(this.authService.getCurrentUserEmail(),coins);
+    return this.http.post(this.addCoinsUrl, coinDTO, this.authService.getHttpOptionsWithToken());
+  }
+
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -126,6 +134,7 @@ export class UserService {
       'customer/getCustomerCoinAmount/' +
       authService.getCurrentUserId();
     this.addImageUrl = environment.apiEndpoint + 'profile/addImage';
+    this.addCoinsUrl = environment.apiEndpoint + 'customer/addCoins';
   }
 
   banUser(id: Number) {

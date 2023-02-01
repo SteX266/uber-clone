@@ -14,6 +14,14 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import {
+  SocialAuthServiceConfig,
+  SocialLoginModule,
+} from '@abacritt/angularx-social-login';
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+} from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -34,7 +42,33 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     LeafletModule,
     MatInputModule,
+    SocialLoginModule,
   ],
   exports: [HomePageComponent],
+  providers:[
+
+
+        {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('518524193712114'),
+          },
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '164509104596-3kctgprgablt8h80f8av9palueb5817k.apps.googleusercontent.com'
+            ),
+          },
+        ],
+        onError: (err) => {
+          console.log(err);
+        },
+      } as SocialAuthServiceConfig,
+    },
+  ]
 })
 export class GuestModule {}

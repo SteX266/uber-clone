@@ -7,7 +7,7 @@
       <div class="card-bottom pt-3 px-3 mb-2">
         <div class="d-flex flex-row justify-content-between text-align-center">
           <div class="d-flex flex-column"><span>Balance amount</span><p><i class="fa fa-brands fa-viacoin"></i> <span class="text-white">{{coinAmount}}</span></p></div>
-          <button class="btn btn-secondary"><i class="fa fa-solid fa-plus"></i></button>
+          <button name="buyCoins" (click)="closeModal()" id="buyCoins" [routerLink]="['/client/edit-payment']" class="btn btn-secondary"><i class="fa fa-solid fa-plus"></i></button>
         </div>
       </div>
     </div>
