@@ -132,28 +132,27 @@ export class DriverMapComponent implements OnInit {
 
   rejectRide() {
     this.rideState = RideState.WAITING;
-    this.rideService
-      .abortRide(new AbortDTO(this.rideId, ''))
-      .subscribe((data: any) => {
-        console.log(data);
-      });
+    this.rideService.abortRide(this.rideId, '').subscribe((data: any) => {
+      console.log(data);
+    });
   }
 
   startRide() {
+    this.rideState = RideState.ONGOING;
     this.rideService.startRide(this.rideId).subscribe((data: any) => {
       console.log(data);
     });
     let total = 0;
     let totalPoints = 0;
     this.routes.forEach((feature: any) => {
-      totalPoints += feature.geometry.coordinates.length;
+      totalPoints += feature.geometry.coordinates.length - 1;
     });
     this.routes.forEach((feature: any) => {
       feature.geometry.coordinates.forEach(
         (coordinate: number[], index: number) => {
-          if (index == feature.geometry.coordinates.length) total += 9;
+          if (index == feature.geometry.coordinates.length - 1) total += 9;
           total += 1;
-          this.updateLocation(coordinate, total, false, total === totalPoints);
+          this.updateLocation(coordinate, total, false, total >= totalPoints);
         }
       );
     });
@@ -167,12 +166,44 @@ export class DriverMapComponent implements OnInit {
           this.updateLocation(
             coordinate,
             index,
-            feature.geometry.coordinates.length === index,
+            feature.geometry.coordinates.length - 1 <= index,
             false
           );
         }
       );
     });
+  }
+
+  updateLocation(
+    coordinates: number[],
+    index: number,
+    arriving: boolean,
+    finished: boolean
+  ) {
+    setTimeout(() => {
+      let location = new Location(coordinates[1], coordinates[0]);
+      this.updateDriverMarkerLocation(location);
+      if (arriving) {
+        this.rideState = RideState.ARRIVED;
+        // this.rideService.driverArrived(this.rideId).subscribe((data: any) => {
+        //   console.log(data);
+        // });
+      }
+      if (finished) {
+        this.rideState = RideState.FINISHED;
+      }
+      this.locationService
+        .updateLocation(
+          new LocationDTO(
+            Number(this.authService.getCurrentUserId()),
+            coordinates[1],
+            coordinates[0]
+          )
+        )
+        .subscribe((data: any) => {
+          console.log(data);
+        });
+    }, 1000 * index);
   }
 
   initializeMapOptions() {
@@ -268,38 +299,6 @@ export class DriverMapComponent implements OnInit {
         }
       }
     );
-  }
-
-  updateLocation(
-    coordinates: number[],
-    index: number,
-    arriving: boolean,
-    finished: boolean
-  ) {
-    setTimeout(() => {
-      let location = new Location(coordinates[1], coordinates[0]);
-      this.updateDriverMarkerLocation(location);
-      if (arriving) {
-        this.rideState = RideState.ARRIVED;
-        this.rideService.driverArrived(this.rideId).subscribe((data: any) => {
-          console.log(data);
-        });
-      }
-      if (finished) {
-        this.rideState = RideState.FINISHED;
-      }
-      this.locationService
-        .updateLocation(
-          new LocationDTO(
-            Number(this.authService.getCurrentUserId()),
-            coordinates[1],
-            coordinates[0]
-          )
-        )
-        .subscribe((data: any) => {
-          console.log(data);
-        });
-    }, 1000 * index);
   }
 
   getActiveDriverLocations() {

@@ -33,7 +33,7 @@ public class Route {
 
     @ElementCollection
     @CollectionTable(name="routeGeoJson", joinColumns = @JoinColumn(name="route_id"))
-    @Column(length = 2048)
+    @Column(length = 2048*8)
     private List<String> routeGeoJson;
 
     @Column

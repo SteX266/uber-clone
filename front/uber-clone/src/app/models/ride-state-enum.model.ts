@@ -1,7 +1,7 @@
 export enum RideState {
   ARRIVING,
+  ARRIVED,
   ONGOING,
   FINISHED,
-  ARRIVED,
   WAITING,
 }

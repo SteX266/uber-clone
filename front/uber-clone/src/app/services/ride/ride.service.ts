@@ -69,15 +69,15 @@ export class RideService {
     let url = environment.apiEndpoint + 'ride/endRide';
     return this.http.post<string[]>(
       url,
-      rideId,
+      { rideId: rideId, driverId: this.authService.getCurrentUserId() },
       this.authService.getHttpOptionsWithToken()
     );
   }
-  abortRide(abortDTO: AbortDTO) {
-    let url = environment.apiEndpoint + 'ride/abortRide';
+  abortRide(rideId: number, reason: string) {
+    let url = environment.apiEndpoint + 'ride/rejectRide';
     return this.http.post<string[]>(
       url,
-      abortDTO,
+      new AbortDTO(rideId, Number(this.authService.getCurrentUserId()), reason),
       this.authService.getHttpOptionsWithToken()
     );
   }
@@ -86,7 +86,7 @@ export class RideService {
     let url = environment.apiEndpoint + 'ride/startRide';
     return this.http.post<string[]>(
       url,
-      rideId,
+      { rideId: rideId, driverId: this.authService.getCurrentUserId() },
       this.authService.getHttpOptionsWithToken()
     );
   }
