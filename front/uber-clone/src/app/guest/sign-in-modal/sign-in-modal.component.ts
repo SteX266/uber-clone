@@ -7,6 +7,7 @@ import {
   GoogleLoginProvider,
   SocialAuthService,
   FacebookLoginProvider,
+  SocialUser
 } from '@abacritt/angularx-social-login';
 import { Router } from '@angular/router';
 
@@ -18,20 +19,22 @@ import { Router } from '@angular/router';
 export class SignInModalComponent {
   email: string = '';
   password: string = '';
+  socialUser!: SocialUser;
 
   constructor(
     public dialogRef: MatDialogRef<SignInModalComponent>,
     private authService: AuthService,
     private snackBarService: SnackBarService,
     private socialAuthService: SocialAuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
-  facebookLogin() {
-    this.socialAuthService
-      .signIn(FacebookLoginProvider.PROVIDER_ID)
-      .then((res) => {
-        this.authService.socialLogin(res).subscribe({
+  ngOnInit(){
+    this.socialAuthService.authState.subscribe((user)=>{
+      this.socialUser = user;
+      console.log(this.socialUser);
+      if(this.socialUser){
+        this.authService.socialLogin(this.socialUser).subscribe({
           next: (value) => {
             if (value) {
               this.snackBarService.openSuccessSnackBar('Login successful!');
@@ -54,20 +57,19 @@ export class SignInModalComponent {
             );
           },
         });
-      });
-  }
-
-  googleLogin() {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
-      console.log(res);
-      this.snackBarService.openSuccessSnackBar('Login successful!');
-
-      console.log('GUGUL');
-    }).catch((err)=>{
-
-      console.log(err);
+      }
+      
     });
   }
+
+  facebookLogin() {
+    console.log("USAOOO");
+    this.socialAuthService
+      .signIn(FacebookLoginProvider.PROVIDER_ID);
+
+  }
+
+
 
   login() {
     this.authService

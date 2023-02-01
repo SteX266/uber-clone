@@ -44,7 +44,7 @@ VALUES (1, false, 'Sremska Mitrovica', false, 'bubibubisa@gmail.com', true, null
 
 INSERT INTO public.customer(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins, social_login)
-VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Serfeze', false, 100, false);
+VALUES (2, false, 'Novi Sad', false, 'serfezev@gmail.com', true, null, 'Vanja', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Serfeze', false, 10000, false);
 
 
 INSERT INTO public.driver(
@@ -53,7 +53,7 @@ VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa
 
 INSERT INTO public.customer(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins, social_login)
-VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 100, false);
+VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 10000, false);
 
 
 
