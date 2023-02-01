@@ -37,7 +37,7 @@ export class RideMapComponent implements OnInit {
 
   rideId: number = 0;
   stompClient: any;
-  driverMarker!: Marker;
+  driverMarker!: any;
   driverId: number = -1;
   map!: Map;
   routeGeoJson: any[] = [];
@@ -120,11 +120,13 @@ export class RideMapComponent implements OnInit {
       '/location-updates/update-driver-location',
       (message: { body: string }) => {
         let locationDto = JSON.parse(message.body);
-        if (locationDto.driverId === this.driverId)
+        if (locationDto.driverId === this.driverId) {
           this.driverMarker.setLatLng([
-            locationDto.longitude,
             locationDto.latitude,
+            locationDto.longitude,
           ]);
+          this.driverMarker.update();
+        }
       }
     );
   }

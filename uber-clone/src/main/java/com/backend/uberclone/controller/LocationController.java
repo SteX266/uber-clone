@@ -2,6 +2,7 @@ package com.backend.uberclone.controller;
 
 
 import com.backend.uberclone.dto.LocationDTO;
+import com.backend.uberclone.dto.SuccessResponseDTO;
 import com.backend.uberclone.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,11 +42,11 @@ public class LocationController {
     }
 
     @PostMapping("/updateLocation")
-    public ResponseEntity<String> updateLocation(@RequestBody LocationDTO locationDTO) {
+    public ResponseEntity<SuccessResponseDTO> updateLocation(@RequestBody LocationDTO locationDTO) {
         System.out.println("UPDATE LOCATION");
-        if(!locationService.updateUserLocation(locationDTO)) return new ResponseEntity<>("Couldn't get driver by id!", HttpStatus.BAD_REQUEST);
+        if(!locationService.updateUserLocation(locationDTO)) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.BAD_REQUEST);
         simpMessagingTemplate.convertAndSend("/location-updates/update-driver-location", locationDTO);
-        return new ResponseEntity<>("Successfully updated location!", HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 
     @PostMapping("/endShift")

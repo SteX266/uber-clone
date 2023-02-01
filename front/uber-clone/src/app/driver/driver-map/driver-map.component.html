@@ -1,11 +1,15 @@
 <div class="container map-container">
-  <div class="col" *ngIf="!drivingToStart">
-    <button (click)="startShift()">Toggle active</button>
+  <div class="col" [ngSwitch]="rideState">
+    <button *ngSwitchCase="'ARRIVING'" (click)="rejectRide()">
+      Reject ride
+    </button>
+    <div class="row" *ngSwitchCase="'ARRIVED'">
+      <button (click)="rejectRide()">Reject ride</button>
+      <button (click)="startRide()">Start ride</button>
+    </div>
+    <button *ngSwitchCase="'ONGOING'" (click)="rejectRide()">Abort ride</button>
+    <button *ngSwitchCase="'FINISHED'" (click)="endRide()">End ride</button>
   </div>
-  <div class="col" *ngIf="arrivedAtStart">
-    <button (click)="startDriveToDestination()">Start ride</button>
-  </div>
-  <div class="col" *ngIf="arrivedAtDestination"><button>End ride</button></div>
   <div
     class="col-9 map"
     leaflet
