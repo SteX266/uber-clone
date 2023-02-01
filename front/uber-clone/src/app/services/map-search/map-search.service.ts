@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { MapPoint } from '../../models/map-point.model';
+import {
+  GeoJsonFeature,
+  GeoJsonFeatureCollection,
+} from 'src/app/models/geo-json-feature.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,15 +25,22 @@ export class MapSearchService {
       );
   }
 
-  directions(start: MapPoint, end: MapPoint) {
+  directions(
+    start: MapPoint,
+    end: MapPoint
+  ): Observable<GeoJsonFeatureCollection> {
     let header = new HttpHeaders({
       Authorization: '5b3ce3597851110001cf6248fadb036acdb548c5977c319c02c25c24',
     });
+    console.log(start, end);
     let url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${this.API_KEY}&start=${start.longitude},${start.latitude}&end=${end.longitude},${end.latitude}`;
-    return this.httpClient.get(url);
+    return this.httpClient.get<GeoJsonFeatureCollection>(url);
   }
 
-  directionsWithAlternatives(start: MapPoint, end: MapPoint) {
+  directionsWithAlternatives(
+    start: MapPoint,
+    end: MapPoint
+  ): Observable<GeoJsonFeatureCollection> {
     let headers = new HttpHeaders({
       Authorization: this.API_KEY,
     });
@@ -45,7 +56,11 @@ export class MapSearchService {
     let requestOptions = { headers: headers };
     let url =
       'https://api.openrouteservice.org/v2/directions/driving-car/geojson';
-    return this.httpClient.post(url, body, requestOptions);
+    return this.httpClient.post<GeoJsonFeatureCollection>(
+      url,
+      body,
+      requestOptions
+    );
   }
 
   directionsWithAlternativesForMorePoints(points: Array<MapPoint>) {

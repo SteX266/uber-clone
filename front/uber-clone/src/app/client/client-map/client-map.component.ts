@@ -23,6 +23,10 @@ import { PaymentDTO } from 'src/app/models/payment-dto.model';
 import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
+import {
+  GeoJsonFeature,
+  GeoJsonFeatureCollection,
+} from 'src/app/models/geo-json-feature.model';
 @Component({
   selector: 'app-client-map',
   templateUrl: './client-map.component.html',
@@ -77,8 +81,8 @@ export class ClientMapComponent implements OnInit {
 
   customers: string[] = [];
 
-  routes: any[] = [];
-  selectedRoutes: any[] = [];
+  routes: GeoJsonFeature[][] = [];
+  selectedRoutes: GeoJsonFeature[] = [];
 
   private stompClient: any;
 
@@ -241,14 +245,16 @@ export class ClientMapComponent implements OnInit {
       let end = stops[i + 1];
       this.mapService
         .directionsWithAlternatives(start, end)
-        .subscribe((geoJsonData: any) => {
-          let rts: any[] = geoJsonData.features;
-          let selectedRoute = rts.at(0);
+        .subscribe((geoJsonData: GeoJsonFeatureCollection) => {
+          let rts: GeoJsonFeature[] = geoJsonData.features;
+
+          let selectedRoute: GeoJsonFeature = rts[0];
           this.selectedRoutes.push(selectedRoute);
           this.routes.push(rts);
           this.createRoute(selectedRoute);
         });
     }
+
     this.gotRoutes = true;
   }
 

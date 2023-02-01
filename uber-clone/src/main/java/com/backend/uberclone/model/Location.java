@@ -17,6 +17,9 @@ public class Location {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @OneToOne(mappedBy = "currentLocation")
+    private Driver driver;
+
     @Column
     private Double latitude;
     @Column

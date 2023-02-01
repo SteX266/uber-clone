@@ -1,5 +1,11 @@
 <div class="container map-container">
-  <div class="col"></div>
+  <div class="col" *ngIf="!drivingToStart">
+    <button (click)="startShift()">Toggle active</button>
+  </div>
+  <div class="col" *ngIf="arrivedAtStart">
+    <button (click)="startDriveToDestination()">Start ride</button>
+  </div>
+  <div class="col" *ngIf="arrivedAtDestination"><button>End ride</button></div>
   <div
     class="col-9 map"
     leaflet

@@ -8,6 +8,7 @@ import {
   MapOptions,
   geoJSON,
   FeatureGroup,
+  Marker,
 } from 'leaflet';
 import { MapSearchService } from 'src/app/services/map-search/map-search.service';
 import { MapPoint } from '../../models/map-point.model';
@@ -19,6 +20,14 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
 import { RideService } from 'src/app/services/ride/ride.service';
+import { ShiftService } from 'src/app/services/shift/shift.service';
+import { LocationDTO } from 'src/app/models/location-dto.model';
+import {
+  GeoJsonFeature,
+  GeoJsonFeatureCollection,
+  Location,
+} from 'src/app/models/geo-json-feature.model';
+import { RandomLocationService } from 'src/app/services/random-location/random-location.service';
 @Component({
   selector: 'app-driver-map',
   templateUrl: './driver-map.component.html',
@@ -32,14 +41,14 @@ export class DriverMapComponent implements OnInit {
     private authService: AuthService,
     private snackbar: SnackBarService,
     private router: Router,
-    private rideService: RideService
+    private rideService: RideService,
+    private shiftService: ShiftService,
+    private randomLocationService: RandomLocationService
   ) {}
 
   ngOnInit(): void {
     this.initializeMapOptions();
-    this.getActiveDriverLocations();
     this.initializeWebSocketConnection();
-    this.customers.push(this.authService.getCurrentUserEmail());
   }
 
   map!: Map;
@@ -47,21 +56,59 @@ export class DriverMapComponent implements OnInit {
   driversLayer: FeatureGroup = new FeatureGroup();
   markerLayer: FeatureGroup = new FeatureGroup();
   routeLayer: FeatureGroup = new FeatureGroup();
+  routeToStartLayer: FeatureGroup = new FeatureGroup();
 
   rideId!: number;
+  driverId: number = Number(this.authService.getCurrentUserId());
+
+  driverMarker!: any;
+  currentLocation: Location = this.randomLocationService.getRandomLocation();
 
   stops: Array<MapPoint> = new Array<MapPoint>();
 
-  gotRoutes: boolean = false;
-
-  customers: string[] = [];
-
   routes: any[] = [];
-  selectedRoutes: any[] = [];
+
+  routeToStart!: GeoJsonFeatureCollection;
+
+  drivingToStart: boolean = false;
+
+  arrivedAtStart: boolean = false;
+
+  arrivedAtDestination: boolean = false;
 
   private stompClient: any;
 
   drivers: any = {};
+
+  // trenutna lokacija vozaca nasumicna iz liste lokacija
+  // ceka da mu se dodeli voznja
+  // dobaviti rutu od trenutne lokacije do pocetne tacke voznje koja mu je dodeljena
+  // simulirati kretanje od trenutne lokacije vozaca do pocetne tacke voznje
+  // kada vozac stigne na pocetnu tacku rute obavestavaju se korisnici da je stigao na pocetnu tacku
+  // lokacija ostaje ista dok vozac ne pritisne dugme start ride koje mu se pojavi kada dodje na pocetnu tacku rute
+  // kada pritisne dugme start ride pocinje voznju i ide do krajnje tacke voznje
+  // lokacija ostaje ista dok vozac ne pritisne dugme end ride kojom potvrdjuje da je voznja zavrsena
+  // dodeljuje mu se nova lokacija ka kojoj se krece
+
+  initializeDriverMarker() {
+    this.driverMarker = marker(
+      [this.currentLocation.longitude, this.currentLocation.latitude],
+      {
+        icon: icon({
+          iconUrl: 'assets/taxi.svg',
+          iconSize: [30, 30],
+          iconAnchor: [10, 10],
+        }),
+      }
+    );
+    this.driverMarker.addTo(this.map);
+  }
+
+  updateDriverMarkerLocation(location: Location) {
+    this.currentLocation = location;
+    this.driverMarker.setLatLng([location.latitude, location.longitude]);
+    this.driverMarker.update();
+  }
 
   initializeWebSocketConnection() {
     let ws = new SockJS('http://localhost:8080/socket');
@@ -71,6 +118,20 @@ export class DriverMapComponent implements OnInit {
     this.stompClient.connect({}, function () {
       that.openGlobalSocket();
     });
+  }
+
+  startShift() {
+    this.shiftService
+      .startShift(
+        new LocationDTO(
+          this.driverId,
+          this.currentLocation.latitude,
+          this.currentLocation.longitude
+        )
+      )
+      .subscribe((data: any) => {
+        console.log(data);
+      });
   }
 
   initializeMapOptions() {
@@ -92,24 +153,27 @@ export class DriverMapComponent implements OnInit {
 
   initializeMap(map: Map) {
     this.map = map;
+    this.initializeDriverMarker();
   }
 
   openGlobalSocket() {
     this.stompClient.subscribe(
       '/location-updates/update-driver-location',
       (message: { body: string }) => {
-        let locationDto = JSON.parse(message.body);
-        let existingDriver = this.drivers[locationDto.driverId];
-        existingDriver.setLatLng([locationDto.longitude, locationDto.latitude]);
+        let locationDTO: LocationDTO = JSON.parse(message.body);
+        if (this.driverId == locationDTO.driverId) return;
+        let existingDriver = this.drivers[locationDTO.driverId];
+        existingDriver.setLatLng([locationDTO.longitude, locationDTO.latitude]);
         existingDriver.update();
       }
     );
     this.stompClient.subscribe(
       '/location-updates/new-driver',
       (message: { body: string }) => {
-        let locationDto = JSON.parse(message.body);
+        let locationDTO: LocationDTO = JSON.parse(message.body);
+        if (this.driverId == locationDTO.driverId) return;
         let driverMarker = marker(
-          [locationDto.longitude, locationDto.latitude],
+          [locationDTO.longitude, locationDTO.latitude],
           {
             icon: icon({
               iconUrl: 'assets/taxi.svg',
@@ -119,39 +183,100 @@ export class DriverMapComponent implements OnInit {
           }
         );
         driverMarker.addTo(this.map);
-        this.drivers[locationDto.driverId] = driverMarker;
+        this.drivers[locationDTO.driverId] = driverMarker;
       }
     );
     this.stompClient.subscribe(
       '/location-updates/end-drive',
-      (message: { body: string }) => {
-        let driverId = JSON.parse(message.body);
+      (driverId: number) => {
         delete this.drivers[driverId];
       }
     );
     this.stompClient.subscribe(
-      '/ride/new-confirmed',
+      '/ride/new-ride',
       (message: { body: string }) => {
         let dto: any = JSON.parse(message.body);
-
         if (dto.driverEmail === this.authService.getCurrentUserEmail()) {
           this.snackbar.openSuccessSnackBar('Got new ride.');
           this.rideId = Number(dto.rideId);
           this.rideService
             .getGeoJsonRouteById(this.rideId)
-            .subscribe((route: any) => {
-              this.selectedRoutes = route;
-              this.showSelectedRoutes();
+            .subscribe((routesStrings: string[]) => {
+              routesStrings.forEach((routeString: string) => {
+                let route: any = JSON.parse(routeString);
+                this.routes.push(route);
+              });
+              this.showRoutes();
+              this.getDirectionsToStart(this.routes[0].geometry.coordinates[0]);
             });
         }
       }
     );
   }
 
+  getDirectionsToStart(routeStart: number[]) {
+    let start = new MapPoint(
+      '',
+      this.currentLocation.longitude,
+      this.currentLocation.latitude
+    );
+    let end = this.mapService
+      .directions(start, new MapPoint('', routeStart[1], routeStart[0]))
+      .subscribe((geoJsonData: any) => {
+        this.routeToStart = geoJsonData;
+
+        this.startDriveToStart();
+      });
+  }
+
+  startDriveToStart() {
+    this.drivingToStart = true;
+    this.routeToStart.features.forEach((feature: any) => {
+      for (
+        let index = 0;
+        index < feature.geometry.coordinates.length;
+        index++
+      ) {
+        let location: number[] = feature.geometry.coordinates[index];
+        setTimeout(() => {
+          this.updateDriverMarkerLocation(
+            new Location(location[1], location[0])
+          );
+        }, 1000 * index);
+      }
+    });
+    this.routeToStart;
+    this.arrivedAtStart = true;
+  }
+
+  startDriveToDestination() {
+    this.arrivedAtStart = false;
+    this.routes.forEach((feature: any) => {
+      for (
+        let index = 0;
+        index < feature.geometry.coordinates.length;
+        index++
+      ) {
+        let location: number[] = feature.geometry.coordinates[index];
+        setTimeout(() => {
+          this.updateDriverMarkerLocation(
+            new Location(location[1], location[0])
+          );
+        }, 1000 * index);
+      }
+    });
+    this.arrivedAtDestination = true;
+  }
+
+  getRouteEnd(): Location {
+    return this.routes[this.routes.length - 1].geometry.coordinates[
+      this.routes[this.routes.length - 1].geometry.coordinates.length - 1
+    ];
+  }
+
   Redirect(reservationId: number) {
     let route = '/client/ride/' + reservationId;
     this.router.navigate([route]);
-    console.log(route);
   }
 
   getActiveDriverLocations() {
@@ -192,41 +317,29 @@ export class DriverMapComponent implements OnInit {
     };
   }
 
-  refreshDirections(stops: Array<MapPoint>) {
-    this.stops = stops;
-    this.clearMap();
+  showRoutes() {
     this.routeLayer = new FeatureGroup();
-    this.routeLayer.addTo(this.map);
-    this.showMarkers();
-    this.routes = [];
-    this.selectedRoutes = [];
-    for (let i = 0; i < stops.length - 1; i++) {
-      let start = stops[i];
-      let end = stops[i + 1];
-      this.mapService
-        .directionsWithAlternatives(start, end)
-        .subscribe((geoJsonData: any) => {
-          let rts: any[] = geoJsonData.features;
-          let selectedRoute = rts.at(0);
-          this.selectedRoutes.push(selectedRoute);
-          this.routes.push(rts);
-          this.createRoute(selectedRoute);
-        });
-    }
-    this.gotRoutes = true;
-  }
-
-  showSelectedRoutes() {
-    this.routeLayer = new FeatureGroup();
-    this.selectedRoutes.forEach((route: any) => {
+    this.routes.forEach((route: GeoJsonFeature) => {
       this.createRoute(route);
     });
     this.routeLayer.addTo(this.map);
   }
 
+  showRouteToStart() {
+    this.routeToStart.features.forEach((route: GeoJsonFeature) => {
+      this.createStartRoute(route);
+    });
+    this.routeToStartLayer.addTo(this.map);
+  }
+
   createRoute(route: any) {
     let geoJson = geoJSON(route, { style: this.routeStyle() });
     geoJson.addTo(this.routeLayer);
+  }
+
+  createStartRoute(route: any) {
+    let geoJson = geoJSON(route, { style: this.routeStyle() });
+    geoJson.addTo(this.routeToStartLayer);
   }
 
   createMarker(stop: MapPoint) {
@@ -244,19 +357,10 @@ export class DriverMapComponent implements OnInit {
     this.map.fitBounds(this.markerLayer.getBounds());
   }
 
-  totalDistance(routes: any[]) {
-    let totalDistance = 0;
-    routes.forEach((route: any) => {
-      totalDistance += route.properties.summary.distance;
-    });
-    let kilometers = totalDistance / 1000;
-
-    return kilometers;
-  }
-
   clearMap() {
     this.clearRouteLayer();
     this.clearMarkerLayer();
+    this.clearRouteToStartLayer();
   }
 
   clearRouteLayer() {
@@ -264,19 +368,13 @@ export class DriverMapComponent implements OnInit {
       this.map.removeLayer(this.routeLayer);
   }
 
+  clearRouteToStartLayer() {
+    if (this.map.hasLayer(this.routeToStartLayer))
+      this.map.removeLayer(this.routeToStartLayer);
+  }
+
   clearMarkerLayer() {
     if (this.map.hasLayer(this.markerLayer))
       this.map.removeLayer(this.markerLayer);
-  }
-
-  getStops() {
-    let strings: string[] = [];
-    this.stops.forEach((stop: MapPoint) => {
-      let arr = stop.name.split(', ');
-      arr.splice(-7, 8);
-      let stopName = arr.join(', ');
-      strings.push(stopName);
-    });
-    return strings;
   }
 }

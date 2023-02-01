@@ -62,7 +62,7 @@ public class Reservation {
     private double estimatedCost;
 
     public Reservation(ReservationDTO reservationDTO, Set<Customer> customers, List<Payment> payments) {
-        this.route = new Route(reservationDTO.getStops(), reservationDTO.getRouteGeoJson(), reservationDTO.getEstimatedTime(), reservationDTO.getDistance());
+        this.route = new Route(reservationDTO.getStops(), reservationDTO.getRouteGeoJson(), reservationDTO.getEstimatedTime(), reservationDTO.getDistance(), reservationDTO.getStartCoordinates(), reservationDTO.getEndCoordinates());
         this.payments = payments;
         this.customers = customers;
         this.vehicleType = reservationDTO.getVehicleType();

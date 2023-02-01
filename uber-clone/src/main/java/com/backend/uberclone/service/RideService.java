@@ -78,6 +78,7 @@ public class RideService {
             int numberOfRides = 0;
             double distance = 0;
             if(d.isAvailable()){
+                System.out.println("EJ BREE");
                  distance = d.getCurrentLocation().calculateDistance(startCoordinates);
             }
             else{

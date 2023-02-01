@@ -36,7 +36,8 @@ public class Driver extends User {
     @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ride> rides;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "current_location_id", referencedColumnName = "id")
     private Location currentLocation;
 
 

@@ -54,11 +54,13 @@ public class Route {
     @OneToMany(mappedBy = "route", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
-    public Route(List<String> stops, List<String> routeGeoJson, double estimatedTimeInMinutes, double distanceInKm) {
+    public Route(List<String> stops, List<String> routeGeoJson, double estimatedTimeInMinutes, double distanceInKm, List<Double> startCoordinates, List<Double> endCoordinates) {
         this.stops = stops;
         this.routeGeoJson = routeGeoJson;
         this.estimatedTimeInMinutes = estimatedTimeInMinutes;
         this.distanceInKm = distanceInKm;
+        this.startCoordinates = new Location(startCoordinates.get(1), startCoordinates.get(0));
+        this.endCoordinates = new Location(endCoordinates.get(1), endCoordinates.get(0));
     }
 
 }

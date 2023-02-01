@@ -1,20 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { GeoJsonFeature } from 'src/app/models/geo-json-feature.model';
+import { LocationDTO } from 'src/app/models/location-dto.model';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RideService {
+export class ShiftService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getGeoJsonRouteById(rideId: number): Observable<string[]> {
-    let url = environment.apiEndpoint + 'ride/getGeoJsonRoute/' + rideId;
-    return this.http.get<string[]>(
+  startShift(locationDTO: LocationDTO) {
+    let url = environment.apiEndpoint + 'location/startShift/';
+    return this.http.post(
       url,
+      locationDTO,
       this.authService.getHttpOptionsWithToken()
     );
   }

@@ -5,6 +5,7 @@ import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Location;
 import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.repository.DriverRepository;
+import com.backend.uberclone.repository.LocationRepository;
 import com.backend.uberclone.repository.RideRepository;
 import com.backend.uberclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,13 @@ public class LocationService {
     private DriverRepository driverRepository;
 
     private RideRepository rideRepository;
+
+    private LocationRepository locationRepository;
+
+    @Autowired
+    public void setLocationRepository(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
 
     @Autowired
     public void setDriverRepository(DriverRepository driverRepository) {
@@ -53,7 +61,11 @@ public class LocationService {
         Driver driver = driverRepository.findOneById(locationDTO.getDriverId());
         if(driver == null) return false;
         if(!driver.isActive()) return false;
-        driver.setCurrentLocation(new Location(locationDTO.getLatitude(), locationDTO.getLongitude()));
+        System.out.println(driver.getEmail());
+
+        Location currentLocation = new Location(locationDTO.getLatitude(), locationDTO.getLongitude());
+        locationRepository.save(currentLocation);
+        driver.setCurrentLocation(currentLocation);
         driverRepository.save(driver);
         return true;
     }
@@ -61,8 +73,13 @@ public class LocationService {
     public List<LocationDTO> getActiveDriverLocations() {
         List<LocationDTO> locationDTOS = new ArrayList<>();
         List<Driver> activeDrivers = driverRepository.findAllByActive(true);
+
         for (Driver d: activeDrivers) {
+            System.out.println(d.getEmail());
             Location location = d.getCurrentLocation();
+            System.out.println("LOKACIJA JEBENA");
+            System.out.println(location.getLatitude());
+            System.out.println(location.getLongitude());
             locationDTOS.add(new LocationDTO(location.getLatitude(), location.getLongitude(), d.getId()));
         }
         return locationDTOS;

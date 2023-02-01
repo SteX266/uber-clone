@@ -35,6 +35,10 @@ public class ReservationDTO {
 
     double estimatedCost;
 
+    List<Double> startCoordinates;
+
+    List<Double> endCoordinates;
+
 
 
 }
