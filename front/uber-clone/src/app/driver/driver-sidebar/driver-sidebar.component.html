@@ -1,18 +1,45 @@
 <div class="conatiner" [ngSwitch]="rideState">
-  <button class="btn btn-dark" *ngSwitchCase="0" (click)="onRejectRide.emit()">
-    Reject ride
-  </button>
-  <div class="row" *ngSwitchCase="1">
+  <div class="row" *ngSwitchCase="0">
     <button class="btn btn-dark" (click)="onRejectRide.emit()">
       Reject ride
     </button>
+    <input
+      type="text"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Reason"
+      [(ngModel)]="reason"
+      class="form-control control"
+    />
+  </div>
+
+  <div class="row" *ngSwitchCase="1">
+    <button class="btn btn-dark" (click)="onRejectRide.emit(reason)">
+      Reject ride
+    </button>
+    <input
+      type="text"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Reason"
+      [(ngModel)]="reason"
+      class="form-control control"
+    />
     <button class="btn btn-dark" (click)="onStartRide.emit()">
       Start ride
     </button>
   </div>
-  <button class="btn btn-dark" *ngSwitchCase="2" (click)="onRejectRide.emit()">
-    Abort ride
-  </button>
+  <div class="row" *ngSwitchCase="2">
+    <button class="btn btn-dark" (click)="onRejectRide.emit(reason)">
+      Abort ride
+    </button>
+    <input
+      type="text"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Reason"
+      [(ngModel)]="reason"
+      class="form-control control"
+    />
+  </div>
+
   <button class="btn btn-dark" *ngSwitchCase="3" (click)="onEndRide.emit()">
     End ride
   </button>

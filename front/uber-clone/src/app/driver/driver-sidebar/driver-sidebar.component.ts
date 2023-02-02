@@ -7,6 +7,7 @@ import { RideState } from 'src/app/models/ride-state-enum.model';
   styleUrls: ['./driver-sidebar.component.scss'],
 })
 export class DriverSidebarComponent {
+  reason: string = '';
   @Input() rideState!: RideState;
 
   @Input() available!: boolean;

@@ -4,7 +4,7 @@
       [available]="available"
       [rideState]="rideState"
       (onEndRide)="endRide()"
-      (onRejectRide)="rejectRide()"
+      (onRejectRide)="rejectRide($event)"
       (onStartRide)="startRide()"
       (onToggleAvailable)="toggleAvailable($event)"
     ></app-driver-sidebar>

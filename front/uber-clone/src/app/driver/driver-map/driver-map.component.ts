@@ -126,14 +126,14 @@ export class DriverMapComponent implements OnInit {
       .subscribe((data: any) => {
         console.log(data);
       });
-  } // !
+  }
 
   endRide() {
     this.clearState();
     this.rideService.endRide(this.rideId).subscribe((data: any) => {
       console.log(data);
     });
-  } // !
+  }
 
   clearState() {
     this.clearMap();
@@ -143,9 +143,9 @@ export class DriverMapComponent implements OnInit {
     this.stops = [];
   }
 
-  rejectRide() {
-    this.clearMap();
-    this.rideService.abortRide(this.rideId, '').subscribe((data: any) => {
+  rejectRide(reason: string) {
+    this.clearState();
+    this.rideService.abortRide(this.rideId, reason).subscribe((data: any) => {
       console.log(data);
     });
   }
@@ -195,6 +195,7 @@ export class DriverMapComponent implements OnInit {
     finished: boolean
   ) {
     setTimeout(() => {
+      if (this.rideState === RideState.WAITING) return;
       let location = new Location(coordinates[1], coordinates[0]);
       this.updateDriverMarkerLocation(location);
       if (arriving) {

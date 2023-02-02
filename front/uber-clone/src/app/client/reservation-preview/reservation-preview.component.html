@@ -20,8 +20,17 @@
     <p class="card-text">Pet: {{ data.hasPet }}</p>
     <h5 class="card-title" *ngIf="data.customers.length">Customers</h5>
     <p class="card-text" *ngFor="let person of data.customers">{{ person }}</p>
-    <button class="btn btn-dark" (click)="confirmReservation()">
-      Confirm reservation
-    </button>
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-dark" (click)="confirmReservation()">
+          Confirm reservation
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn btn-dark" (click)="addRouteToFavorites()">
+          Add route to favorites
+        </button>
+      </div>
+    </div>
   </div>
 </div>

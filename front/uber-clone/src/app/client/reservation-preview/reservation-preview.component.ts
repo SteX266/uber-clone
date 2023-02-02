@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FavoriteRouteDTO } from 'src/app/models/favorite-route-dto.model';
 import { ReservationDTO } from 'src/app/models/reservation-dto.model';
 import { ReservationService } from 'src/app/services/reservation/reservation.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
@@ -39,5 +40,29 @@ export class ReservationPreviewComponent implements OnInit {
       },
     });
     this.dialogRef.close();
+  }
+
+  addRouteToFavorites() {
+    let favoriteRouteDto = new FavoriteRouteDTO(
+      this.data.stops,
+      this.data.routeGeoJson,
+      this.data.customers[0],
+      this.data.distance,
+      this.data.estimatedTime,
+      this.data.estimatedCost,
+      this.data.startCoordinates,
+      this.data.endCoordinates
+    );
+    console.log(favoriteRouteDto);
+    this.reservationService.addFavoriteRoute(favoriteRouteDto).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.snackbar.openSuccessSnackBar('Successfully added to favorites.');
+      },
+      error: (err: any) => {
+        this.snackbar.openFailureSnackBar("Couldn't save route to favorites.");
+        console.log(err);
+      },
+    });
   }
 }

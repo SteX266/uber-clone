@@ -1,12 +1,10 @@
 package com.backend.uberclone.controller;
 
-import com.backend.uberclone.dto.DriverNewRideNotificationDTO;
-import com.backend.uberclone.dto.PaymentDTO;
-import com.backend.uberclone.dto.ReservationDTO;
-import com.backend.uberclone.dto.SuccessResponseDTO;
+import com.backend.uberclone.dto.*;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.service.ReservationService;
 import com.backend.uberclone.service.RideService;
+import com.backend.uberclone.service.RouteService;
 import com.backend.uberclone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +29,9 @@ public class ReservationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RouteService routeService;
 
 
     @PostMapping("/makeReservation")
@@ -96,6 +97,13 @@ public class ReservationController {
             p.setPaid(false);
             simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true));
         }
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+
+    }
+
+    @PostMapping("/addFavoriteRoute")
+    public ResponseEntity<SuccessResponseDTO> cancelPayment(@RequestBody FavoriteRouteDTO favoriteRouteDTO) {
+        this.routeService.saveFavoriteRoute(favoriteRouteDTO);
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
 
     }
