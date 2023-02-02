@@ -38,10 +38,6 @@ public class ReservationService {
 
         Set<Customer> customers = customerRepository.findAllByEmailIn(reservationDTO.getCustomers());
 
-        for(Customer c:customers){
-            System.out.println("CUSTOMERIIIII");
-            System.out.println(c);
-        }
 
         if(!checkCustomerBalance(customers, reservationDTO.getEstimatedCost())) return new ArrayList<>();
         List<Payment> payments = createPayments(customers, reservationDTO.getEstimatedCost());

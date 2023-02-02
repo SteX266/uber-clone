@@ -41,6 +41,8 @@ public class ReservationController {
             return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         for (PaymentDTO p :
                 paymentDTOS) {
+            System.out.println("PLACANJEEEEEE");
+            System.out.println(p.getCustomerEmail());
             simpMessagingTemplate.convertAndSend("/payment/payment-made", p);
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
