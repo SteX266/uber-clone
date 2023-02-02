@@ -200,9 +200,7 @@ export class DriverMapComponent implements OnInit {
       this.updateDriverMarkerLocation(location);
       if (arriving) {
         this.rideState = RideState.ARRIVED;
-        // this.rideService.driverArrived(this.rideId).subscribe((data: any) => {
-        //   console.log(data);
-        // });
+        this.stompClient.send('/ride/arrived', {}, this.rideId);
       }
       if (finished) {
         this.rideState = RideState.FINISHED;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FeatureGroup,
   geoJSON,
@@ -14,6 +14,7 @@ import {
 import * as SockJS from 'sockjs-client';
 import { LocationService } from 'src/app/services/location/location.service';
 import { RideService } from 'src/app/services/ride/ride.service';
+import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import * as Stomp from 'stompjs';
 @Component({
   selector: 'app-ride-map',
@@ -24,7 +25,9 @@ export class RideMapComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private locationService: LocationService,
-    private rideService: RideService
+    private rideService: RideService,
+    private snackbar: SnackBarService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.initializeMapOptions();
@@ -145,6 +148,43 @@ export class RideMapComponent implements OnInit {
 
           this.driverMarker.update();
           this.map.fitBounds(this.markerLayer.getBounds());
+        }
+      }
+    );
+    this.stompClient.subscribe('/ride/arrived', (message: { body: string }) => {
+      let rideId = JSON.parse(message.body);
+      if (this.rideId === rideId) {
+        this.snackbar.openFailureSnackBar('Driver has arrived.');
+      }
+    });
+    this.stompClient.subscribe(
+      '/ride/rejected',
+      (message: { body: string }) => {
+        let rideId = JSON.parse(message.body);
+        if (this.rideId === rideId) {
+          this.snackbar.openFailureSnackBar('Ride was rejected.');
+          let route = '/client';
+          this.router.navigate([route]);
+          console.log(route);
+        }
+      }
+    );
+    this.stompClient.subscribe('/ride/aborted', (message: { body: string }) => {
+      let rideId = JSON.parse(message.body);
+      if (this.rideId === rideId) {
+        this.snackbar.openFailureSnackBar('Ride was aborted.');
+        let route = '/client';
+        this.router.navigate([route]);
+        console.log(route);
+      }
+    });
+    this.stompClient.subscribe(
+      '/ride/finished',
+      (message: { body: string }) => {
+        let rideId = JSON.parse(message.body);
+        if (this.rideId === rideId) {
+          this.snackbar.openSuccessSnackBar('Ride finished.');
+          // otvoriti modal za review
         }
       }
     );
