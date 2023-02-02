@@ -6,14 +6,11 @@ import com.backend.uberclone.dto.RideDTO;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.RideRepository;
-import com.backend.uberclone.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // treba videti kako da pretplatim neki servis na promene repozitorijuma ili tako nesto da mogu da vrsim real time promene unutar sistema
@@ -73,28 +70,34 @@ public class RideService {
 
 
     public Ride createRide(Reservation r) {
-        Driver d = findClosestAvailableDriver(r.getRoute().getStartCoordinates());
+        Driver d = findClosestAvailableDriver(r);
+        if (d == null){
+            return null;
+        }
         Ride ride = new Ride();
         ride.setDriver(d);
         ride.setReservation(r);
         ride.setStatus(RideStatus.ARRIVING);
         ride.setEstimatedArrivalTimeInMinutes(5);
-
         return rideRepository.save(ride);
     }
 
-    private Driver findClosestAvailableDriver(Location startCoordinates) {
+    private Driver findClosestAvailableDriver(Reservation r) {
 
+        Location startCoordinates = r.getRoute().getStartCoordinates();
         List<Driver> allDrivers = driverRepository.findAllByActiveTrue();
 
         double minDistance = 500000;
         Driver closestDriver = null;
 
         for (Driver d:allDrivers){
+            if(!isDriverSuitable(d,r)){
+                continue;
+            }
             int numberOfRides = 0;
             double distance = 0;
+
             if(d.isAvailable()){
-                System.out.println("EJ BREE");
                  distance = d.getCurrentLocation().calculateDistance(startCoordinates);
             }
             else{
@@ -121,6 +124,22 @@ public class RideService {
             }
         }
         return closestDriver;
+    }
+
+    private boolean isDriverSuitable(Driver d, Reservation r) {
+        Vehicle v = d.getVehicle();
+        if(r.isHasPet() && !v.isAllowsPet()){
+            return false;
+        }
+        if(r.isHasBaby() && !v.isAllowsBaby()){
+            return false;
+        }
+        if(r.getVehicleType() != VehicleType.ANY && r.getVehicleType() != v.getType()){
+            return false;
+        }
+        return !d.isDriverOverworked();
+
+
     }
 
     public List<String> getGeoJsonRoute(Integer rideId) {
