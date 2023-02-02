@@ -13,4 +13,9 @@ import lombok.Setter;
 public class RideDTO {
     private int rideId;
     private int driverId;
+
+    public RideDTO(int rideId){
+        this.rideId = rideId;
+
+    }
 }
