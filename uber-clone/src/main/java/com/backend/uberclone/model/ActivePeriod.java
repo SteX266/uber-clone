@@ -20,15 +20,15 @@ public class ActivePeriod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "start_date")
     private LocalDateTime start;
 
-    @Column
+    @Column(name="end_date")
     private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="driver_id")
-    private Driver driver;
+    private User driver;
 
     public ActivePeriod(Driver driver) {
         this.start = LocalDateTime.now();
