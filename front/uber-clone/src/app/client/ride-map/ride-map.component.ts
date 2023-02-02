@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   FeatureGroup,
@@ -16,6 +17,7 @@ import { LocationService } from 'src/app/services/location/location.service';
 import { RideService } from 'src/app/services/ride/ride.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import * as Stomp from 'stompjs';
+import { ReviewRideModalComponent } from '../review-ride-modal/review-ride-modal.component';
 @Component({
   selector: 'app-ride-map',
   templateUrl: './ride-map.component.html',
@@ -27,7 +29,8 @@ export class RideMapComponent implements OnInit {
     private locationService: LocationService,
     private rideService: RideService,
     private snackbar: SnackBarService,
-    private router: Router
+    private router: Router,
+    public modal: MatDialog
   ) {}
   ngOnInit(): void {
     this.initializeMapOptions();
@@ -153,15 +156,15 @@ export class RideMapComponent implements OnInit {
     );
     this.stompClient.subscribe('/ride/arrived', (message: { body: string }) => {
       let rideId = JSON.parse(message.body);
-      if (this.rideId === rideId) {
-        this.snackbar.openFailureSnackBar('Driver has arrived.');
+      if (rideId === this.rideId) {
+        this.snackbar.openSuccessSnackBar('Driver has arrived.');
       }
     });
     this.stompClient.subscribe(
       '/ride/rejected',
       (message: { body: string }) => {
-        let rideId = JSON.parse(message.body);
-        if (this.rideId === rideId) {
+        let dto = JSON.parse(message.body);
+        if (this.rideId === dto.rideId) {
           this.snackbar.openFailureSnackBar('Ride was rejected.');
           let route = '/client';
           this.router.navigate([route]);
@@ -170,8 +173,8 @@ export class RideMapComponent implements OnInit {
       }
     );
     this.stompClient.subscribe('/ride/aborted', (message: { body: string }) => {
-      let rideId = JSON.parse(message.body);
-      if (this.rideId === rideId) {
+      let dto = JSON.parse(message.body);
+      if (this.rideId === dto.rideId) {
         this.snackbar.openFailureSnackBar('Ride was aborted.');
         let route = '/client';
         this.router.navigate([route]);
@@ -181,10 +184,13 @@ export class RideMapComponent implements OnInit {
     this.stompClient.subscribe(
       '/ride/finished',
       (message: { body: string }) => {
-        let rideId = JSON.parse(message.body);
-        if (this.rideId === rideId) {
+        console.log(message.body);
+        let dto = JSON.parse(message.body);
+        if (this.rideId === dto.rideId) {
           this.snackbar.openSuccessSnackBar('Ride finished.');
-          // otvoriti modal za review
+          this.modal.open(ReviewRideModalComponent, {
+            data: dto.rideId,
+          });
         }
       }
     );

@@ -43,11 +43,6 @@ export class ClientMapComponent implements OnInit {
     private router: Router
   ) {}
 
-  openReservationPreviewModal(
-    enterAnimationDuration: string,
-    exitAnimationDuration: string
-  ): void {}
-
   ngOnInit(): void {
     this.initializeMapOptions();
     this.getActiveDriverLocations();
@@ -415,6 +410,7 @@ export class ClientMapComponent implements OnInit {
   }
 
   openPreview() {
+    console.log(this.customers);
     this.modal.open(ReservationPreviewComponent, {
       width: '500px',
       data: new ReservationDTO(

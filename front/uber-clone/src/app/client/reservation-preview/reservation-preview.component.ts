@@ -31,6 +31,7 @@ export class ReservationPreviewComponent implements OnInit {
   }
 
   confirmReservation() {
+    console.log(this.data.customers);
     this.reservationService.makeReservation(this.data).subscribe({
       next: (data: any) => {
         console.log(data);
