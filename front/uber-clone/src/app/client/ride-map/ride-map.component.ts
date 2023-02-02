@@ -33,13 +33,13 @@ export class RideMapComponent implements OnInit {
     public modal: MatDialog
   ) {}
   ngOnInit(): void {
+    this.initializeSocket();
     this.initializeMapOptions();
     this.route.params.subscribe((params) => {
       this.rideId = Number(params['id']);
       this.getGeoJsonRoute(this.rideId);
       this.getDriverLocation(this.rideId);
     });
-    this.initializeSocket();
   }
 
   rideId: number = 0;

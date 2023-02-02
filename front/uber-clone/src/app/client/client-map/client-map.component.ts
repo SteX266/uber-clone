@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   latLng,
   tileLayer,
@@ -33,7 +33,7 @@ import {
   templateUrl: './client-map.component.html',
   styleUrls: ['./client-map.component.scss'],
 })
-export class ClientMapComponent implements OnInit {
+export class ClientMapComponent implements OnInit, OnDestroy {
   constructor(
     private mapService: MapSearchService,
     private locationService: LocationService,
@@ -48,6 +48,16 @@ export class ClientMapComponent implements OnInit {
     this.getActiveDriverLocations();
     this.initializeWebSocketConnection();
     this.customers.push(this.authService.getCurrentUserEmail());
+  }
+
+  ngOnDestroy(): void {
+    this.closeSocket();
+  }
+
+  closeSocket() {
+    this.stompClient.disconnect(() => {
+      this.snackbar.openSuccessSnackBar('UGASIO SOCKET!');
+    });
   }
 
   map!: Map;
