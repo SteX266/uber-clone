@@ -59,6 +59,7 @@ public class Ride {
     public void cancelRide() {
         if (this.status == RideStatus.ARRIVING || this.status == RideStatus.ARRIVED){
             this.status = RideStatus.CANCELED;
+
         }
         if(this.status == RideStatus.ONGOING){
             this.status = RideStatus.ABORTED;

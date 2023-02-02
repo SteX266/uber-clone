@@ -47,6 +47,12 @@ public class RideService {
         Ride ride = rideRepository.findByIdAndDriverId(rejectionDTO.getRideId(), driver.getId());
         if(ride == null) return;
         ride.setRejection(rejectionDTO.createRejection(ride));
+        if(ride.getStatus() == RideStatus.ARRIVING || ride.getStatus() == RideStatus.ARRIVED) {
+            simpMessagingTemplate.convertAndSend("/ride/rejected", new RideDTO(ride.getId(), ride.getDriver().getId()));
+        }
+        if(ride.getStatus() == RideStatus.ONGOING){
+            simpMessagingTemplate.convertAndSend("/ride/aborted", new RideDTO(ride.getId(), ride.getDriver().getId()));
+        }
         ride.cancelRide();
         setUpDriver(driver);
         rideRepository.save(ride);
@@ -76,6 +82,7 @@ public class RideService {
         ride.endRide();
         setUpDriver(driver);
         rideRepository.save(ride);
+        simpMessagingTemplate.convertAndSend("/ride/finished", new RideDTO(ride.getId(), ride.getDriver().getId()));
     }
 
 
