@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.util.List;
 public class ReservationDTO {
     List<String> stops;
 
-    String reservationTime;
+    LocalDateTime reservationTime;
 
     List<String> routeGeoJson;
 

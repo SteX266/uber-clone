@@ -71,6 +71,7 @@ public class Reservation {
         this.type = reservationDTO.getReservationType();
         this.status = ReservationStatus.PAYMENT;
         this.estimatedCost = reservationDTO.getEstimatedCost();
+        this.reservationTime = reservationDTO.getReservationTime();
 
     }
 
