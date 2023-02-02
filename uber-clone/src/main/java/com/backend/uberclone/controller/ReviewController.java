@@ -1,6 +1,7 @@
 package com.backend.uberclone.controller;
 
 import com.backend.uberclone.dto.ReviewDTO;
+import com.backend.uberclone.dto.SuccessResponseDTO;
 import com.backend.uberclone.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,14 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @RequestMapping("/createReview")
-    public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO){
+    public ResponseEntity<SuccessResponseDTO> createReview(@RequestBody ReviewDTO reviewDTO){
         boolean isSuccessful = reviewService.createReview(reviewDTO);
 
         if (isSuccessful){
-            return new ResponseEntity<>("OK", HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("Already reviewed!", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.CONFLICT);
         }
     }
 
