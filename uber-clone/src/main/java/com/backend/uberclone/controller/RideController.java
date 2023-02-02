@@ -1,10 +1,7 @@
 package com.backend.uberclone.controller;
 
 
-import com.backend.uberclone.dto.RejectionDTO;
-import com.backend.uberclone.dto.RideDTO;
-import com.backend.uberclone.dto.RideHistoryDTO;
-import com.backend.uberclone.dto.SuccessResponseDTO;
+import com.backend.uberclone.dto.*;
 import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.service.RideService;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +24,18 @@ public class RideController {
 
     RideService rideService;
 
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
 
     @Autowired
     public void setRideService(RideService rideService) { this.rideService = rideService; }
+
+    @MessageMapping("/driverArrived")
+    public void sendMessage(RideDTO rideDTO){
+        rideService.setRideArrived(rideDTO);
+        this.simpMessagingTemplate.convertAndSend("/ride/arrived", rideDTO);
+    }
 
     @PostMapping("/rejectRide")
     public ResponseEntity<SuccessResponseDTO> rejectRide(@RequestBody  RejectionDTO rejectionDTO) {

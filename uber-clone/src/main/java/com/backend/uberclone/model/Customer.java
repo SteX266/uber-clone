@@ -42,4 +42,7 @@ public class Customer extends User {
             inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
     private Set<Reservation> reservations;
 
+    public void addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
+    }
 }

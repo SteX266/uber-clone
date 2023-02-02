@@ -184,5 +184,12 @@ public class RideService {
         }
         return rideHistory;
     }
+
+    public void setRideArrived(RideDTO rideDTO) {
+        Ride r = rideRepository.findOneById(rideDTO.getRideId());
+        r.setStatus(RideStatus.ARRIVED);
+        rideRepository.save(r);
+
+    }
 }
 
