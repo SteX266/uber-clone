@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -88,7 +89,13 @@ public class RideService {
         ride.setReservation(r);
         ride.setStatus(RideStatus.ARRIVING);
         ride.setEstimatedArrivalTimeInMinutes(5);
-        ride.setCustomers(r.getCustomers());
+        Set<Customer> cus = new HashSet<>();
+        for (Customer c: r.getCustomers()
+             ) {
+            cus.add(c);
+            System.out.println(c.getUsername());
+        }
+        ride.setCustomers(cus);
         return rideRepository.save(ride);
     }
 
