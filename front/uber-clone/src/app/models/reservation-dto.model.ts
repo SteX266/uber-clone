@@ -1,7 +1,7 @@
 export class ReservationDTO {
   stops: Array<string>;
 
-  reservationTime: string;
+  reservationTime: Date;
 
   routeGeoJson: Array<string>;
 
@@ -25,7 +25,7 @@ export class ReservationDTO {
 
   constructor(
     stops: Array<string>,
-    reservationTime: string,
+    reservationTime: Date,
     routeGeoJson: Array<string>,
     customers: Array<string>,
     vehicleType: string,

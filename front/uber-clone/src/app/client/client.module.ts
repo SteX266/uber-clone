@@ -22,6 +22,7 @@ import { SplitFareComponent } from './split-fare/split-fare.component';
 import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { RideMapComponent } from './ride-map/ride-map.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { RideMapComponent } from './ride-map/ride-map.component';
     NgbModule,
     MatDialogModule,
     LeafletModule,
+    CalendarModule,
   ],
   exports: [EditClientProfileComponent],
 })

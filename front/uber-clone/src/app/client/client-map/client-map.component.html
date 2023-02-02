@@ -49,18 +49,42 @@
         </select>
         <label for="selectVehicle" class="text-white">Vehicle type</label>
       </div>
-      <div class="form-floating button">
-        <input
-          id="time"
-          class="form-control control"
-          aria-label="Default select example"
-          type="datetime-local"
+      <div class="row button">
+        <p-calendar
           [(ngModel)]="time"
-          [min]="minTime"
-          [max]="maxTime"
-          (ngModelChange)="limitTime()"
-        />
-        <label for="time" class="text-white">Time</label>
+          [showTime]="true"
+          [hourFormat]="'24'"
+          [minDate]="minTime"
+          [maxDate]="maxTime"
+          [disabled]="reservationType === 'INSTANT'"
+        ></p-calendar>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            id="flexRadioDefault1"
+            [(ngModel)]="reservationType"
+            value="INSTANT"
+            checked
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            Instant
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            [(ngModel)]="reservationType"
+            value="SCHEDULED"
+            class="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            id="flexRadioDefault2"
+          />
+          <label class="form-check-label" for="flexRadioDefault2">
+            Scheduled
+          </label>
+        </div>
       </div>
 
       <div class="row button">

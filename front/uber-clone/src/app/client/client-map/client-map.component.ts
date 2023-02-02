@@ -23,6 +23,7 @@ import { PaymentDTO } from 'src/app/models/payment-dto.model';
 import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
+
 import {
   GeoJsonFeature,
   GeoJsonFeatureCollection,
@@ -62,6 +63,8 @@ export class ClientMapComponent implements OnInit {
 
   selectedVehicleType: string = 'ANY';
 
+  reservationType: string = 'INSTANT';
+
   PRICE_COEF = 120;
   CAR_PRICE_MAP = {
     ANY: 100,
@@ -92,6 +95,7 @@ export class ClientMapComponent implements OnInit {
 
   createMinTime() {
     let time = new Date();
+    console.log(time);
     let minutes = time.getMinutes() + 10;
     time.setMinutes(minutes);
     return time;
@@ -367,7 +371,6 @@ export class ClientMapComponent implements OnInit {
   }
 
   addPerson(person: string) {
-    console.log(person);
     this.customers.push(person);
   }
 
@@ -416,11 +419,11 @@ export class ClientMapComponent implements OnInit {
       width: '500px',
       data: new ReservationDTO(
         this.getStops(),
-        '',
+        this.time,
         this.getGeoJsonStringRoutes(),
         this.customers,
         this.selectedVehicleType,
-        'INSTANT',
+        this.reservationType,
         this.hasBaby,
         this.hasPet,
         this.totalDistance(this.selectedRoutes),

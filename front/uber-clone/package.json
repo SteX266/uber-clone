@@ -32,6 +32,8 @@
     "font-awesome": "^4.7.0",
     "leaflet": "^1.9.3",
     "net": "^1.0.2",
+    "primeicons": "^6.0.1",
+    "primeng": "^15.2.0",
     "rxjs": "~7.5.0",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
