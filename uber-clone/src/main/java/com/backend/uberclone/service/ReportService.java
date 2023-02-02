@@ -28,7 +28,7 @@ public class ReportService {
 
     public List<ReportDTO> getUserReport(ReportDTO reportRequest) {
         List<ReportDTO> reports = new ArrayList<>();
-        List<Ride> rides = new ArrayList<>();
+        List<Ride> rides;
         if (reportRequest.getUserRole().equals("client")){
             Customer c = customerRepository.findOneById(reportRequest.getUserId());
             rides = new ArrayList<>(c.getRides());
