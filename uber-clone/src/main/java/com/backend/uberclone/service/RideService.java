@@ -55,7 +55,15 @@ public class RideService {
         }
         ride.cancelRide();
         setUpDriver(driver);
+        refundClients(ride);
         rideRepository.save(ride);
+    }
+
+    private void refundClients(Ride ride) {
+        for (Customer c:ride.getCustomers()){
+            c.addCoins(ride.getReservation().getPayments().get(0).getAmount());
+        }
+        
     }
 
     private void setUpDriver(Driver driver) {

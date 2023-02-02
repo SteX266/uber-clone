@@ -45,4 +45,8 @@ public class Customer extends User {
     public void addReservation(Reservation reservation) {
         this.reservations.add(reservation);
     }
+
+    public void addCoins(double amount) {
+        this.coins += amount;
+    }
 }
