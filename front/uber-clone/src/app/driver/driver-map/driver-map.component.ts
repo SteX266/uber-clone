@@ -24,7 +24,6 @@ import { ShiftService } from 'src/app/services/shift/shift.service';
 import { LocationDTO } from 'src/app/models/location-dto.model';
 import {
   GeoJsonFeature,
-  GeoJsonFeatureCollection,
   Location,
 } from 'src/app/models/geo-json-feature.model';
 import { RandomLocationService } from 'src/app/services/random-location/random-location.service';
@@ -42,7 +41,6 @@ export class DriverMapComponent implements OnInit {
     public modal: MatDialog,
     private authService: AuthService,
     private snackbar: SnackBarService,
-    private router: Router,
     private rideService: RideService,
     private shiftService: ShiftService,
     private randomLocationService: RandomLocationService
@@ -60,6 +58,7 @@ export class DriverMapComponent implements OnInit {
   markerLayer: FeatureGroup = new FeatureGroup();
   routeLayer: FeatureGroup = new FeatureGroup();
   routeToStartLayer: FeatureGroup = new FeatureGroup();
+  available: boolean = false;
 
   rideId!: number;
   driverId: number = Number(this.authService.getCurrentUserId());
@@ -71,17 +70,22 @@ export class DriverMapComponent implements OnInit {
 
   routes: any[] = [];
 
-  routeToStart!: GeoJsonFeatureCollection;
+  routeToStart!: any;
 
   rideState: RideState = RideState.WAITING;
 
   private stompClient: any;
 
   drivers: any = {};
+  toggleAvailable(toggledValue: boolean) {
+    this.available = toggledValue;
+    console.log(this.available);
+  }
 
   initializeDriverMarker() {
+    console.log(this.currentLocation);
     this.driverMarker = marker(
-      [this.currentLocation.longitude, this.currentLocation.latitude],
+      [this.currentLocation.latitude, this.currentLocation.longitude],
       {
         icon: icon({
           iconUrl: 'assets/taxi.svg',
@@ -95,6 +99,7 @@ export class DriverMapComponent implements OnInit {
 
   updateDriverMarkerLocation(location: Location) {
     this.currentLocation = location;
+    console.log(this.currentLocation);
     this.driverMarker.setLatLng([location.latitude, location.longitude]);
     this.driverMarker.update();
   }
@@ -114,24 +119,32 @@ export class DriverMapComponent implements OnInit {
       .startShift(
         new LocationDTO(
           this.driverId,
-          this.currentLocation.latitude,
-          this.currentLocation.longitude
+          this.currentLocation.longitude,
+          this.currentLocation.latitude
         )
       )
       .subscribe((data: any) => {
         console.log(data);
       });
-  }
+  } // !
 
   endRide() {
-    this.rideState = RideState.WAITING;
+    this.clearState();
     this.rideService.endRide(this.rideId).subscribe((data: any) => {
       console.log(data);
     });
+  } // !
+
+  clearState() {
+    this.clearMap();
+    this.routeToStart = [];
+    this.routes = [];
+    this.rideState = RideState.WAITING;
+    this.stops = [];
   }
 
   rejectRide() {
-    this.rideState = RideState.WAITING;
+    this.clearMap();
     this.rideService.abortRide(this.rideId, '').subscribe((data: any) => {
       console.log(data);
     });
@@ -146,11 +159,12 @@ export class DriverMapComponent implements OnInit {
     let totalPoints = 0;
     this.routes.forEach((feature: any) => {
       totalPoints += feature.geometry.coordinates.length - 1;
+      totalPoints += 9;
     });
     this.routes.forEach((feature: any) => {
       feature.geometry.coordinates.forEach(
         (coordinate: number[], index: number) => {
-          if (index == feature.geometry.coordinates.length - 1) total += 9;
+          if (index == 0) total += 9;
           total += 1;
           this.updateLocation(coordinate, total, false, total >= totalPoints);
         }
@@ -196,8 +210,8 @@ export class DriverMapComponent implements OnInit {
         .updateLocation(
           new LocationDTO(
             Number(this.authService.getCurrentUserId()),
-            coordinates[1],
-            coordinates[0]
+            coordinates[0],
+            coordinates[1]
           )
         )
         .subscribe((data: any) => {
@@ -231,13 +245,14 @@ export class DriverMapComponent implements OnInit {
   getDirectionsToStart(routeStart: number[]) {
     let start = new MapPoint(
       '',
-      this.currentLocation.longitude,
-      this.currentLocation.latitude
+      this.currentLocation.latitude,
+      this.currentLocation.longitude
     );
     this.mapService
       .directions(start, new MapPoint('', routeStart[1], routeStart[0]))
       .subscribe((geoJsonData: any) => {
         this.routeToStart = geoJsonData;
+        console.log(geoJsonData);
         this.drivingToStart();
       });
   }
@@ -249,7 +264,7 @@ export class DriverMapComponent implements OnInit {
         let locationDTO: LocationDTO = JSON.parse(message.body);
         if (this.driverId == locationDTO.driverId) return;
         let existingDriver = this.drivers[locationDTO.driverId];
-        existingDriver.setLatLng([locationDTO.longitude, locationDTO.latitude]);
+        existingDriver.setLatLng([locationDTO.latitude, locationDTO.longitude]);
         existingDriver.update();
       }
     );
@@ -259,7 +274,7 @@ export class DriverMapComponent implements OnInit {
         let locationDTO: LocationDTO = JSON.parse(message.body);
         if (this.driverId == locationDTO.driverId) return;
         let driverMarker = marker(
-          [locationDTO.longitude, locationDTO.latitude],
+          [locationDTO.latitude, locationDTO.longitude],
           {
             icon: icon({
               iconUrl: 'assets/taxi.svg',
@@ -307,7 +322,7 @@ export class DriverMapComponent implements OnInit {
       .subscribe((locationDtos: any[]) => {
         locationDtos.forEach((locationDto: any) => {
           let driverMarker = marker(
-            [locationDto.longitude, locationDto.latitude],
+            [locationDto.latitude, locationDto.latitude],
             {
               icon: icon({
                 iconUrl: 'assets/taxi.svg',

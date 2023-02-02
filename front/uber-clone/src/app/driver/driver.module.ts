@@ -9,6 +9,7 @@ import { DriverNavbarComponent } from './driver-navbar/driver-navbar.component';
 import { DriverHomePageComponent } from './driver-home-page/driver-home-page.component';
 import { DriverMapComponent } from './driver-map/driver-map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { DriverSidebarComponent } from './driver-sidebar/driver-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     DriverNavbarComponent,
     DriverHomePageComponent,
     DriverMapComponent,
+    DriverSidebarComponent,
   ],
   imports: [CommonModule, DriverRoutingModule, FormsModule, LeafletModule],
   exports: [EditDriverProfileComponent, OtherProfileComponent],

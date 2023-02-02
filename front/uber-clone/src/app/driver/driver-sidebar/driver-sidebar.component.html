@@ -1,0 +1,32 @@
+<div class="conatiner" [ngSwitch]="rideState">
+  <button class="btn btn-dark" *ngSwitchCase="0" (click)="onRejectRide.emit()">
+    Reject ride
+  </button>
+  <div class="row" *ngSwitchCase="1">
+    <button class="btn btn-dark" (click)="onRejectRide.emit()">
+      Reject ride
+    </button>
+    <button class="btn btn-dark" (click)="onStartRide.emit()">
+      Start ride
+    </button>
+  </div>
+  <button class="btn btn-dark" *ngSwitchCase="2" (click)="onRejectRide.emit()">
+    Abort ride
+  </button>
+  <button class="btn btn-dark" *ngSwitchCase="3" (click)="onEndRide.emit()">
+    End ride
+  </button>
+  <div *ngSwitchDefault class="form-check form-switch">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      role="switch"
+      id="toggleAvailable"
+      [checked]="available"
+      (click)="onToggleAvailable.emit(!available)"
+    />
+    <label class="form-check-label" for="toggleAvailable"
+      >Toggle Available</label
+    >
+  </div>
+</div>

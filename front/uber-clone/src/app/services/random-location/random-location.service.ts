@@ -18,7 +18,7 @@ export class RandomLocationService {
   getRandomLocation(): Location {
     let coordinates =
       this.taxiStops[this.getRandomInt(0, this.taxiStops.length - 1)];
-    return new Location(coordinates[1], coordinates[0]);
+    return new Location(coordinates[0], coordinates[1]);
   }
 
   getRandomInt(min: number, max: number) {

@@ -70,6 +70,8 @@ export class ClientMapComponent implements OnInit {
     ECO: 150,
   };
 
+  minTime: Date = this.createMinTime();
+  maxTime: Date = this.createMaxTime();
   time: Date = new Date();
 
   stops: Array<MapPoint> = new Array<MapPoint>();
@@ -87,6 +89,28 @@ export class ClientMapComponent implements OnInit {
   private stompClient: any;
 
   drivers: any = {};
+
+  createMinTime() {
+    let time = new Date();
+    let minutes = time.getMinutes() + 10;
+    time.setMinutes(minutes);
+    return time;
+  }
+  createMaxTime() {
+    let time = new Date();
+    let hours = time.getHours() + 5;
+    time.setHours(hours);
+    return time;
+  }
+
+  limitTime() {
+    let date = new Date(this.time);
+    if (date.getMilliseconds() > this.maxTime.getMilliseconds())
+      this.time = this.maxTime;
+    console.log(this.maxTime.getMilliseconds());
+    if (date.getMilliseconds() < this.minTime.getMilliseconds())
+      this.time = this.minTime;
+  }
 
   initializeWebSocketConnection() {
     let ws = new SockJS('http://localhost:8080/socket');
@@ -381,6 +405,8 @@ export class ClientMapComponent implements OnInit {
     this.selectedRoutes.forEach((route: any) => {
       geoJsonData.push(JSON.stringify(route));
     });
+    console.log(this.selectedRoutes);
+    console.log(this.stops);
     return geoJsonData;
   }
 
