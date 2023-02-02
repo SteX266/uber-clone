@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -47,7 +46,7 @@ public class Driver extends User {
     public boolean isDriverOverworked() {
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
         double totalTimeInSeconds = 0;
-        for (ActivePeriod period:activePeriods){
+        for (ActivePeriod period: activePeriods){
             if(period.getStart().compareTo(yesterday) > 0){
                 if(period.getEnd() == null){
                     totalTimeInSeconds += period.getStart().until(LocalDateTime.now(), ChronoUnit.SECONDS);
