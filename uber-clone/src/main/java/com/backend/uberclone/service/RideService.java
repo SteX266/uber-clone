@@ -55,7 +55,16 @@ public class RideService {
         }
         ride.cancelRide();
         setUpDriver(driver);
+        refundClients(ride);
         rideRepository.save(ride);
+    }
+
+    public void refundClients(Ride ride) {
+        for (Customer c:ride.getCustomers()){
+            c.addCoins(ride.getReservation().getPayments().get(0).getAmount());
+            customerRepository.save(c);
+        }
+
     }
 
     private void setUpDriver(Driver driver) {
@@ -97,10 +106,8 @@ public class RideService {
         ride.setStatus(RideStatus.ARRIVING);
         ride.setEstimatedArrivalTimeInMinutes(5);
         Set<Customer> cus = new HashSet<>();
-        for (Customer c: r.getCustomers()
-             ) {
+        for (Customer c: r.getCustomers()) {
             cus.add(c);
-            System.out.println(c.getUsername());
         }
         ride.setCustomers(cus);
         return rideRepository.save(ride);
