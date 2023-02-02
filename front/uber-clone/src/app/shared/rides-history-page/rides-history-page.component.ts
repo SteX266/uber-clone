@@ -19,7 +19,11 @@ export class RidesHistoryPageComponent {
     private authService: AuthService
   ) {}
   ngOnInit() {
-    this.rides = this.rideService.getRides(this.authService.getCurrentUserId);
+    this.rideService
+      .getRides(this.authService.getCurrentUserId())
+      .subscribe((data) => {
+        this.rides = data;
+      });
     this.sorted();
   }
 

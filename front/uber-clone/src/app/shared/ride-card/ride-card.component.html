@@ -14,11 +14,10 @@
                 [routerLink]="'/driver/profile/' + ride.driver.id"
               >
                 {{ ride.driver.name }} {{ ride.driver.surname }}
-              </a>
-            </strong>
+              </a> </strong
+            >1
             <i class="fa fa-clock-o"></i>
-            {{ ride.startTime.toLocaleString() }} -
-            {{ ride.endTime.toLocaleString() }}</small
+            {{ startString }} - {{ endString }}</small
           >
           <br />
           <div class="row">

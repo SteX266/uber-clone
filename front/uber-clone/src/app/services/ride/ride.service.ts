@@ -14,8 +14,8 @@ import { AuthService } from '../auth/auth.service';
 export class RideService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getRides(getCurrentUserId: () => string): Ride[] {
-    return [
+  getRides(id: string) {
+    let rides = [
       new Ride(
         1,
         [
@@ -55,6 +55,11 @@ export class RideService {
         ['4.Jul 39', 'Koce kolarova 1']
       ),
     ];
+    let url = environment.apiEndpoint + 'ride/getRideHistory/' + id;
+    return this.http.get<Ride[]>(
+      url,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 
   getGeoJsonRouteById(rideId: number): Observable<string[]> {
