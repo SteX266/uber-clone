@@ -3,14 +3,18 @@ package com.backend.uberclone.service;
 import com.backend.uberclone.dto.DriverNewRideNotificationDTO;
 import com.backend.uberclone.dto.RejectionDTO;
 import com.backend.uberclone.dto.RideDTO;
+import com.backend.uberclone.dto.RideHistoryDTO;
 import com.backend.uberclone.model.*;
+import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.RideRepository;
+import com.backend.uberclone.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // treba videti kako da pretplatim neki servis na promene repozitorijuma ili tako nesto da mogu da vrsim real time promene unutar sistema
@@ -19,10 +23,14 @@ import java.util.List;
 @Service
 public class RideService {
 
-    RideRepository rideRepository;
+    private RideRepository rideRepository;
     @Autowired
-    DriverRepository driverRepository;
+    private DriverRepository driverRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
@@ -145,6 +153,27 @@ public class RideService {
     public List<String> getGeoJsonRoute(Integer rideId) {
         Ride ride = rideRepository.findOneById(rideId);
         return ride.getReservation().getRoute().getRouteGeoJson();
+    }
+
+    public List<RideHistoryDTO> getRideHistory(Integer userId) {
+        User u = this.userRepository.findOneById(userId);
+        List<RideHistoryDTO> rideHistory =  new ArrayList<>();
+        List<Ride> rides;
+        if(u.getRole().equals("CLIENT")){
+            Customer c = this.customerRepository.findOneById(userId);
+            rides = (List<Ride>) c.getRides();
+        }
+        else if(u.getRole().equals("DRIVER")){
+            Driver d = this.driverRepository.findOneById(userId);
+            rides = d.getRides();
+        }
+        else{
+            rides = rideRepository.findAll();
+        }
+        for (Ride r:rides){
+            rideHistory.add(new RideHistoryDTO(r));
+        }
+        return rideHistory;
     }
 }
 

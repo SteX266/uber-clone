@@ -3,6 +3,8 @@ package com.backend.uberclone.controller;
 
 import com.backend.uberclone.dto.RejectionDTO;
 import com.backend.uberclone.dto.RideDTO;
+import com.backend.uberclone.dto.RideHistoryDTO;
+import com.backend.uberclone.dto.SuccessResponseDTO;
 import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.service.RideService;
@@ -29,21 +31,21 @@ public class RideController {
     public void setRideService(RideService rideService) { this.rideService = rideService; }
 
     @PostMapping("/rejectRide")
-    public ResponseEntity<String> rejectRide(@RequestBody  RejectionDTO rejectionDTO) {
+    public ResponseEntity<SuccessResponseDTO> rejectRide(@RequestBody  RejectionDTO rejectionDTO) {
         rideService.rejectRide(rejectionDTO); // treba vozac da se izvuce iz tokena
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 
     @PostMapping("/startRide")
-    public ResponseEntity<String> startRide(@RequestBody RideDTO rideDTO) {
+    public ResponseEntity<SuccessResponseDTO> startRide(@RequestBody RideDTO rideDTO) {
         rideService.startRide(rideDTO);
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 
     @PostMapping("/endRide")
-    public ResponseEntity<String> endRide(@RequestBody RideDTO rideDTO) {
+    public ResponseEntity<SuccessResponseDTO> endRide(@RequestBody RideDTO rideDTO) {
         rideService.endRide(rideDTO);
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 
     @GetMapping("/getGeoJsonRoute/{id}")
@@ -52,6 +54,12 @@ public class RideController {
         return new ResponseEntity<>(geoJsonRoute, HttpStatus.OK);
     }
 
+    @GetMapping("/getRideHistory/{id}")
+    public ResponseEntity<List<RideHistoryDTO>> getRideHistory(@PathVariable("id") Integer userId){
+        List<RideHistoryDTO> rides = this.rideService.getRideHistory(userId);
+        return new ResponseEntity<>(rides, HttpStatus.OK);
+
+    }
 
 
 }
