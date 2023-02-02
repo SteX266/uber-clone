@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,7 +30,8 @@ public class Driver extends User {
     @Column
     private boolean active;
 
-    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "driver", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<ActivePeriod> activePeriods;
 
     @OneToMany(mappedBy = "recipient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -47,17 +50,17 @@ public class Driver extends User {
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
         double totalTimeInSeconds = 0;
         for (ActivePeriod period: activePeriods){
-            if(period.getStart().compareTo(yesterday) > 0){
-                if(period.getEnd() == null){
-                    totalTimeInSeconds += period.getStart().until(LocalDateTime.now(), ChronoUnit.SECONDS);
+            if(period.getStartTime().compareTo(yesterday) > 0){
+                if(period.getEndTime() == null){
+                    totalTimeInSeconds += period.getStartTime().until(LocalDateTime.now(), ChronoUnit.SECONDS);
                 }
                 else{
-                    totalTimeInSeconds += period.getStart().until(period.getEnd(), ChronoUnit.SECONDS);
+                    totalTimeInSeconds += period.getStartTime().until(period.getEndTime(), ChronoUnit.SECONDS);
                 }
             }
-            else if(period.getEnd() != null){
-                if(period.getEnd().compareTo(yesterday) > 0){
-                    totalTimeInSeconds += yesterday.until(period.getEnd(), ChronoUnit.SECONDS);
+            else if(period.getEndTime() != null){
+                if(period.getEndTime().compareTo(yesterday) > 0){
+                    totalTimeInSeconds += yesterday.until(period.getEndTime(), ChronoUnit.SECONDS);
                 }
             }
         }

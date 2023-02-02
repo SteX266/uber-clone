@@ -254,7 +254,7 @@ public class UserService {
         else{
             driver.setActive(false);
             driver.setAvailable(false);
-            driver.getActivePeriods().get(driver.getActivePeriods().size()-1).setEnd(LocalDateTime.now());
+            driver.getActivePeriods().get(driver.getActivePeriods().size()-1).setEndTime(LocalDateTime.now());
 
         }
         driverRepository.save(driver);

@@ -173,9 +173,10 @@ export class ClientMapComponent implements OnInit {
         if (dto.customerEmail === this.authService.getCurrentUserEmail()) {
           if (dto.canceled) {
             this.snackbar.openFailureSnackBar('Payment canceled');
+          } else {
+            this.snackbar.openSuccessSnackBar('Reservation confirmer.');
+            this.Redirect(dto.reservationId);
           }
-          this.snackbar.openSuccessSnackBar('Reservation confirmer.');
-          this.Redirect(dto.reservationId);
         }
       }
     );

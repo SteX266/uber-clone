@@ -68,7 +68,7 @@ public class ReservationController {
 
     public boolean makeRide(Reservation r) {
         Ride newRide = rideService.createRide(r);
-        if (newRide.getDriver() == null) {
+        if (newRide== null) {
             for (Payment p : r.getPayments()) {
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true));
             }

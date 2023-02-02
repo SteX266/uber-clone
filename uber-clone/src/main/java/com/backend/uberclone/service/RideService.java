@@ -71,12 +71,14 @@ public class RideService {
 
     public Ride createRide(Reservation r) {
         Driver d = findClosestAvailableDriver(r);
+        if (d == null){
+            return null;
+        }
         Ride ride = new Ride();
         ride.setDriver(d);
         ride.setReservation(r);
         ride.setStatus(RideStatus.ARRIVING);
         ride.setEstimatedArrivalTimeInMinutes(5);
-
         return rideRepository.save(ride);
     }
 
