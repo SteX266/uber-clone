@@ -52,6 +52,9 @@ public class Ride {
     @Column
     private int estimatedArrivalTimeInMinutes;
 
+    @ManyToMany(mappedBy = "rides")
+    private Set<Customer> customers;
+
 
     public void cancelRide() {
         if (this.status == RideStatus.ARRIVING || this.status == RideStatus.ARRIVED){

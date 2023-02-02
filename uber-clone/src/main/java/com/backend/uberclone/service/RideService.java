@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 // treba videti kako da pretplatim neki servis na promene repozitorijuma ili tako nesto da mogu da vrsim real time promene unutar sistema
 // treba videti kako da se propagiraju promene korisnika na front da je aktivan ili da je neaktivan itd. mozda se za to koriste web socketi ali nisam siguran
@@ -87,6 +88,7 @@ public class RideService {
         ride.setReservation(r);
         ride.setStatus(RideStatus.ARRIVING);
         ride.setEstimatedArrivalTimeInMinutes(5);
+        ride.setCustomers(r.getCustomers());
         return rideRepository.save(ride);
     }
 
@@ -161,7 +163,7 @@ public class RideService {
         List<Ride> rides;
         if(u.getRole().equals("CLIENT")){
             Customer c = this.customerRepository.findOneById(userId);
-            rides = (List<Ride>) c.getRides();
+            rides = new ArrayList<>(c.getRides());
         }
         else if(u.getRole().equals("DRIVER")){
             Driver d = this.driverRepository.findOneById(userId);

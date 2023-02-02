@@ -54,10 +54,7 @@ public class ReservationService {
 
     private boolean checkCustomerBalance(Set<Customer> customers, double totalAmount) {
         double amount = totalAmount / customers.size();
-        for (Customer c:
-             customers) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAA");
-            System.out.println(c.getCoins());
+        for (Customer c: customers) {
             if (c.getCoins() < amount) return false;
         }
         return true;
