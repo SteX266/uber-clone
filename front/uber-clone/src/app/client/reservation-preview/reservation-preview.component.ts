@@ -18,6 +18,7 @@ export class ReservationPreviewComponent implements OnInit {
   ) {}
   time!: string;
   ngOnInit(): void {
+    console.log(this.data);
     this.time = this.prettyTime(this.data.estimatedTime);
   }
 

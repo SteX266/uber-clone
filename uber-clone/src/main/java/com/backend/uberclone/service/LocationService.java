@@ -61,9 +61,9 @@ public class LocationService {
         Driver driver = driverRepository.findOneById(locationDTO.getDriverId());
         if(driver == null) return false;
         if(!driver.isActive()) return false;
-        System.out.println(driver.getEmail());
 
         Location currentLocation = new Location(locationDTO.getLatitude(), locationDTO.getLongitude());
+        System.out.println(locationDTO.getLongitude());
         locationRepository.save(currentLocation);
         driver.setCurrentLocation(currentLocation);
         driverRepository.save(driver);
@@ -77,9 +77,6 @@ public class LocationService {
         for (Driver d: activeDrivers) {
             System.out.println(d.getEmail());
             Location location = d.getCurrentLocation();
-            System.out.println("LOKACIJA JEBENA");
-            System.out.println(location.getLatitude());
-            System.out.println(location.getLongitude());
             locationDTOS.add(new LocationDTO(location.getLatitude(), location.getLongitude(), d.getId()));
         }
         return locationDTOS;

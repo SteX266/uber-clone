@@ -1,5 +1,5 @@
 <div class="row map-container">
-  <div class="col">
+  <div class="col scrollable">
     <app-map-sidebar
       (onShowResults)="refreshDirections($event)"
     ></app-map-sidebar>
@@ -49,6 +49,19 @@
         </select>
         <label for="selectVehicle" class="text-white">Vehicle type</label>
       </div>
+      <div class="form-floating button">
+        <input
+          id="time"
+          class="form-control control"
+          aria-label="Default select example"
+          type="datetime-local"
+          [(ngModel)]="time"
+          [min]="minTime"
+          [max]="maxTime"
+          (ngModelChange)="limitTime()"
+        />
+        <label for="time" class="text-white">Time</label>
+      </div>
 
       <div class="row button">
         <div class="form-check">
@@ -78,7 +91,5 @@
     leaflet
     [leafletOptions]="options"
     (leafletMapReady)="initializeMap($event)"
-  >
-    >
-  </div>
+  ></div>
 </div>

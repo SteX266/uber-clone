@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
+  FeatureGroup,
   geoJSON,
   icon,
   latLng,
@@ -43,6 +44,9 @@ export class RideMapComponent implements OnInit {
   routeGeoJson: any[] = [];
   options!: MapOptions;
 
+  routeLayer: FeatureGroup = new FeatureGroup();
+  markerLayer: FeatureGroup = new FeatureGroup();
+
   initializeSocket() {
     let ws = new SockJS('http://localhost:8080/socket');
     this.stompClient = Stomp.over(ws);
@@ -77,16 +81,26 @@ export class RideMapComponent implements OnInit {
   getGeoJsonRoute(rideId: number) {
     this.rideService
       .getGeoJsonRouteById(rideId)
-      .subscribe((routeGeoJsonData: any) => {
-        this.routeGeoJson = JSON.parse(routeGeoJsonData);
-        this.createRoute(this.routeGeoJson);
+      .subscribe((routeGeoJsonData: string[]) => {
+        routeGeoJsonData.forEach((routeStr: string) => {
+          this.routeGeoJson.push(JSON.parse(routeStr));
+        });
         console.log(this.routeGeoJson);
+        this.createRoutes();
       });
   }
 
+  createRoutes() {
+    this.routeLayer = new FeatureGroup();
+    this.routeGeoJson.forEach((route: any) => {
+      this.createRoute(route);
+    });
+    this.routeLayer.addTo(this.map);
+    this.map.fitBounds(this.routeLayer.getBounds());
+  }
   createRoute(route: any) {
     let geoJson = geoJSON(route, { style: this.routeStyle() });
-    geoJson.addTo(this.map);
+    geoJson.addTo(this.routeLayer);
     this.map.fitBounds(geoJson.getBounds());
   }
 
@@ -112,7 +126,9 @@ export class RideMapComponent implements OnInit {
             }),
           }
         );
-        this.driverMarker.addTo(this.map);
+        this.driverMarker.addTo(this.markerLayer);
+        this.markerLayer.addTo(this.map);
+        this.map.fitBounds(this.markerLayer.getBounds());
       });
   }
   openGlobalSocket() {
@@ -121,11 +137,14 @@ export class RideMapComponent implements OnInit {
       (message: { body: string }) => {
         let locationDto = JSON.parse(message.body);
         if (locationDto.driverId === this.driverId) {
+          console.log(locationDto);
           this.driverMarker.setLatLng([
-            locationDto.latitude,
             locationDto.longitude,
+            locationDto.latitude,
           ]);
+
           this.driverMarker.update();
+          this.map.fitBounds(this.markerLayer.getBounds());
         }
       }
     );

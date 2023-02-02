@@ -68,21 +68,24 @@ export class MapSidebarComponent {
   }
 
   showResults() {
-    var all_results = Array<MapPoint>();
+    let all_results = Array<MapPoint>();
     all_results.push(this.resultsForStart[0]);
     this.resultsForStops.forEach((results: Array<MapPoint>) => {
       all_results.push(results[0]);
     });
     all_results.push(this.resultsForDestination[0]);
+    console.log(all_results);
     this.onShowResults.emit(all_results);
   }
 
   addStop() {
     this.stops.push('');
+    this.resultsForStops.push(new Array<MapPoint>());
   }
 
   removeStop(i: number) {
     this.stops.splice(i, 1);
     this.resultsForStops.splice(i, 1);
+    console.log(this.resultsForStops);
   }
 }
