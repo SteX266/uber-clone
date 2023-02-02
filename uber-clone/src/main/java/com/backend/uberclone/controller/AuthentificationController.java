@@ -2,7 +2,9 @@ package com.backend.uberclone.controller;
 
 import com.backend.uberclone.dto.*;
 import com.backend.uberclone.exception.ResourceConflictException;
+import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.User;
+import com.backend.uberclone.service.DriverService;
 import com.backend.uberclone.service.EmailService;
 import com.backend.uberclone.service.UserService;
 import com.backend.uberclone.util.TokenUtils;
@@ -39,6 +41,9 @@ public class AuthentificationController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private DriverService driverService;
 
 
     @PostMapping("/forgotPassword")
@@ -131,7 +136,8 @@ public class AuthentificationController {
 
         String role = user.getRoles().get(0).getName();
         if(role.equals("DRIVER")){
-            userService.setDriverActive(user.getId());
+            Driver d = driverService.findOneById(user.getId());
+            userService.setDriverActivity(d, true);
         }
         // Vrati token kao odgovor na uspesnu autentifikaciju
         return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);

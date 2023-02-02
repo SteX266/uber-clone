@@ -29,4 +29,9 @@ public class ActivePeriod {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="driver_id")
     private Driver driver;
+
+    public ActivePeriod(Driver driver) {
+        this.start = LocalDateTime.now();
+        this.driver = driver;
+    }
 }

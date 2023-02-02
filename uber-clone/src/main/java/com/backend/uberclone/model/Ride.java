@@ -66,16 +66,19 @@ public class Ride {
     public void startRide() {
         this.status = RideStatus.ONGOING;
         toggleCustomers(true);
+        this.setStartTime(LocalDateTime.now());
     }
 
     public void endRide() {
         this.status = RideStatus.FINISHED;
         toggleCustomers(false);
+        this.setEndTime(LocalDateTime.now());
     }
 
     public void abortRide() {
         this.status = RideStatus.ABORTED;
         toggleCustomers(false);
+        this.setEndTime(LocalDateTime.now());
     }
 
     private void toggleCustomers(boolean value) {

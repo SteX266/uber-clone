@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,32 @@ public class Driver extends User {
     private Location currentLocation;
 
 
+
+    public boolean isDriverOverworked() {
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        double totalTimeInSeconds = 0;
+        for (ActivePeriod period:activePeriods){
+            if(period.getStart().compareTo(yesterday) > 0){
+                if(period.getEnd() == null){
+                    totalTimeInSeconds += period.getStart().until(LocalDateTime.now(), ChronoUnit.SECONDS);
+                }
+                else{
+                    totalTimeInSeconds += period.getStart().until(period.getEnd(), ChronoUnit.SECONDS);
+                }
+            }
+            else if(period.getEnd() != null){
+                if(period.getEnd().compareTo(yesterday) > 0){
+                    totalTimeInSeconds += yesterday.until(period.getEnd(), ChronoUnit.SECONDS);
+                }
+            }
+        }
+        if (totalTimeInSeconds < 28500){
+            return false;
+        }
+        return true;
+
+    }
+
     public Ride getNextRide() {
         for (Ride r:rides){
             if(r.getStatus() == RideStatus.ARRIVING){
@@ -48,5 +76,9 @@ public class Driver extends User {
             }
         }
         return null;
+    }
+
+    public void addActivePeriod(ActivePeriod activePeriod) {
+        this.activePeriods.add(activePeriod);
     }
 }

@@ -26,21 +26,19 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/reservation", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReservationController {
-
-    ReservationService reservationService;
+    @Autowired
+   private  ReservationService reservationService;
 
     @Autowired
-    RideService rideService;
+    private RideService rideService;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    public void setReservationService(ReservationService reservationService) {
-        this.reservationService = reservationService;
-    }
+
+
 
     @PostMapping("/makeReservation")
     public ResponseEntity<SuccessResponseDTO> makeReservation(@RequestBody ReservationDTO reservationDTO) {
