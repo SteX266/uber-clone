@@ -31,7 +31,7 @@ public class ReportService {
         List<Ride> rides = new ArrayList<>();
         if (reportRequest.getUserRole().equals("client")){
             Customer c = customerRepository.findOneById(reportRequest.getUserId());
-            rides = (List<Ride>) c.getRides();
+            rides = new ArrayList<>(c.getRides());
         }
         else if(reportRequest.getUserRole().equals("driver")){
             Driver d = driverRepository.findOneById(reportRequest.getUserId());

@@ -77,7 +77,7 @@ public class ReservationController {
 
         if (newRide.getDriver().isAvailable()) {
             simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(), newRide.getDriver().getEmail()));
-            this.userService.setDriverAvailable(newRide.getDriver());
+            this.userService.setDriverAvailable(newRide.getDriver(), false);
         }
         return true;
     }

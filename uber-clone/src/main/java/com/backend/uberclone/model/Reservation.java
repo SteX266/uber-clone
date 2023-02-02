@@ -71,7 +71,13 @@ public class Reservation {
         this.type = reservationDTO.getReservationType();
         this.status = ReservationStatus.PAYMENT;
         this.estimatedCost = reservationDTO.getEstimatedCost();
-        this.reservationTime = reservationDTO.getReservationTime();
+        this.reservationTime = reservationDTO.getReservationTime().plusHours(1);
+        if(LocalDateTime.now().plusMinutes(5).compareTo(reservationTime) > 0){
+            this.type = ReservationType.INSTANT;
+        }
+        if (this.type == ReservationType.INSTANT){
+            this.reservationTime = LocalDateTime.now();
+        }
 
     }
 

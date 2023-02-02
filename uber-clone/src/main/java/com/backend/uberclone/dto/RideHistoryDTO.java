@@ -47,5 +47,6 @@ public class RideHistoryDTO {
         this.startTime = ride.getStartTime();
         this.endTime = ride.getEndTime();
         this.stops = ride.getReservation().getRoute().getStops();
+        this.vehicleType = ride.getDriver().getVehicle().getType().toString();
     }
 }

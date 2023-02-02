@@ -225,8 +225,8 @@ public class UserService {
 
     }
 
-    public void setDriverAvailable(Driver driver) {
-        driver.setAvailable(true);
+    public void setDriverAvailable(Driver driver, boolean isAvailable) {
+        driver.setAvailable(isAvailable);
         driverRepository.save(driver);
     }
 
