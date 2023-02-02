@@ -6,14 +6,11 @@ import com.backend.uberclone.dto.RideDTO;
 import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.RideRepository;
-import com.backend.uberclone.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // treba videti kako da pretplatim neki servis na promene repozitorijuma ili tako nesto da mogu da vrsim real time promene unutar sistema

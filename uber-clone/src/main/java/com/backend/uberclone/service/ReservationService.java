@@ -36,13 +36,6 @@ public class ReservationService {
 
     public List<PaymentDTO> makeReservation(ReservationDTO reservationDTO) {
 
-        if(reservationDTO.getReservationType().equals(ReservationType.INSTANT)) {
-            return makeInstantReservation(reservationDTO);
-        }
-        return new ArrayList<>();
-    }
-
-    private List<PaymentDTO> makeInstantReservation(ReservationDTO reservationDTO) {
         Set<Customer> customers = customerRepository.findAllByEmailIn(reservationDTO.getCustomers());
 
         if(!checkCustomerBalance(customers, reservationDTO.getEstimatedCost())) return new ArrayList<>();
@@ -56,9 +49,8 @@ public class ReservationService {
         }
 
         return createPaymentDTOS(reservation.getPayments(), reservation.getId());
-        // socket.convertAndSend(paymentDto, putanja)
-        // sacuva u payment repozitorijum i onda na frontu da se pri loginu dobave svi paymenti
     }
+
 
     private boolean checkCustomerBalance(Set<Customer> customers, double totalAmount) {
         double amount = totalAmount / customers.size();
