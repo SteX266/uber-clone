@@ -2,6 +2,7 @@ package com.backend.uberclone.controller;
 
 import com.backend.uberclone.dto.ReviewDTO;
 import com.backend.uberclone.dto.SuccessResponseDTO;
+import com.backend.uberclone.model.Review;
 import com.backend.uberclone.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,15 @@ public class ReviewController {
             return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.CONFLICT);
         }
     }
+    @PostMapping("/reviewPossible")
+    public ResponseEntity<Boolean> isReviewPossible(@RequestBody ReviewDTO reviewDTO){
 
+        if(reviewService.canRideBeReviewed(reviewDTO.getRideId(), reviewDTO.getReviewerEmail())){
+            return new ResponseEntity<>(true,HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(false,HttpStatus.METHOD_NOT_ALLOWED);
+
+    }
 }
 
