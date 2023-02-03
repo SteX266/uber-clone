@@ -1,4 +1,4 @@
-import { SafeResourceUrl } from "@angular/platform-browser";
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 export class UserProfileInfo {
   id!: number;
@@ -9,9 +9,23 @@ export class UserProfileInfo {
   phoneNumber!: string;
   profilePicture!: string;
   role!: string;
-  srcData!:SafeResourceUrl;
+  srcData!: SafeResourceUrl;
+  driverScore!: number;
 
-  constructor(id:number, email:string,name:string,surname:string,city:string, phoneNumber:string,profilePicture:string,role:string){
+  vehicleScore!: number;
+
+  constructor(
+    id: number,
+    email: string,
+    name: string,
+    surname: string,
+    city: string,
+    phoneNumber: string,
+    profilePicture: string,
+    role: string,
+    driverScore: number,
+    vehicleScore: number
+  ) {
     this.id = id;
     this.email = email;
     this.name = name;
@@ -20,5 +34,7 @@ export class UserProfileInfo {
     this.phoneNumber = phoneNumber;
     this.profilePicture = profilePicture;
     this.role = role;
+    this.driverScore = driverScore;
+    this.vehicleScore = vehicleScore;
   }
 }
