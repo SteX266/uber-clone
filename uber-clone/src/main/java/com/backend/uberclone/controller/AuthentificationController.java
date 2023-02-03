@@ -137,7 +137,7 @@ public class AuthentificationController {
         String role = user.getRoles().get(0).getName();
         if(role.equals("DRIVER")){
             Driver d = driverService.findOneById(user.getId());
-            userService.setDriverActivity(d, true);
+            driverService.setDriverActivity(d, true);
         }
         // Vrati token kao odgovor na uspesnu autentifikaciju
         return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);

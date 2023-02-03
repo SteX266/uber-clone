@@ -236,28 +236,5 @@ public class UserService {
         return userRepository.findOneByEmail(user.getUsername());
     }
 
-    public void setDriverActivity(Driver driver, boolean isActive){
 
-        if(driver.isActive() == isActive){
-            return;
-        }
-        if(isActive){
-            if(driver.isDriverOverworked()){
-                return;
-            }
-
-            ActivePeriod activePeriod = new ActivePeriod(driver);
-            driver.addActivePeriod(activePeriod);
-            driver.setActive(true);
-            driver.setAvailable(true);
-        }
-        else{
-            driver.setActive(false);
-            driver.setAvailable(false);
-            driver.getActivePeriods().get(driver.getActivePeriods().size()-1).setEndTime(LocalDateTime.now());
-
-        }
-        driverRepository.save(driver);
-
-    }
 }
