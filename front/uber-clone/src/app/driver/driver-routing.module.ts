@@ -11,6 +11,7 @@ import { DriverNavbarComponent } from './components/driver-navbar/driver-navbar.
 import { ChatComponent } from '../shared/pages/chat/chat.component';
 import { DriverHomePageComponent } from './pages/driver-home-page/driver-home-page.component';
 import { RidesHistoryPageComponent } from '../shared/pages/rides-history-page/rides-history-page.component';
+import { ReportPageComponent } from '../shared/pages/report-page/report-page.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
       { path: 'edit-picture', component: ChangePhotoComponent },
       { path: 'edit-car', component: ChangeCarComponent },
       { path: 'support', component: ChatComponent },
+      {
+        path: 'report/:id',
+        component: ReportPageComponent,
+      },
       { path: '', component: DriverHomePageComponent },
     ],
   },

@@ -1,5 +1,5 @@
 <div class="field col-12 md:col-4">
-  <label for="range">Range</label>
+  <label for="range">select date range: </label>
   <p-calendar
     [(ngModel)]="rangeDates"
     selectionMode="range"
@@ -7,12 +7,17 @@
     inputId="range"
   ></p-calendar>
 </div>
-<button (click)="selectDateRange()">Select Dates</button>
-<div class="card">
-  <h5>Horizontal</h5>
-  <p-chart
-    type="bar"
-    [data]="basicData"
-    [options]="horizontalOptions"
-  ></p-chart>
+<button class="btn btn-dark btn-block" (click)="selectDateRange()">
+  Select Dates
+</button>
+
+<div *ngIf="basicData">
+  <p>Cumulative money: {{ cMoney }}</p>
+  <p>Average money per day: {{ aMoney }}</p>
+  <p>Cumulative rides: {{ cNumber }}</p>
+  <p>Average rides per day: {{ aNumber }}</p>
+  <p>Cumulative distance: {{ cumDistance }} km</p>
+  <p>Average distance per day: {{ aDistance }} km</p>
 </div>
+
+<app-chart [basicData]="basicData"></app-chart>

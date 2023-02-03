@@ -11,6 +11,7 @@ import { RideCardComponent } from '../shared/components/ride-card/ride-card.comp
 import { RideMapComponent } from './pages/ride-map/ride-map.component';
 import { PaymentMethodComponent } from '../profile/pages/payment-method/payment-method.component';
 import { RidesHistoryPageComponent } from '../shared/pages/rides-history-page/rides-history-page.component';
+import { ReportPageComponent } from '../shared/pages/report-page/report-page.component';
 const routes: Routes = [
   {
     path: 'client',
@@ -25,7 +26,10 @@ const routes: Routes = [
       { path: 'edit-picture', component: ChangePhotoComponent },
       { path: 'edit-payment', component: PaymentMethodComponent },
       { path: 'history', component: RidesHistoryPageComponent },
-
+      {
+        path: 'report/:id',
+        component: ReportPageComponent,
+      },
       { path: 'support', component: ChatComponent },
       { path: 'ride/:id', component: RideMapComponent },
       { path: '', component: ClientHomePageComponent },

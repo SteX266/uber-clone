@@ -1,1 +1,9 @@
-<p>chart works!</p>
+<div class="card">
+  <h5>Report</h5>
+  <p-chart
+    *ngIf="basicData"
+    type="bar"
+    [data]="basicData"
+    [options]="horizontalOptions"
+  ></p-chart>
+</div>
