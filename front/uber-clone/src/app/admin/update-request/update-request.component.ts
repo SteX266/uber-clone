@@ -15,9 +15,9 @@ import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 })
 export class UpdateRequestComponent {
   selectedId = 0;
-  user1 = new UserProfileInfo(0, '', '', '', '', '', '', '');
+  user1 = new UserProfileInfo(0, '', '', '', '', '', '', '', 0, 0);
   car1 = new Vehicle(0, '', 0, false, false, '', 0);
-  user2 = new UserProfileInfo(0, '', '', '', '', '', '', '');
+  user2 = new UserProfileInfo(0, '', '', '', '', '', '', '', 0, 0);
   car2 = new Vehicle(0, '', 0, false, false, '', 0);
 
   constructor(

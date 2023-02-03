@@ -3,12 +3,15 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.ReviewDTO;
 import com.backend.uberclone.model.Customer;
+import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Review;
 import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.repository.CustomerRepository;
+import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.ReviewRepository;
 import com.backend.uberclone.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,24 +29,53 @@ public class ReviewService {
     @Autowired
     private RideRepository rideRepository;
 
+    @Autowired
+    private DriverRepository driverRepository;
+
 
 
 
     public boolean createReview(ReviewDTO reviewDTO) {
         Customer reviewer = customerRepository.findOneByEmail(reviewDTO.getReviewerEmail());
         Ride ride = rideRepository.findOneById(reviewDTO.getRideId());
-        if (ride == null){
-            System.out.println("ALOOO9OOOGADSOAOSOGSOASGOGAS");
+        if (ride == null || reviewer == null){
             return false;
         }
-        if (isRatingValid(reviewDTO.getVehicleRating(), reviewDTO.getDriverRating()) && isRideDateValid(ride.getStartTime())){
-
+        if (!canRideBeReviewed(reviewDTO.getRideId(), reviewDTO.getReviewerEmail())){
+            return false;
+        }
+        if (isRatingValid(reviewDTO.getVehicleRating(), reviewDTO.getDriverRating())){
             Review review = new Review(ride, reviewer, ride.getDriver(), reviewDTO.getVehicleRating(), reviewDTO.getDriverRating(), reviewDTO.getComment());
             reviewRepository.save(review);
+            Driver d = ride.getDriver();
+            d.addReview(review);
+            driverRepository.save(d);
             return true;
-
         }
         return false;
+    }
+
+    public boolean canRideBeReviewed(int rideId, String userEmail){
+
+        Ride ride = rideRepository.findOneById(rideId);
+        if (ride == null){
+            return false;
+        }
+        if (!isRideDateValid(ride.getStartTime())){
+
+            return false;
+        }
+        Customer c = customerRepository.findOneByEmail(userEmail);
+        if(c == null){
+            return false;
+        }
+        for (Review review:c.getGiven_reviews()){
+            if (review.getRide().getId() == rideId){
+                return false;
+            }
+        }
+        return true;
+
     }
 
     private boolean isRideDateValid(LocalDateTime startTime) {

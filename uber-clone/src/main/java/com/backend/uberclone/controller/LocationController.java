@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/startShift")
     public ResponseEntity<String> startShift(@RequestBody LocationDTO locationDTO) {
         System.out.println("USAO U POCETAK SHIFTA");
@@ -40,7 +41,7 @@ public class LocationController {
         simpMessagingTemplate.convertAndSend("/location-updates/new-driver", locationDTO);
         return new ResponseEntity<>("Successfully started shift!", HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/updateLocation")
     public ResponseEntity<SuccessResponseDTO> updateLocation(@RequestBody LocationDTO locationDTO) {
         System.out.println("UPDATE LOCATION");
@@ -48,7 +49,7 @@ public class LocationController {
         simpMessagingTemplate.convertAndSend("/location-updates/update-driver-location", locationDTO);
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/endShift")
     public ResponseEntity<String> endShift(@RequestBody Integer driverId) {
         System.out.println("USAO U POCETAK SHIFTA");

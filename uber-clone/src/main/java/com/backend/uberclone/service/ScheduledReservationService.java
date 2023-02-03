@@ -24,6 +24,9 @@ public class ScheduledReservationService {
     private DriverRepository driverRepository;
 
     @Autowired
+    private DriverService driverService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -45,7 +48,7 @@ public class ScheduledReservationService {
     public void deactivateOverworkedDrivers() {
         for (Driver d:driverRepository.findAllByActive(true)){
             if(d.isDriverOverworked()){
-                userService.setDriverActivity(d,false);
+                driverService.setDriverActivity(d,false);
                 simpMessagingTemplate.convertAndSend("/driver/shift", new RejectionDTO("",-1,d.getId()));
             }
         }

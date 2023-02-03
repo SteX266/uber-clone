@@ -30,6 +30,10 @@ public class UserDTO {
 
     private String role;
 
+    private double driverScore;
+
+    private double vehicleScore;
+
     public UserDTO(User u){
         email = u.getEmail();
         name = u.getName();
@@ -37,8 +41,21 @@ public class UserDTO {
         city = u.getCity();
         phoneNumber = u.getPhoneNumber();
         profilePicture = u.getProfilePicture();
-        role = u.getRoles().get(0).getName();
+        role = u.getRole();
         id = u.getId();
+    }
+
+    public UserDTO(User u, double driverScore, double vehicleScore){
+        email = u.getEmail();
+        name = u.getName();
+        surname = u.getSurname();
+        city = u.getCity();
+        phoneNumber = u.getPhoneNumber();
+        profilePicture = u.getProfilePicture();
+        role = u.getRole();
+        id = u.getId();
+        this.driverScore = driverScore;
+        this.vehicleScore = vehicleScore;
     }
 
     public UserDTO(UpdateUserRequest u){

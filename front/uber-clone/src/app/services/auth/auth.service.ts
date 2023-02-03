@@ -16,6 +16,7 @@ export class AuthService {
   private readonly registrationUrl: string;
   private readonly forgotPasswordUrl: string;
   private readonly resetPasswordUrl: string;
+  private readonly logoutDriverUrl:string;
   constructor(private http: HttpClient) {
     this.loginUrl = environment.apiEndpoint + 'auth/login';
     this.signUpUrl = environment.apiEndpoint + 'auth/usersignup';
@@ -23,6 +24,7 @@ export class AuthService {
     this.registrationUrl = environment.apiEndpoint + 'auth/usersignup';
     this.forgotPasswordUrl = environment.apiEndpoint + 'auth/forgotPassword';
     this.resetPasswordUrl = environment.apiEndpoint + 'auth/resetPassword';
+    this.logoutDriverUrl = environment.apiEndpoint + 'driver/logoutDriver';
   }
 
   public saveCurrentUserRole(role: string) {
@@ -73,7 +75,20 @@ export class AuthService {
 
   }
 
+  logoutAdmin(){
+    let body ={
+      id:this.getCurrentUserId()
+    }
+    return this.http.post<any>(this.logoutDriverUrl, body, this.getHttpOptionsWithToken());
+
+
+  }
+
   logout() {
+    if(this.getCurrentUserRole() === "DRIVER"){
+      this.logoutAdmin().subscribe();
+    }
+
     this.invalidateToken();
     window.location.href = '/';
 
