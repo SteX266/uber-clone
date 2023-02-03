@@ -3,7 +3,11 @@ package com.backend.uberclone.controller;
 
 import com.backend.uberclone.dto.LocationDTO;
 import com.backend.uberclone.dto.SuccessResponseDTO;
+import com.backend.uberclone.dto.ToggleAvailableDTO;
+import com.backend.uberclone.model.Driver;
+import com.backend.uberclone.service.DriverService;
 import com.backend.uberclone.service.LocationService;
+import com.backend.uberclone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +26,10 @@ public class LocationController {
     SimpMessagingTemplate simpMessagingTemplate;
 
     LocationService locationService;
+
+    @Autowired
+    DriverService driverService;
+
     @Autowired
     public void setSimMessagingTemplate(SimpMessagingTemplate simpMessagingTemplate) {
         this.simpMessagingTemplate = simpMessagingTemplate;
@@ -68,6 +76,14 @@ public class LocationController {
     public ResponseEntity<LocationDTO> getDriverLocationByRideId(@PathVariable("id") String id) {
         System.out.println("Usao u dobavljanje lokacija jednog korisnika");
         return new ResponseEntity<>(locationService.getDriverLocationByRideId(Integer.valueOf(id)), HttpStatus.OK);
+    }
+
+    @PostMapping("/toggleAvailable")
+    public ResponseEntity<String> toggleAvailable(@RequestBody ToggleAvailableDTO toggleAvailableDTO) {
+        Driver driver = this.driverService.findOneById(toggleAvailableDTO.getDriverId());
+        if(driver == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        driverService.setDriverActivity(driver, toggleAvailableDTO.getAvailable());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

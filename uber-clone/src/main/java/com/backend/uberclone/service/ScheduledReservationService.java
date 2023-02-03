@@ -62,7 +62,7 @@ public class ScheduledReservationService {
                     Ride newRide = this.rideService.createRide(r);
                     if (newRide== null) {
                         for (Payment p : r.getPayments()) {
-                            simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true));
+                            simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true,-1));
                             Customer c = p.getCustomer();
                             c.addCoins(p.getAmount());
                             customerRepository.save(c);

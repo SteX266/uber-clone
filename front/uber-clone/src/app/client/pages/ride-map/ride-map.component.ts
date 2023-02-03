@@ -53,6 +53,8 @@ export class RideMapComponent implements OnInit {
   routeLayer: FeatureGroup = new FeatureGroup();
   markerLayer: FeatureGroup = new FeatureGroup();
 
+  estimatedTime: number = NaN;
+
   initializeSocket() {
     let ws = new SockJS('http://localhost:8080/socket');
     this.stompClient = Stomp.over(ws);
@@ -191,6 +193,16 @@ export class RideMapComponent implements OnInit {
           this.modal.open(ReviewRideModalComponent, {
             data: dto.rideId,
           });
+        }
+      }
+    );
+    this.stompClient.subscribe(
+      '/ride/time-updated',
+      (message: { body: string }) => {
+        let dto = JSON.parse(message.body);
+        console.log(dto);
+        if (this.rideId === dto.rideId) {
+          this.estimatedTime = dto.time;
         }
       }
     );

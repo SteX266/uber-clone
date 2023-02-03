@@ -73,12 +73,12 @@ public class ReservationController {
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
-    @PreAuthorize("hasRole('CLIENT')")
+
     public boolean makeRide(Reservation r) {
         Ride newRide = rideService.createRide(r);
         if (newRide== null) {
             for (Payment p : r.getPayments()) {
-                simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true));
+                simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true, -1));
             }
             return false;
         }
@@ -92,8 +92,12 @@ public class ReservationController {
 
     private  void chargeUsers(Reservation r){
         reservationService.chargeUsers(r);
+        int rideId = -1;
+        if (r.getRide() != null){
+            rideId = r.getRide().getId();
+        }
         for (Payment p : r.getPayments()) {
-         simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), false));
+         simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), false, rideId));
      }
     }
     @PreAuthorize("hasRole('CLIENT')")
@@ -103,7 +107,7 @@ public class ReservationController {
         Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
         for(Payment p:r.getPayments()){
             p.setPaid(false);
-            simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true));
+            simpMessagingTemplate.convertAndSend("/payment/all-confirmed",new PaymentDTO(p.getAmount(), r.getId(),p.getCustomer().getEmail(),true, -1));
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
 

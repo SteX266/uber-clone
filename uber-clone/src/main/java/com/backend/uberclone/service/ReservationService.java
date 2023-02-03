@@ -68,7 +68,7 @@ public class ReservationService {
     private List<PaymentDTO> createPaymentDTOS(List<Payment> payments, Integer reservationId) {
         List<PaymentDTO> paymentDTOS = new ArrayList<>();
         for (Payment p: payments) {
-            paymentDTOS.add(new PaymentDTO(p.getAmount(), reservationId, p.getCustomer().getEmail(),false));
+            paymentDTOS.add(new PaymentDTO(p.getAmount(), reservationId, p.getCustomer().getEmail(),false, -1));
         }
         return paymentDTOS;
     }

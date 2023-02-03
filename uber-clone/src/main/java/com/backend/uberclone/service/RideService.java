@@ -1,14 +1,8 @@
 package com.backend.uberclone.service;
 
-import com.backend.uberclone.dto.DriverNewRideNotificationDTO;
-import com.backend.uberclone.dto.RejectionDTO;
-import com.backend.uberclone.dto.RideDTO;
-import com.backend.uberclone.dto.RideHistoryDTO;
+import com.backend.uberclone.dto.*;
 import com.backend.uberclone.model.*;
-import com.backend.uberclone.repository.CustomerRepository;
-import com.backend.uberclone.repository.DriverRepository;
-import com.backend.uberclone.repository.RideRepository;
-import com.backend.uberclone.repository.UserRepository;
+import com.backend.uberclone.repository.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -35,7 +29,8 @@ public class RideService {
     private UserRepository userRepository;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
-
+    @Autowired
+    private ReservationRepository reservationRepository;
 
 
     @Autowired
@@ -113,7 +108,11 @@ public class RideService {
         for(Customer c:ride.getCustomers()){
             customerRepository.save(c);
         }
-        return rideRepository.save(ride);
+        Ride rajd = rideRepository.save(ride);
+        r.setRide(rajd);
+
+        reservationRepository.save(r);
+        return rajd;
     }
 
     private Driver findClosestAvailableDriver(Reservation r) {
@@ -213,5 +212,6 @@ public class RideService {
         rideRepository.save(r);
 
     }
+
 }
 

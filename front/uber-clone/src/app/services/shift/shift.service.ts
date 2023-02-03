@@ -18,4 +18,11 @@ export class ShiftService {
       this.authService.getHttpOptionsWithToken()
     );
   }
+  toggleAvailable(available: boolean) {
+    let url = environment.apiEndpoint + 'location/toggleAvailable/';
+    return this.http.post(url, {
+      available: available,
+      driverId: this.authService.getCurrentUserId(),
+    });
+  }
 }

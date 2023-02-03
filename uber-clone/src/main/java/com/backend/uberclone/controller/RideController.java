@@ -69,6 +69,12 @@ public class RideController {
         return new ResponseEntity<>(rides, HttpStatus.OK);
 
     }
+    @PostMapping("/updateTime")
+    public ResponseEntity<SuccessResponseDTO> updateTime(@RequestBody TimeDTO timeDTO) {
+        simpMessagingTemplate.convertAndSend("/ride/time-updated", timeDTO);
+        return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
+    }
+
 
 
 }

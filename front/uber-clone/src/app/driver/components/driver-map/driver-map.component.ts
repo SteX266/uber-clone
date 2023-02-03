@@ -29,6 +29,7 @@ import {
 import { RandomLocationService } from 'src/app/services/random-location/random-location.service';
 import { RideState } from 'src/app/models/ride-state-enum.model';
 import { AbortDTO } from 'src/app/models/abort-dto.model';
+import { TimeService } from 'src/app/services/time/time.service';
 @Component({
   selector: 'app-driver-map',
   templateUrl: './driver-map.component.html',
@@ -43,7 +44,8 @@ export class DriverMapComponent implements OnInit {
     private snackbar: SnackBarService,
     private rideService: RideService,
     private shiftService: ShiftService,
-    private randomLocationService: RandomLocationService
+    private randomLocationService: RandomLocationService,
+    private timeService: TimeService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,7 @@ export class DriverMapComponent implements OnInit {
   markerLayer: FeatureGroup = new FeatureGroup();
   routeLayer: FeatureGroup = new FeatureGroup();
   routeToStartLayer: FeatureGroup = new FeatureGroup();
-  available: boolean = false;
+  available: boolean = true;
 
   rideId!: number;
   driverId: number = Number(this.authService.getCurrentUserId());
@@ -152,21 +154,28 @@ export class DriverMapComponent implements OnInit {
 
   startRide() {
     this.rideState = RideState.ONGOING;
-    this.rideService.startRide(this.rideId).subscribe((data: any) => {
-      console.log(data);
-    });
+    this.rideService.startRide(this.rideId).subscribe((data: any) => {});
     let total = 0;
     let totalPoints = 0;
     this.routes.forEach((feature: any) => {
       totalPoints += feature.geometry.coordinates.length - 1;
+
       totalPoints += 9;
     });
+    totalPoints += 1;
+
     this.routes.forEach((feature: any) => {
       feature.geometry.coordinates.forEach(
         (coordinate: number[], index: number) => {
           if (index == 0) total += 9;
           total += 1;
-          this.updateLocation(coordinate, total, false, total >= totalPoints);
+          this.updateLocation(
+            coordinate,
+            total,
+            false,
+            total >= totalPoints,
+            totalPoints
+          );
         }
       );
     });
@@ -181,7 +190,8 @@ export class DriverMapComponent implements OnInit {
             coordinate,
             index,
             feature.geometry.coordinates.length - 1 <= index,
-            false
+            false,
+            feature.geometry.coordinates.length - 1
           );
         }
       );
@@ -192,7 +202,8 @@ export class DriverMapComponent implements OnInit {
     coordinates: number[],
     index: number,
     arriving: boolean,
-    finished: boolean
+    finished: boolean,
+    totalPoints: number
   ) {
     setTimeout(() => {
       if (this.rideState === RideState.WAITING) return;
@@ -213,9 +224,11 @@ export class DriverMapComponent implements OnInit {
             coordinates[1]
           )
         )
-        .subscribe((data: any) => {
-          console.log(data);
-        });
+        .subscribe((data: any) => {});
+      console.log(totalPoints - index);
+      this.timeService
+        .updateTime(totalPoints - index, this.rideId)
+        .subscribe((data: any) => {});
     }, 1000 * index);
   }
 

@@ -212,16 +212,19 @@ export class ClientMapComponent implements OnInit, OnDestroy {
           if (dto.canceled) {
             this.snackbar.openFailureSnackBar('Payment canceled');
           } else {
-            this.snackbar.openSuccessSnackBar('Reservation confirmer.');
-            this.redirect(dto.reservationId);
+            this.snackbar.openSuccessSnackBar('Reservation confirmed.');
+            if (dto.rideId == -1) {
+              this.redirect('/client');
+            } else {
+              this.redirect('/client/ride/' + dto.rideId);
+            }
           }
         }
       }
     );
   }
 
-  redirect(reservationId: number) {
-    let route = '/client/ride/' + reservationId;
+  redirect(route: string) {
     this.router.navigate([route]);
   }
 

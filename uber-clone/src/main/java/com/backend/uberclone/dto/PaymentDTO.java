@@ -16,5 +16,8 @@ public class PaymentDTO {
 
     boolean canceled;
 
+    Integer rideId;
+
+
 
 }
