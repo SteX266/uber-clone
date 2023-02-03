@@ -13,6 +13,9 @@ import { UserRegistrationRequest } from 'src/app/models/UserRegistrationRequest'
   styleUrls: ['./sign-up-modal.component.scss'],
 })
 export class SignUpModalComponent {
+
+  emailPattern: RegExp =
+  /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/\d=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/\d=?A-Z^_`a-z{|}~]+)*@[A-Za-z\d]([A-Za-z\d-]{0,61}[A-Za-z\d])?(\.[A-Za-z\d]([A-Za-z\d-]{0,61}[A-Za-z\d])?)*$/;
   email: string = '';
   password: string = '';
   repeatedPassword: string = '';
@@ -60,7 +63,9 @@ export class SignUpModalComponent {
   }
 
   validateEmail() {
-    return true;
+    return this.emailPattern.test(this.email);
+
+   
   }
 
   validateInputData() {

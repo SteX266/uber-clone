@@ -153,25 +153,10 @@ export class AuthService {
   sendRegistrationRequest(
     registrationRequest: UserRegistrationRequest
   ): Observable<any> {
-    let body = {
-      email: registrationRequest.email,
-      password: registrationRequest.password,
-      name: registrationRequest.name,
-      surname: registrationRequest.surname,
-      city: registrationRequest.city,
-      phoneNumber: registrationRequest.phoneNumber,
-      userType: registrationRequest.userType,
-      carModel: registrationRequest.carModel,
-      numberOfSeats: registrationRequest.numberOfSeats,
-      petFriendly: registrationRequest.petFriendly,
-      childrenFriendly: registrationRequest.childrenFriendly,
-      vehicleType: registrationRequest.vehicleType,
-    };
-    console.log(body);
 
     return this.http.post<any>(
       this.registrationUrl,
-      body,
+      registrationRequest,
       this.getHttpOptions()
     );
   }

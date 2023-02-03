@@ -2,10 +2,7 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.ReportDTO;
 import com.backend.uberclone.dto.ReportListsDTO;
-import com.backend.uberclone.model.Customer;
-import com.backend.uberclone.model.Driver;
-import com.backend.uberclone.model.Report;
-import com.backend.uberclone.model.Ride;
+import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.RideRepository;
@@ -35,8 +32,13 @@ public class ReportService {
         ArrayList<Double> distance = new ArrayList<>();
         List<Ride> rides;
         if (reportRequest.getUserRole().equals("CLIENT")){
-            Customer c = customerRepository.findOneById(reportRequest.getUserId());
-            rides = new ArrayList<>(c.getRides());
+            rides = new ArrayList<>();
+            Customer c = this.customerRepository.findOneById(reportRequest.getUserId());
+            for(Reservation r:c.getReservations()){
+                if(r.getRide() != null){
+                    rides.add(r.getRide());
+                }
+            }
         }
         else if(reportRequest.getUserRole().equals("DRIVER")){
             Driver d = driverRepository.findOneById(reportRequest.getUserId());
