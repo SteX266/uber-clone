@@ -28,4 +28,9 @@ export class ReservationService {
       this.authService.getHttpOptionsWithToken()
     );
   }
+
+  getReservationByRideId(rideId:number){
+    let url = environment.apiEndpoint + 'reservation/getReservationByRide/' + rideId;
+    return this.http.get<any>(url, this.authService.getHttpOptionsWithToken());
+  }
 }

@@ -120,5 +120,12 @@ public class ReservationController {
 
     }
 
+    @GetMapping("/getReservationByRide/{id}")
+    public ResponseEntity<ReservationDTO> getReservationByRide(@PathVariable("id") Integer rideId){
+        ReservationDTO reservation = this.reservationService.getReservationByRide(rideId);
+        return new ResponseEntity<>(reservation, HttpStatus.OK);
+
+    }
+
 
 }
