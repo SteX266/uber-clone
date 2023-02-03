@@ -91,7 +91,15 @@ public abstract class User implements UserDetails {
 
     public String getRole(){
         try{
-            return this.getRoles().get(0).getName();
+            if(this.getRoles().get(0).getName().equals("ROLE_CLIENT")){
+                return "CLIENT";
+            }
+            else if(this.getRoles().get(0).getName().equals("ROLE_DRIVER")){
+                return "DRIVER";
+            }
+            else{
+                return "ADMIN";
+            }
         }
         catch(Exception e){
             return "";

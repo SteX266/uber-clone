@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,13 @@ public class CustomerController {
     @Autowired
     private UserService userService;
 
-
+    @PreAuthorize("hasRole('CLIENT')")
     @GetMapping(value = "/getCustomerCoinAmount/{id}")
     public ResponseEntity<Double> getProfileInfo(@PathVariable("id") Integer id){
         return new ResponseEntity<>(userService.getCustomerCoinAmount(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(value="/addCoins")
     public ResponseEntity<SuccessResponseDTO> addCoins(@RequestBody CoinDTO coins){
         this.userService.addCoins(coins);

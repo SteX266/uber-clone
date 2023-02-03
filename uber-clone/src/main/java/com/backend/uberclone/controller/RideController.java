@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -37,18 +38,19 @@ public class RideController {
         this.simpMessagingTemplate.convertAndSend("/ride/arrived", rideDTO);
     }
 
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/rejectRide")
     public ResponseEntity<SuccessResponseDTO> rejectRide(@RequestBody  RejectionDTO rejectionDTO) {
         rideService.rejectRide(rejectionDTO); // treba vozac da se izvuce iz tokena
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/startRide")
     public ResponseEntity<SuccessResponseDTO> startRide(@RequestBody RideDTO rideDTO) {
         rideService.startRide(rideDTO);
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/endRide")
     public ResponseEntity<SuccessResponseDTO> endRide(@RequestBody RideDTO rideDTO) {
         rideService.endRide(rideDTO);
