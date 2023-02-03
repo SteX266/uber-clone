@@ -1,6 +1,7 @@
 package com.backend.uberclone.controller;
 
 import com.backend.uberclone.dto.ReportDTO;
+import com.backend.uberclone.dto.ReportListsDTO;
 import com.backend.uberclone.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class ReportController {
     private ReportService reportService;
 
     @PostMapping("/getUserReport")
-    public ResponseEntity<List<ReportDTO>> updateUserProfile(@RequestBody ReportDTO reportRequest){
-        List<ReportDTO> reports = this.reportService.getUserReport(reportRequest);
+    public ResponseEntity<ReportListsDTO> updateUserProfile(@RequestBody ReportDTO reportRequest){
+        ReportListsDTO reports = this.reportService.getUserReport(reportRequest);
         return new ResponseEntity<>(reports,HttpStatus.OK);
 
     }

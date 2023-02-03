@@ -1,0 +1,18 @@
+<div class="field col-12 md:col-4">
+  <label for="range">Range</label>
+  <p-calendar
+    [(ngModel)]="rangeDates"
+    selectionMode="range"
+    [readonlyInput]="true"
+    inputId="range"
+  ></p-calendar>
+</div>
+<button (click)="selectDateRange()">Select Dates</button>
+<div class="card">
+  <h5>Horizontal</h5>
+  <p-chart
+    type="bar"
+    [data]="basicData"
+    [options]="horizontalOptions"
+  ></p-chart>
+</div>

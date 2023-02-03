@@ -1,6 +1,7 @@
 package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.ReportDTO;
+import com.backend.uberclone.dto.ReportListsDTO;
 import com.backend.uberclone.model.Customer;
 import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Report;
@@ -26,36 +27,46 @@ public class ReportService {
     @Autowired
     private DriverRepository driverRepository;
 
-    public List<ReportDTO> getUserReport(ReportDTO reportRequest) {
-        List<ReportDTO> reports = new ArrayList<>();
+    public ReportListsDTO getUserReport(ReportDTO reportRequest) {
+        ReportListsDTO lists = new ReportListsDTO();
+        ArrayList<String> labels = new ArrayList<>();
+        ArrayList<Double> prices = new ArrayList<>();
+        ArrayList<Integer> numberOfRides = new ArrayList<>();
+        ArrayList<Double> distance = new ArrayList<>();
         List<Ride> rides;
-        if (reportRequest.getUserRole().equals("client")){
+        if (reportRequest.getUserRole().equals("CLIENT")){
             Customer c = customerRepository.findOneById(reportRequest.getUserId());
             rides = new ArrayList<>(c.getRides());
         }
-        else if(reportRequest.getUserRole().equals("driver")){
+        else if(reportRequest.getUserRole().equals("DRIVER")){
             Driver d = driverRepository.findOneById(reportRequest.getUserId());
             rides = d.getRides();
         }
         else{
             rides = rideRepository.findAll();
         }
-        for (LocalDate date = reportRequest.getStartDate(); date.isEqual(reportRequest.getEndDate());date=date.plusDays(1)){
-            int numberOfRides = 0;
+        for (LocalDate date = reportRequest.getStartDate(); date.compareTo(reportRequest.getEndDate())<=0;date=date.plusDays(1)){
+            labels.add(date.toString());
+            int nOfRides = 0;
             double numberOfKilometers = 0;
             double money = 0;
             for (Ride ride:rides){
                 if (ride.getStartTime().toLocalDate().isEqual(date)){
-                    numberOfRides++;
+                    nOfRides++;
                     money += ride.getReservation().getEstimatedCost();
                     numberOfKilometers += ride.getReservation().getRoute().getDistanceInKm();
                 }
             }
-            ReportDTO dayReport = new ReportDTO(numberOfRides,numberOfKilometers,money);
-            reports.add(dayReport);
 
+            numberOfRides.add(nOfRides);
+            prices.add(money);
+            distance.add(numberOfKilometers);
         }
-        return reports;
+        lists.setLabels(labels);
+        lists.setDistance(distance);
+        lists.setNumberOfRides(numberOfRides);
+        lists.setPrices(prices);
+        return lists;
 
     }
 }

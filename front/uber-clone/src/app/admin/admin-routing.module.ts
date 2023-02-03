@@ -6,6 +6,7 @@ import { ChangePhotoComponent } from '../profile/pages/change-photo/change-photo
 import { ProfilePageComponent } from '../profile/pages/profile-page/profile-page.component';
 import { UserPersonalInfoUpdateComponent } from '../profile/pages/user-personal-info-update/user-personal-info-update.component';
 import { ChatComponent } from '../shared/pages/chat/chat.component';
+import { ReportPageComponent } from '../shared/pages/report-page/report-page.component';
 import { RidesHistoryPageComponent } from '../shared/pages/rides-history-page/rides-history-page.component';
 import { AdminNavbarComponent } from './components/admin-navbar/admin-navbar.component';
 import { NotesComponent } from './pages/notes/notes.component';
@@ -37,6 +38,10 @@ const routes: Routes = [
       {
         path: 'notes/:id',
         component: NotesComponent,
+      },
+      {
+        path: 'report/:id',
+        component: ReportPageComponent,
       },
       { path: '', component: ClientHomePageComponent },
     ],

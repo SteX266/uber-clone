@@ -29,6 +29,7 @@
     "@types/stompjs": "^2.3.5",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
+    "chart.js": "^4.2.0",
     "font-awesome": "^4.7.0",
     "leaflet": "^1.9.3",
     "net": "^1.0.2",

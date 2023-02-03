@@ -8,6 +8,7 @@ import { Review } from 'src/app/models/Review';
 import { Image } from 'src/app/models/Image';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AddCoin } from 'src/app/models/add-coin.model';
+import { Report } from 'src/app/models/report';
 
 @Injectable({
   providedIn: 'root',
@@ -160,6 +161,20 @@ export class UserService {
   banUser(id: Number) {
     return this.http.get<UserProfileInfo>(
       environment.apiEndpoint + 'profile/banUser/' + id,
+      this.authService.getHttpOptionsWithToken()
+    );
+  }
+
+  getUserReports(dateFrom: Date, dateTo: Date, id: number) {
+    let body = {
+      userId: id,
+      startDate: dateFrom,
+      endDate: dateTo,
+      userRole: this.authService.getCurrentUserRole(),
+    };
+    return this.http.post<Report>(
+      environment.apiEndpoint + 'report/getUserReport',
+      body,
       this.authService.getHttpOptionsWithToken()
     );
   }
