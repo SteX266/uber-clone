@@ -48,6 +48,8 @@ export class UserService {
         user.surname = val.surname;
         user.phoneNumber = val.phoneNumber;
         user.role = val.role;
+        user.driverScore = val.driverScore;
+        user.vehicleScore = val.vehicleScore;
         console.log(user);
       },
     });
