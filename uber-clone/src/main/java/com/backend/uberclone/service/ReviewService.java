@@ -3,9 +3,11 @@ package com.backend.uberclone.service;
 
 import com.backend.uberclone.dto.ReviewDTO;
 import com.backend.uberclone.model.Customer;
+import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Review;
 import com.backend.uberclone.model.Ride;
 import com.backend.uberclone.repository.CustomerRepository;
+import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.ReviewRepository;
 import com.backend.uberclone.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ReviewService {
     @Autowired
     private RideRepository rideRepository;
 
+    @Autowired
+    private DriverRepository driverRepository;
+
 
 
 
@@ -42,6 +47,9 @@ public class ReviewService {
         if (isRatingValid(reviewDTO.getVehicleRating(), reviewDTO.getDriverRating())){
             Review review = new Review(ride, reviewer, ride.getDriver(), reviewDTO.getVehicleRating(), reviewDTO.getDriverRating(), reviewDTO.getComment());
             reviewRepository.save(review);
+            Driver d = ride.getDriver();
+            d.addReview(review);
+            driverRepository.save(d);
             return true;
         }
         return false;

@@ -83,4 +83,8 @@ public class Driver extends User {
     public void addActivePeriod(ActivePeriod activePeriod) {
         this.activePeriods.add(activePeriod);
     }
+
+    public void addReview(Review review) {
+        this.receivedReviews.add(review);
+    }
 }
