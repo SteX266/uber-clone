@@ -32,6 +32,7 @@ public class VehicleController {
     public ResponseEntity<CarDTO> getCarByRequestId(@PathVariable("id") String id){
         return new ResponseEntity<>(vehicleService.getCarByRequestId(Integer.valueOf(id)), HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('DRIVER')")
 
     @PostMapping("/updateVehicle")
     public ResponseEntity<SuccessResponseDTO> updateVehicle(@RequestBody CarDTO car){

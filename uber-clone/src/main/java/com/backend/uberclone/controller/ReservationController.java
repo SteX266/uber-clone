@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ReservationController {
     @Autowired
     private RouteService routeService;
 
-
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/makeReservation")
     public ResponseEntity<SuccessResponseDTO> makeReservation(@RequestBody ReservationDTO reservationDTO) {
         List<PaymentDTO> paymentDTOS = reservationService.makeReservation(reservationDTO);
@@ -48,7 +49,7 @@ public class ReservationController {
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/confirmPayment")
     public ResponseEntity<SuccessResponseDTO> confirmPayment(@RequestBody PaymentDTO paymentDTO) {
 
@@ -72,7 +73,7 @@ public class ReservationController {
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('CLIENT')")
     public boolean makeRide(Reservation r) {
         Ride newRide = rideService.createRide(r);
         if (newRide== null) {
@@ -95,6 +96,7 @@ public class ReservationController {
          simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), false));
      }
     }
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/cancelPayment")
     public ResponseEntity<SuccessResponseDTO> cancelPayment(@RequestBody PaymentDTO paymentDTO) {
         this.reservationService.cancelPayment(paymentDTO);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,6 +22,7 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @PreAuthorize("hasRole('CLIENT')")
     @RequestMapping("/createReview")
     public ResponseEntity<SuccessResponseDTO> createReview(@RequestBody ReviewDTO reviewDTO){
         boolean isSuccessful = reviewService.createReview(reviewDTO);
@@ -32,6 +34,7 @@ public class ReviewController {
             return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.CONFLICT);
         }
     }
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/reviewPossible")
     public ResponseEntity<Able> isReviewPossible(@RequestBody ReviewDTO reviewDTO){
 

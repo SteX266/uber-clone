@@ -39,9 +39,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-    if (this.friendList.length > 0){
-      this.openChat(this.friendList[0]);
-    }
+    
     this.scrollToBottom();
   }
 
@@ -115,6 +113,9 @@ export class ChatComponent implements OnInit {
 
   getFriendList(){
     this.friendList = this.chatService.getChatList(this.currentUserId);
+    if (this.friendList.length > 0){
+      this.openChat(this.friendList[0]);
+    }
   }
 
   scrollToBottom(): void {

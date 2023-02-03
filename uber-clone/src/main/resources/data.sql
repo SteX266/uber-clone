@@ -27,15 +27,15 @@ VALUES ( true, true, 'Peugeot 206', 5, 'REGULAR');
 
 INSERT INTO public.role(
     id, name)
-VALUES (1, 'ADMIN');
+VALUES (1, 'ROLE_ADMIN');
 
 INSERT INTO public.role(
     id, name)
-VALUES (2, 'CLIENT');
+VALUES (2, 'ROLE_CLIENT');
 
 INSERT INTO public.role(
     id, name)
-VALUES (3, 'DRIVER');
+VALUES (3, 'ROLE_DRIVER');
 
 
 INSERT INTO public.admin(

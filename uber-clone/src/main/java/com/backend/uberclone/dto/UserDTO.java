@@ -37,7 +37,7 @@ public class UserDTO {
         city = u.getCity();
         phoneNumber = u.getPhoneNumber();
         profilePicture = u.getProfilePicture();
-        role = u.getRoles().get(0).getName();
+        role = u.getRole();
         id = u.getId();
     }
 

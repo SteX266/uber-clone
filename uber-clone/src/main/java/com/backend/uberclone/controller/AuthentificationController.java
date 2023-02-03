@@ -98,7 +98,7 @@ public class AuthentificationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
-        String role = user.getRoles().get(0).getName();
+        String role = user.getRole();
         System.out.println("ULOGOVAN" + user.getUsername());
 
         return new ResponseEntity<>(new UserTokenState(jwt, expiresIn, role, user.getEmail(), user.getId()), HttpStatus.OK);
@@ -134,7 +134,7 @@ public class AuthentificationController {
 
         System.out.println("ULOGOVAN" + user.getUsername());
 
-        String role = user.getRoles().get(0).getName();
+        String role = user.getRole();
         if(role.equals("DRIVER")){
             Driver d = driverService.findOneById(user.getId());
             driverService.setDriverActivity(d, true);

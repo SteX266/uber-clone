@@ -23,7 +23,7 @@ public class VehicleService {
     UpdateUserRequestRepository updateUserRequestRepository;
 
     public CarDTO getCarByUserId(Integer id) {
-        if (userRepository.findOneById(id).getRoles().get(0).getName().equals("DRIVER"))  {
+        if (userRepository.findOneById(id).getRole().equals("DRIVER"))  {
             return new CarDTO(vehicleRepository.getVehicleByDriverId(id));
         }
         return new CarDTO();
