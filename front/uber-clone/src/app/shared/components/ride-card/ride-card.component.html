@@ -71,6 +71,13 @@
         >
           Review
         </button>
+        <button
+          *ngIf="client"
+          class="btn btn-dark btn-sm"
+          (click)="repeatRide()"
+        >
+          Repeat Ride
+        </button>
       </div>
     </div>
   </div>
