@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class UserProfileComponent {
   selectedId = 0;
-  user = new UserProfileInfo(0, '', '', '', '', '', '', '');
+  user = new UserProfileInfo(0, '', '', '', '', '', '', '', 0, 0);
   srcData: SafeResourceUrl | undefined;
   defaultAvatar: string = 'assets/default-avatar.png';
 
@@ -28,7 +28,6 @@ export class UserProfileComponent {
     private carService: CarService,
     private auth: AuthService,
     private sanitizer: DomSanitizer
-
   ) {}
 
   ngOnInit() {
@@ -42,14 +41,17 @@ export class UserProfileComponent {
       this.setUserCar();
     });
 
-    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe({next:(data)=>{
-
-      this.imageUrl = URL.createObjectURL(data);
-      this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.imageUrl);
-    },error:(err)=>{
-
-      this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.defaultAvatar);
-    }});
+    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe({
+      next: (data) => {
+        this.imageUrl = URL.createObjectURL(data);
+        this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.imageUrl);
+      },
+      error: (err) => {
+        this.srcData = this.sanitizer.bypassSecurityTrustUrl(
+          this.defaultAvatar
+        );
+      },
+    });
   }
 
   setUserCar() {

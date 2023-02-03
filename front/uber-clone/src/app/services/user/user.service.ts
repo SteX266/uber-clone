@@ -37,7 +37,7 @@ export class UserService {
   }
 
   getUserById(idNumber: number): UserProfileInfo {
-    let user = new UserProfileInfo(0, '', '', '', '', '', '', '');
+    let user = new UserProfileInfo(0, '', '', '', '', '', '', '', 0, 0);
 
     this.sendGetUserRequest(idNumber).subscribe({
       next: (val) => {
@@ -48,9 +48,9 @@ export class UserService {
         user.surname = val.surname;
         user.phoneNumber = val.phoneNumber;
         user.role = val.role;
+        console.log(user);
       },
     });
-
     return user;
   }
 
