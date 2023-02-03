@@ -14,8 +14,8 @@
                 [routerLink]="'/driver/profile/' + ride.driver.id"
               >
                 {{ ride.driver.name }} {{ ride.driver.surname }}
-              </a> </strong
-            >1
+              </a>
+            </strong>
             <i class="fa fa-clock-o"></i>
             {{ startString }} - {{ endString }}</small
           >
@@ -67,7 +67,13 @@
           <span class="small font-bold">Cost </span><br />
           {{ ride.estimatedCost }} rsd
         </div>
-        <button class="btn btn-dark btn-sm">Review</button>
+        <button
+          *ngIf="canReview"
+          class="btn btn-dark btn-sm"
+          (click)="openReviewDialog('0ms', '0ms')"
+        >
+          Review
+        </button>
       </div>
     </div>
   </div>

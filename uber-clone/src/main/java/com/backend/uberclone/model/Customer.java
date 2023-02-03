@@ -49,4 +49,8 @@ public class Customer extends User {
     public void addCoins(double amount) {
         this.coins += amount;
     }
+
+    public void addRide(Ride ride) {
+        this.rides.add(ride);
+    }
 }
