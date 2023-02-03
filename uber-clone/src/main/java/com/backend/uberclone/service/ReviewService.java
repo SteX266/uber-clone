@@ -48,11 +48,13 @@ public class ReviewService {
     }
 
     public boolean canRideBeReviewed(int rideId, String userEmail){
+
         Ride ride = rideRepository.findOneById(rideId);
         if (ride == null){
             return false;
         }
         if (!isRideDateValid(ride.getStartTime())){
+
             return false;
         }
         Customer c = customerRepository.findOneByEmail(userEmail);

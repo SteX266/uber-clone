@@ -17,7 +17,7 @@ export class UserService {
   private readonly createReviewUrl: string;
   private readonly getCoinAmountUrl: string;
   private readonly addImageUrl: string;
-  private readonly addCoinsUrl:string;
+  private readonly addCoinsUrl: string;
 
   srcData: SafeResourceUrl | undefined;
 
@@ -99,6 +99,20 @@ export class UserService {
     );
   }
 
+  isReviewPossible(id: number) {
+    let email = this.authService.getCurrentUserEmail();
+    let body = {
+      rideId: id,
+      reviewerEmail: email,
+    };
+
+    return this.http.post<any>(
+      environment.apiEndpoint + 'review/reviewPossible',
+      body,
+      this.authService.getHttpOptionsWithToken()
+    );
+  }
+
   getCurrentUserCoinAmount(): number {
     let coins = 0;
     this.sendGetCurrentUserCoinAmountRequest().subscribe({
@@ -117,9 +131,13 @@ export class UserService {
     );
   }
 
-  addCoins(coins:number){
-    let coinDTO = new AddCoin(this.authService.getCurrentUserEmail(),coins);
-    return this.http.post(this.addCoinsUrl, coinDTO, this.authService.getHttpOptionsWithToken());
+  addCoins(coins: number) {
+    let coinDTO = new AddCoin(this.authService.getCurrentUserEmail(), coins);
+    return this.http.post(
+      this.addCoinsUrl,
+      coinDTO,
+      this.authService.getHttpOptionsWithToken()
+    );
   }
 
   constructor(

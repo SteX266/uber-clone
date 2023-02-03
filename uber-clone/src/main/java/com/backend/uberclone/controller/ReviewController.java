@@ -1,5 +1,6 @@
 package com.backend.uberclone.controller;
 
+import com.backend.uberclone.dto.Able;
 import com.backend.uberclone.dto.ReviewDTO;
 import com.backend.uberclone.dto.SuccessResponseDTO;
 import com.backend.uberclone.model.Review;
@@ -35,13 +36,14 @@ public class ReviewController {
     }
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/reviewPossible")
-    public ResponseEntity<Boolean> isReviewPossible(@RequestBody ReviewDTO reviewDTO){
+    public ResponseEntity<Able> isReviewPossible(@RequestBody ReviewDTO reviewDTO){
 
         if(reviewService.canRideBeReviewed(reviewDTO.getRideId(), reviewDTO.getReviewerEmail())){
-            return new ResponseEntity<>(true,HttpStatus.OK);
+
+            return new ResponseEntity<>(new Able(true),HttpStatus.OK);
 
         }
-        return new ResponseEntity<>(false,HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(new Able(false),HttpStatus.METHOD_NOT_ALLOWED);
 
     }
 

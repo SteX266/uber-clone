@@ -56,7 +56,6 @@ public class ReservationController {
         boolean isPaymentDone = this.reservationService.confirmPayment(paymentDTO);
         if (isPaymentDone) {
             Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
-            System.out.println("KerinKurac");
             for (Customer c: r.getCustomers()
                  ) {
                 System.out.println(c.getUsername());

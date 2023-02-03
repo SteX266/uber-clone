@@ -110,6 +110,9 @@ public class RideService {
             cus.add(c);
         }
         ride.setCustomers(cus);
+        for(Customer c:ride.getCustomers()){
+            customerRepository.save(c);
+        }
         return rideRepository.save(ride);
     }
 
@@ -183,8 +186,13 @@ public class RideService {
         List<RideHistoryDTO> rideHistory =  new ArrayList<>();
         List<Ride> rides;
         if(u.getRole().equals("CLIENT")){
+            rides = new ArrayList<>();
             Customer c = this.customerRepository.findOneById(userId);
-            rides = new ArrayList<>(c.getRides());
+            for(Reservation r:c.getReservations()){
+                if(r.getRide() != null){
+                    rides.add(r.getRide());
+                }
+            }
         }
         else if(u.getRole().equals("DRIVER")){
             Driver d = this.driverRepository.findOneById(userId);
