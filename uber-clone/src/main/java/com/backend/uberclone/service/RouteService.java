@@ -8,6 +8,9 @@ import com.backend.uberclone.repository.FavoriteRouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class RouteService {
     @Autowired
@@ -16,10 +19,23 @@ public class RouteService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public boolean saveFavoriteRoute(FavoriteRouteDTO favoriteRouteDTO) {
+    public void saveFavoriteRoute(FavoriteRouteDTO favoriteRouteDTO) {
         Customer customer = customerRepository.findOneByEmail(favoriteRouteDTO.getCustomer());
         FavouriteRoute favouriteRoute = new FavouriteRoute(favoriteRouteDTO, customer);
         this.favoriteRouteRepository.save(favouriteRoute);
-        return true;
+    }
+
+    public List<FavoriteRouteDTO> getFavoriteRoutes(Integer customerId) {
+        Customer customer = customerRepository.findOneById(customerId);
+        if(customer == null) return null;
+
+        return convertFavoriteRouteToDTO(customer.getFavoriteRoutes(), customer.getEmail());
+    }
+    private List<FavoriteRouteDTO> convertFavoriteRouteToDTO(List<FavouriteRoute> favouriteRoutes, String customer) {
+        List<FavoriteRouteDTO> favoriteRouteDTOS = new ArrayList<>();
+        for (FavouriteRoute route: favouriteRoutes) {
+            favoriteRouteDTOS.add(new FavoriteRouteDTO(route, customer));
+        }
+        return  favoriteRouteDTOS;
     }
 }

@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header">Select favorite route</div>
+  <div class="card-body">
+    <div class="row dropdown padding">
+      <button
+        class="btn btn-dark dropdown-toggle text-align-left fill"
+        type="button"
+        id="dropdownMenuButton1"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Select favorite route
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li *ngFor="let route of routes">
+          <a class="dropdown-item" (click)="selectRoute(route)"
+            ><h5>Route {{ route.name }}</h5>
+            <small>Distance ≈{{ route.distance }}km</small><br />
+            <small>Time ≈{{ route.estimatedTime }}m</small>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="row padding">
+        <div class="col">
+          <button class="btn btn-dark fill" (click)="showRoute()">
+            Show selected route
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-dark fill" (click)="cancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

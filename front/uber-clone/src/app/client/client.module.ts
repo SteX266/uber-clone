@@ -23,6 +23,7 @@ import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { RideMapComponent } from './ride-map/ride-map.component';
 import { CalendarModule } from 'primeng/calendar';
+import { FavoriteRouteModalComponent } from './favorite-route-modal/favorite-route-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { CalendarModule } from 'primeng/calendar';
     ClinetNavbarComponent,
     PaymentModalComponent,
     RideMapComponent,
+    FavoriteRouteModalComponent,
   ],
   imports: [
     CommonModule,

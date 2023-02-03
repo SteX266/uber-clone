@@ -28,6 +28,8 @@ import {
   GeoJsonFeature,
   GeoJsonFeatureCollection,
 } from 'src/app/models/geo-json-feature.model';
+import { FavoriteRouteModalComponent } from '../favorite-route-modal/favorite-route-modal.component';
+import { FavoriteRouteDTO } from 'src/app/models/favorite-route-dto.model';
 @Component({
   selector: 'app-client-map',
   templateUrl: './client-map.component.html',
@@ -47,17 +49,11 @@ export class ClientMapComponent implements OnInit, OnDestroy {
     this.initializeMapOptions();
     this.getActiveDriverLocations();
     this.initializeWebSocketConnection();
-    this.customers.push(this.authService.getCurrentUserEmail());
+    this.initializeReservationDTO();
   }
 
   ngOnDestroy(): void {
     this.closeSocket();
-  }
-
-  closeSocket() {
-    this.stompClient.disconnect(() => {
-      this.snackbar.openSuccessSnackBar('UGASIO SOCKET!');
-    });
   }
 
   map!: Map;
@@ -66,9 +62,7 @@ export class ClientMapComponent implements OnInit, OnDestroy {
   markerLayer: FeatureGroup = new FeatureGroup();
   routeLayer: FeatureGroup = new FeatureGroup();
 
-  selectedVehicleType: string = 'ANY';
-
-  reservationType: string = 'INSTANT';
+  reservationDTO: ReservationDTO = new ReservationDTO();
 
   PRICE_COEF = 120;
   CAR_PRICE_MAP = {
@@ -80,27 +74,34 @@ export class ClientMapComponent implements OnInit, OnDestroy {
 
   minTime: Date = this.createMinTime();
   maxTime: Date = this.createMaxTime();
-  time: Date = new Date();
 
   stops: Array<MapPoint> = new Array<MapPoint>();
 
   gotRoutes: boolean = false;
+  gotFavoriteRoute: boolean = false;
 
   hasPet: boolean = false;
   hasBaby: boolean = false;
 
-  customers: string[] = [];
-
+  customer: string = this.authService.getCurrentUserEmail();
   routes: GeoJsonFeature[][] = [];
   selectedRoutes: GeoJsonFeature[] = [];
 
   private stompClient: any;
 
   drivers: any = {};
+  initializeReservationDTO() {
+    this.reservationDTO.customers = [this.customer];
+    this.reservationDTO.hasBaby = false;
+    this.reservationDTO.hasPet = false;
+    this.reservationDTO.stops = new Array<string>();
+    this.reservationDTO.reservationType = 'INSTANT';
+    this.reservationDTO.vehicleType = 'ANY';
+    this.reservationDTO.reservationTime = new Date();
+  }
 
   createMinTime() {
     let time = new Date();
-    console.log(time);
     let minutes = time.getMinutes() + 10;
     time.setMinutes(minutes);
     return time;
@@ -113,12 +114,17 @@ export class ClientMapComponent implements OnInit, OnDestroy {
   }
 
   limitTime() {
-    let date = new Date(this.time);
+    let date = new Date(this.reservationDTO.reservationTime);
     if (date.getMilliseconds() > this.maxTime.getMilliseconds())
-      this.time = this.maxTime;
-    console.log(this.maxTime.getMilliseconds());
+      this.reservationDTO.reservationTime = this.maxTime;
     if (date.getMilliseconds() < this.minTime.getMilliseconds())
-      this.time = this.minTime;
+      this.reservationDTO.reservationTime = this.minTime;
+  }
+
+  closeSocket() {
+    this.stompClient.disconnect(() => {
+      this.snackbar.openSuccessSnackBar('UGASIO SOCKET!');
+    });
   }
 
   initializeWebSocketConnection() {
@@ -202,23 +208,21 @@ export class ClientMapComponent implements OnInit, OnDestroy {
       '/payment/all-confirmed',
       (message: { body: string }) => {
         let dto: any = JSON.parse(message.body);
-        console.log(dto);
         if (dto.customerEmail === this.authService.getCurrentUserEmail()) {
           if (dto.canceled) {
             this.snackbar.openFailureSnackBar('Payment canceled');
           } else {
             this.snackbar.openSuccessSnackBar('Reservation confirmer.');
-            this.Redirect(dto.reservationId);
+            this.redirect(dto.reservationId);
           }
         }
       }
     );
   }
 
-  Redirect(reservationId: number) {
+  redirect(reservationId: number) {
     let route = '/client/ride/' + reservationId;
     this.router.navigate([route]);
-    console.log(route);
   }
 
   openPaymentDialog(paymentDTO: PaymentDTO) {
@@ -344,11 +348,12 @@ export class ClientMapComponent implements OnInit, OnDestroy {
   price() {
     let totalDistance = this.totalDistance(this.selectedRoutes);
     let totalPrice =
-      this.getPriceCoeficient(this.selectedVehicleType) + totalDistance * 120;
+      this.getPriceCoeficient(this.reservationDTO.vehicleType) +
+      totalDistance * 120;
     return totalPrice;
   }
 
-  getPriceCoeficient(vehicleType: string) {
+  getPriceCoeficient(vehicleType: string | undefined) {
     if (vehicleType === 'ANY') return this.CAR_PRICE_MAP.ANY;
     if (vehicleType === 'REGULAR') return this.CAR_PRICE_MAP.REGULAR;
     if (vehicleType === 'PREMIUM') return this.CAR_PRICE_MAP.PREMIUM;
@@ -376,12 +381,11 @@ export class ClientMapComponent implements OnInit, OnDestroy {
   }
 
   addPerson(person: string) {
-    this.customers.push(person);
+    this.reservationDTO.customers.push(person);
   }
 
   removePerson(index: number) {
-    console.log(this.customers[index]);
-    this.customers.splice(index, 1);
+    this.reservationDTO.customers.splice(index, 1);
   }
   clearMap() {
     this.clearRouteLayer();
@@ -414,30 +418,61 @@ export class ClientMapComponent implements OnInit, OnDestroy {
     this.selectedRoutes.forEach((route: any) => {
       geoJsonData.push(JSON.stringify(route));
     });
-    console.log(this.selectedRoutes);
-    console.log(this.stops);
     return geoJsonData;
   }
 
   openPreview() {
-    console.log(this.customers);
+    if (!this.gotFavoriteRoute) this.setReservationData();
+    this.reservationDTO.estimatedCost = this.price();
+    this.createModalWithData(this.reservationDTO);
+  }
+
+  setReservationData() {
+    this.reservationDTO.stops = this.getStops();
+    this.reservationDTO.routeGeoJson = this.getGeoJsonStringRoutes();
+    this.reservationDTO.distance = this.totalDistance(this.selectedRoutes);
+    this.reservationDTO.estimatedTime = this.totalEstimatedTimeInMinutes();
+    this.reservationDTO.startCoordinates = this.stops[0].getCoordinates();
+    this.reservationDTO.endCoordinates =
+      this.stops[this.stops.length - 1].getCoordinates();
+  }
+  createModalWithData(reservationDTO: ReservationDTO) {
+    console.log(reservationDTO);
     this.modal.open(ReservationPreviewComponent, {
       width: '500px',
-      data: new ReservationDTO(
-        this.getStops(),
-        this.time,
-        this.getGeoJsonStringRoutes(),
-        this.customers,
-        this.selectedVehicleType,
-        this.reservationType,
-        this.hasBaby,
-        this.hasPet,
-        this.totalDistance(this.selectedRoutes),
-        this.totalEstimatedTimeInMinutes(),
-        this.price(),
-        this.stops[0].getCoordinates(),
-        this.stops[this.stops.length - 1].getCoordinates()
-      ),
+      data: reservationDTO,
+    });
+  }
+
+  openFavoriteRouteModal() {
+    const modalRef = this.modal.open(FavoriteRouteModalComponent, {
+      width: '500px',
+      height: '500px',
+    });
+    modalRef.afterClosed().subscribe((route: FavoriteRouteDTO) => {
+      this.selectedRoutes = [];
+      route.routeGeoJson.forEach((geoJson: string) => {
+        this.selectedRoutes.push(JSON.parse(geoJson));
+      });
+      this.showSelectedRoutes();
+      this.map.fitBounds(this.routeLayer.getBounds());
+      this.reservationDTO = new ReservationDTO(
+        route.stops,
+        new Date(),
+        route.routeGeoJson,
+        [this.customer],
+        'ANY',
+        'INSTANT',
+        false,
+        false,
+        route.distance,
+        route.estimatedTime,
+        route.distance,
+        route.startCoordinates,
+        route.endCoordinates
+      );
+      this.gotRoutes = true;
+      this.gotFavoriteRoute = true;
     });
   }
 }

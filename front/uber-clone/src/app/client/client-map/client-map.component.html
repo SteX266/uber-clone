@@ -4,6 +4,11 @@
       (onShowResults)="refreshDirections($event)"
     ></app-map-sidebar>
     <div class="container">
+      <div class="row button">
+        <button class="btn btn-dark" (click)="openFavoriteRouteModal()">
+          Favorite Routes
+        </button>
+      </div>
       <div
         class="row dropdown button"
         *ngFor="let routes of routes; index as i"
@@ -40,7 +45,7 @@
           id="selectVehicle"
           class="form-select bg-dark text-white"
           aria-label="Default select example"
-          [(ngModel)]="selectedVehicleType"
+          [(ngModel)]="reservationDTO.vehicleType"
         >
           <option selected value="ANY">ANY</option>
           <option value="REGULAR">REGULAR</option>
@@ -51,12 +56,12 @@
       </div>
       <div class="row button">
         <p-calendar
-          [(ngModel)]="time"
+          [(ngModel)]="reservationDTO.reservationTime"
           [showTime]="true"
           [hourFormat]="'24'"
           [minDate]="minTime"
           [maxDate]="maxTime"
-          [disabled]="reservationType === 'INSTANT'"
+          [disabled]="reservationDTO.reservationType === 'INSTANT'"
         ></p-calendar>
         <div class="form-check">
           <input
@@ -64,7 +69,7 @@
             type="radio"
             name="flexRadioDefault"
             id="flexRadioDefault1"
-            [(ngModel)]="reservationType"
+            [(ngModel)]="reservationDTO.reservationType"
             value="INSTANT"
             checked
           />
@@ -74,7 +79,7 @@
         </div>
         <div class="form-check">
           <input
-            [(ngModel)]="reservationType"
+            [(ngModel)]="reservationDTO.reservationType"
             value="SCHEDULED"
             class="form-check-input"
             type="radio"
@@ -92,7 +97,7 @@
           <input
             class="form-check-input"
             type="checkbox"
-            [(ngModel)]="hasBaby"
+            [(ngModel)]="reservationDTO.hasBaby"
           />
           <label class="form-check-label">Baby</label>
         </div>
@@ -100,7 +105,7 @@
           <input
             class="form-check-input"
             type="checkbox"
-            [(ngModel)]="hasPet"
+            [(ngModel)]="reservationDTO.hasPet"
           />
           <label class="form-check-label">Pet</label>
         </div>

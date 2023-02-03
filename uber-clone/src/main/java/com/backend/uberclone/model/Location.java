@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Math.sqrt;
 
 @Getter
@@ -34,5 +37,12 @@ public class Location {
         double distance = sqrt(Math.pow(this.latitude - location.getLatitude(),2) + Math.pow(this.longitude - location.getLongitude(),2));
 
         return distance;
+    }
+
+    public List<Double> toList() {
+        List<Double> list = new ArrayList<>();
+        list.add(latitude);
+        list.add(longitude);
+        return list;
     }
 }

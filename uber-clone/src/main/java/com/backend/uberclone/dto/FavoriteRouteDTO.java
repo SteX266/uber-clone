@@ -1,7 +1,6 @@
 package com.backend.uberclone.dto;
 
-import com.backend.uberclone.model.Location;
-import com.backend.uberclone.model.Reservation;
+import com.backend.uberclone.model.FavouriteRoute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ public class FavoriteRouteDTO {
     private String name;
 
     private String customer;
-
     private List<String> stops;
 
     private List<String> routeGeoJson;
@@ -28,5 +26,16 @@ public class FavoriteRouteDTO {
     private List<Double> startCoordinates;
 
     private List<Double> endCoordinates;
+
+    public FavoriteRouteDTO(FavouriteRoute favouriteRoute, String customer) {
+        this.name = favouriteRoute.getName();
+        this.stops = favouriteRoute.getStops();
+        this.routeGeoJson = favouriteRoute.getRouteGeoJson();
+        this.estimatedTime = favouriteRoute.getEstimatedTimeInMinutes();
+        this.distance = favouriteRoute.getDistanceInKm();
+        this.startCoordinates = favouriteRoute.getStartCoordinates().toList();
+        this.endCoordinates = favouriteRoute.getEndCoordinates().toList();
+        this.customer = customer;
+    }
 
 }
