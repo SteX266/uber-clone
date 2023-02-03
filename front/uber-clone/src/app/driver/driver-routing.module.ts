@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChangePasswordComponent } from '../profile/change-password/change-password.component';
-import { ChangePhotoComponent } from '../profile/change-photo/change-photo.component';
-import { ClientHomePageComponent } from '../client/client-home-page/client-home-page.component';
-import { ProfilePageComponent } from '../profile/profile-page/profile-page.component';
-import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
-import { HeaderComponent } from '../guest/header/header.component';
-import { ChangeCarComponent } from '../profile/change-car/change-car.component';
-import { DriverNavbarComponent } from './driver-navbar/driver-navbar.component';
-import { ChatComponent } from '../shared/chat/chat.component';
-import { DriverHomePageComponent } from './driver-home-page/driver-home-page.component';
-import { RidesHistoryPageComponent } from '../shared/rides-history-page/rides-history-page.component';
+import { ChangePasswordComponent } from '../profile/pages/change-password/change-password.component';
+import { ChangePhotoComponent } from '../profile/pages/change-photo/change-photo.component';
+import { ClientHomePageComponent } from '../client/pages/client-home-page/client-home-page.component';
+import { ProfilePageComponent } from '../profile/pages/profile-page/profile-page.component';
+import { UserPersonalInfoUpdateComponent } from '../profile/pages/user-personal-info-update/user-personal-info-update.component';
+import { HeaderComponent } from '../guest/components/header/header.component';
+import { ChangeCarComponent } from '../profile/pages/change-car/change-car.component';
+import { DriverNavbarComponent } from './components/driver-navbar/driver-navbar.component';
+import { ChatComponent } from '../shared/pages/chat/chat.component';
+import { DriverHomePageComponent } from './pages/driver-home-page/driver-home-page.component';
+import { RidesHistoryPageComponent } from '../shared/pages/rides-history-page/rides-history-page.component';
 
 const routes: Routes = [
   {

@@ -17,7 +17,7 @@ import { LocationService } from 'src/app/services/location/location.service';
 import { RideService } from 'src/app/services/ride/ride.service';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
 import * as Stomp from 'stompjs';
-import { ReviewRideModalComponent } from '../review-ride-modal/review-ride-modal.component';
+import { ReviewRideModalComponent } from '../../components/review-ride-modal/review-ride-modal.component';
 @Component({
   selector: 'app-ride-map',
   templateUrl: './ride-map.component.html',

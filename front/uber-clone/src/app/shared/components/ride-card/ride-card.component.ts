@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ReviewRideModalComponent } from 'src/app/client/review-ride-modal/review-ride-modal.component';
+import { ReviewRideModalComponent } from 'src/app/client/components/review-ride-modal/review-ride-modal.component';
 import { Ride } from 'src/app/models/ride';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
 import { AuthService } from 'src/app/services/auth/auth.service';

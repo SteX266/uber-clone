@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import { BalanceComponent } from 'src/app/client/balance/balance.component';
-import { ReviewRideModalComponent } from 'src/app/client/review-ride-modal/review-ride-modal.component';
+import { BalanceComponent } from 'src/app/client/components/balance/balance.component';
+import { ReviewRideModalComponent } from 'src/app/client/components/review-ride-modal/review-ride-modal.component';
 import { SignInModalComponent } from '../sign-in-modal/sign-in-modal.component';
 import { SignUpModalComponent } from '../sign-up-modal/sign-up-modal.component';
 

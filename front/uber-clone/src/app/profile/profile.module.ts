@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { ChangeCarComponent } from './change-car/change-car.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ChangePhotoComponent } from './change-photo/change-photo.component';
-import { ProfilePageComponent } from './profile-page/profile-page.component';
-import { UserPersonalInfoUpdateComponent } from './user-personal-info-update/user-personal-info-update.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ChangeCarComponent } from './pages/change-car/change-car.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
+import { ChangePhotoComponent } from './pages/change-photo/change-photo.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { UserPersonalInfoUpdateComponent } from './pages/user-personal-info-update/user-personal-info-update.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -12,7 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminModule } from '../admin/admin.module';
 import { ClientModule } from '../client/client.module';
 import { DriverModule } from '../driver/driver.module';
-import { PaymentMethodComponent } from './payment-method/payment-method.component';
+import { PaymentMethodComponent } from './pages/payment-method/payment-method.component';
 
 @NgModule({
   declarations: [

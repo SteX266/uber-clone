@@ -7,6 +7,8 @@ import { CarService } from 'src/app/services/car/car.service';
 import { UpdateRequestService } from 'src/app/services/update-requests/update-request.service';
 import { Location } from '@angular/common';
 import { SnackBarService } from 'src/app/services/snackbar/snackbar.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-update-request',
@@ -19,14 +21,20 @@ export class UpdateRequestComponent {
   car1 = new Vehicle(0, '', 0, false, false, '', 0);
   user2 = new UserProfileInfo(0, '', '', '', '', '', '', '', 0, 0);
   car2 = new Vehicle(0, '', 0, false, false, '', 0);
+  srcData: SafeResourceUrl | undefined;
+  defaultAvatar: string = 'assets/default-avatar.png';
+
+  imageUrl: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private updateRequestService: UpdateRequestService,
     private carService: CarService,
     private snackBarService: SnackBarService,
-
-    private location: Location
+    private userService: UserService,
+    private location: Location,
+    private auth: AuthService,
+    private sanitizer: DomSanitizer
   ) {}
   back(): void {
     this.location.back();
@@ -51,6 +59,18 @@ export class UpdateRequestComponent {
           this.user1 = data;
           this.car1 = this.carService.getCarByUserById(data.id);
         });
+    });
+
+    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe({
+      next: (data) => {
+        this.imageUrl = URL.createObjectURL(data);
+        this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.imageUrl);
+      },
+      error: (err) => {
+        this.srcData = this.sanitizer.bypassSecurityTrustUrl(
+          this.defaultAvatar
+        );
+      },
     });
   }
 

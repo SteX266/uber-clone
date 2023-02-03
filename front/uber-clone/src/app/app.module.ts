@@ -14,9 +14,9 @@ import { AuthService } from './services/auth/auth.service';
 
 import { ClientModule } from './client/client.module';
 import { SharedModule } from './shared/shared.module';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
 import { DriverModule } from './driver/driver.module';
-import { SignUpDriverModalComponent } from './admin/sign-up-driver-modal/sign-up-driver-modal.component';
+import { SignUpDriverModalComponent } from './admin/components/sign-up-driver-modal/sign-up-driver-modal.component';
 import { LocationService } from './services/location/location.service';
 import { PriceService } from './services/price/price.service';
 import { AdminModule } from './admin/admin.module';
