@@ -6,6 +6,7 @@ import com.backend.uberclone.model.*;
 import com.backend.uberclone.repository.CustomerRepository;
 import com.backend.uberclone.repository.PaymentRepository;
 import com.backend.uberclone.repository.ReservationRepository;
+import com.backend.uberclone.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class ReservationService {
     @Autowired
     PaymentRepository paymentRepository;
 
+    @Autowired
+    RideRepository rideRepository;
+
 
     @Autowired
     public void setCustomerRepository(CustomerRepository customerRepository) {
@@ -37,7 +41,9 @@ public class ReservationService {
     public List<PaymentDTO> makeReservation(ReservationDTO reservationDTO) {
 
         Set<Customer> customers = customerRepository.findAllByEmailIn(reservationDTO.getCustomers());
-
+        if(doCustomersHaveOngoingReservations(customers)){
+            return new ArrayList<>();
+        }
 
         if(!checkCustomerBalance(customers, reservationDTO.getEstimatedCost())) return new ArrayList<>();
         List<Payment> payments = createPayments(customers, reservationDTO.getEstimatedCost());
@@ -54,6 +60,28 @@ public class ReservationService {
         }
 
         return createPaymentDTOS(reservation.getPayments(), reservation.getId());
+    }
+
+    private boolean doCustomersHaveOngoingReservations(Set<Customer> customers) {
+        for(Customer c:customers){
+            List<Ride> rides = new ArrayList<>();
+            Set<Reservation> reservations = c.getReservations();
+            for(Reservation reservation:reservations){
+                if (reservation.getRide() != null){
+                    rides.add(reservation.getRide());
+                }
+                if(reservation.getStatus() == ReservationStatus.PAYMENT || reservation.getStatus() == ReservationStatus.ASSIGNMENT){
+                    return true;
+                }
+            }
+            for(Ride ride:rides){
+                if(ride.getStatus() == RideStatus.ONGOING || ride.getStatus() == RideStatus.ARRIVING || ride.getStatus() == RideStatus.ARRIVED){
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 
 
@@ -129,5 +157,11 @@ public class ReservationService {
             customerRepository.save(c);
         }
 
+    }
+
+    public ReservationDTO getReservationByRide(Integer rideId) {
+        Ride ride = this.rideRepository.findOneById(rideId);
+        ReservationDTO reservation = new ReservationDTO(ride.getReservation());
+        return reservation;
     }
 }

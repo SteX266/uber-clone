@@ -39,7 +39,7 @@ public class Customer extends User {
     @ManyToMany
     @JoinTable(name = "reservations",
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "reservation_id", referencedColumnName = "id"))
     private Set<Reservation> reservations;
 
     public void addReservation(Reservation reservation) {

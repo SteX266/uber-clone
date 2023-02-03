@@ -92,17 +92,14 @@ public class UserService {
     }
 
     public Integer generateNextId(){
-        Integer id;
+        Integer maxId = 0;
         List<User> users = userRepository.findAll();
-        int numberOfUsers = users.size();
-        if ( numberOfUsers == 0){
-            id = 1;
+        for(User u:users){
+            if (u.getId() > maxId){
+                maxId = u.getId();
+            }
         }
-        else{
-            id = users.get(numberOfUsers - 1).getId() + 1;
-        }
-
-        return id;
+        return maxId + 1;
     }
     public User save(UserRequest userRequest) {
         User u;

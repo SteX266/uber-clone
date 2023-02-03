@@ -69,9 +69,18 @@ export class SignInModalComponent {
 
   }
 
+  validateInputData():boolean {
+    if (this.email === "" || this.password === ""){
+      return false;
+    }
+    return true;
+
+  }
+
 
 
   login() {
+    if(this.validateInputData()){
     this.authService
       .sendLoginRequest(new UserCredentials(this.email, this.password))
       .subscribe({
@@ -97,6 +106,10 @@ export class SignInModalComponent {
           );
         },
       });
+    }
+    else{
+      this.snackBarService.openFailureSnackBar("Fields must be filled!");
+    }
   }
   Redirect(userRole: string) {
     let route = '/' + userRole.toLowerCase();
