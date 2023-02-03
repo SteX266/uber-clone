@@ -11,7 +11,7 @@ import {
   Marker,
 } from 'leaflet';
 import { MapSearchService } from 'src/app/services/map-search/map-search.service';
-import { MapPoint } from '../../models/map-point.model';
+import { MapPoint } from '../../../models/map-point.model';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { LocationService } from 'src/app/services/location/location.service';

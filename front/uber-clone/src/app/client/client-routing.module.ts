@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChangePasswordComponent } from '../profile/change-password/change-password.component';
-import { ChangePhotoComponent } from '../profile/change-photo/change-photo.component';
-import { ClientHomePageComponent } from './client-home-page/client-home-page.component';
-import { ProfilePageComponent } from '../profile/profile-page/profile-page.component';
-import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
-import { ClinetNavbarComponent } from './clinet-navbar/clinet-navbar.component';
-import { ChatComponent } from '../shared/chat/chat.component';
-import { RideCardComponent } from '../shared/ride-card/ride-card.component';
-import { RideMapComponent } from './ride-map/ride-map.component';
-import { PaymentMethodComponent } from '../profile/payment-method/payment-method.component';
-import { RidesHistoryPageComponent } from '../shared/rides-history-page/rides-history-page.component';
+import { ChangePasswordComponent } from '../profile/pages/change-password/change-password.component';
+import { ChangePhotoComponent } from '../profile/pages/change-photo/change-photo.component';
+import { ClientHomePageComponent } from './pages/client-home-page/client-home-page.component';
+import { ProfilePageComponent } from '../profile/pages/profile-page/profile-page.component';
+import { UserPersonalInfoUpdateComponent } from '../profile/pages/user-personal-info-update/user-personal-info-update.component';
+import { ClinetNavbarComponent } from './components/clinet-navbar/clinet-navbar.component';
+import { ChatComponent } from '../shared/pages/chat/chat.component';
+import { RideCardComponent } from '../shared/components/ride-card/ride-card.component';
+import { RideMapComponent } from './pages/ride-map/ride-map.component';
+import { PaymentMethodComponent } from '../profile/pages/payment-method/payment-method.component';
+import { RidesHistoryPageComponent } from '../shared/pages/rides-history-page/rides-history-page.component';
 const routes: Routes = [
   {
     path: 'client',

@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClientHomePageComponent } from '../client/client-home-page/client-home-page.component';
-import { ChangePasswordComponent } from '../profile/change-password/change-password.component';
-import { ChangePhotoComponent } from '../profile/change-photo/change-photo.component';
-import { ProfilePageComponent } from '../profile/profile-page/profile-page.component';
-import { UserPersonalInfoUpdateComponent } from '../profile/user-personal-info-update/user-personal-info-update.component';
-import { ChatComponent } from '../shared/chat/chat.component';
-import { RidesHistoryPageComponent } from '../shared/rides-history-page/rides-history-page.component';
-import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
-import { NotesComponent } from './notes/notes.component';
-import { UpdateProfileRequestsComponent } from './update-profile-requests/update-profile-requests.component';
-import { UpdateRequestComponent } from './update-request/update-request.component';
+import { ClientHomePageComponent } from '../client/pages/client-home-page/client-home-page.component';
+import { ChangePasswordComponent } from '../profile/pages/change-password/change-password.component';
+import { ChangePhotoComponent } from '../profile/pages/change-photo/change-photo.component';
+import { ProfilePageComponent } from '../profile/pages/profile-page/profile-page.component';
+import { UserPersonalInfoUpdateComponent } from '../profile/pages/user-personal-info-update/user-personal-info-update.component';
+import { ChatComponent } from '../shared/pages/chat/chat.component';
+import { RidesHistoryPageComponent } from '../shared/pages/rides-history-page/rides-history-page.component';
+import { AdminNavbarComponent } from './components/admin-navbar/admin-navbar.component';
+import { NotesComponent } from './pages/notes/notes.component';
+import { UpdateProfileRequestsComponent } from './pages/update-profile-requests/update-profile-requests.component';
+import { UpdateRequestComponent } from './pages/update-request/update-request.component';
 
 const routes: Routes = [
   {
