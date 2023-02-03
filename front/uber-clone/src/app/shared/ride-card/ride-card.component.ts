@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, Input } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ReviewRideModalComponent } from 'src/app/client/review-ride-modal/review-ride-modal.component';
 import { Ride } from 'src/app/models/ride';
 import { UserProfileInfo } from 'src/app/models/user-profile-info';
@@ -54,6 +54,7 @@ export class RideCardComponent {
     exitAnimationDuration: string
   ): void {
     this.dialog.open(ReviewRideModalComponent, {
+      data: this.ride.id,
       width: '500px',
       enterAnimationDuration,
       exitAnimationDuration,

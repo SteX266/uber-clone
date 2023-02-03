@@ -39,7 +39,7 @@ export class ReviewRideModalComponent {
     @Inject(MAT_DIALOG_DATA) public rideId: number,
     public dialogRef: MatDialogRef<ReviewRideModalComponent>,
     private router: Router,
-    private snackBarService:SnackBarService
+    private snackBarService: SnackBarService
   ) {}
 
   createReview() {
@@ -50,13 +50,15 @@ export class ReviewRideModalComponent {
       this.comment
     );
 
-    this.userService.createReview(review).subscribe({next:(val)=>{
-      this.snackBarService.openSuccessSnackBar("Review made successfuly!");
-
-    },error:(err)=>{
-      console.log(err);
-      this.snackBarService.openFailureSnackBar("Error!");
-    }});
+    this.userService.createReview(review).subscribe({
+      next: (val) => {
+        this.snackBarService.openSuccessSnackBar('Review made successfuly!');
+      },
+      error: (err) => {
+        console.log(err);
+        this.snackBarService.openFailureSnackBar('Error!');
+      },
+    });
     this.dialogRef.close();
     this.router.navigate(['/client']);
   }
