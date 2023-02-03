@@ -41,7 +41,7 @@ export class UserProfileComponent {
       this.setUserCar();
     });
 
-    this.userService.getImage(Number(this.auth.getCurrentUserId())).subscribe({
+    this.userService.getImage(this.selectedId).subscribe({
       next: (data) => {
         this.imageUrl = URL.createObjectURL(data);
         this.srcData = this.sanitizer.bypassSecurityTrustUrl(this.imageUrl);
