@@ -11,7 +11,7 @@
             <strong>
               <a
                 class="link-secondary"
-                [routerLink]="'/driver/profile/' + ride.driver.id"
+                [routerLink]="'../profile/' + ride.driver.id"
               >
                 {{ ride.driver.name }} {{ ride.driver.surname }}
               </a>
@@ -55,10 +55,7 @@
         <div class="col-md-3">
           <p>passengers:</p>
           <div *ngFor="let user of ride.customers">
-            <a
-              class="link-secondary"
-              [routerLink]="'/client/profile/' + user.id"
-            >
+            <a class="link-secondary" [routerLink]="'../profile/' + user.id">
               {{ user.name }} {{ user.surname }}</a
             >
           </div>
