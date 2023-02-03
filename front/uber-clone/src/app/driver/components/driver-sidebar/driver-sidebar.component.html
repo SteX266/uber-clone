@@ -1,6 +1,6 @@
 <div class="conatiner" [ngSwitch]="rideState">
   <div class="row" *ngSwitchCase="0">
-    <button class="btn btn-dark" (click)="onRejectRide.emit()">
+    <button id="rejectRideButton" class="btn btn-dark" (click)="onRejectRide.emit()">
       Reject ride
     </button>
     <input
@@ -13,7 +13,7 @@
   </div>
 
   <div class="row" *ngSwitchCase="1">
-    <button class="btn btn-dark" (click)="onRejectRide.emit(reason)">
+    <button id="rejectRideButton" class="btn btn-dark" (click)="onRejectRide.emit(reason)">
       Reject ride
     </button>
     <input

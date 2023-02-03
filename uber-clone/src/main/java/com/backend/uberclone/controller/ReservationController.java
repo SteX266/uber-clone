@@ -62,44 +62,21 @@ public class ReservationController {
             }
             r.setStatus(ReservationStatus.FINISHED);
             if (r.getType() == ReservationType.INSTANT) {
-                if (!makeRide(r)){
+                if (!rideService.makeRide(r)){
                     return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
                 }else {
-                    chargeUsers(r);
+                    reservationService.chargeUsers(r);
                     return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
                 }
             }
-            chargeUsers(r);
+            reservationService.chargeUsers(r);
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 
-    public boolean makeRide(Reservation r) {
-        Ride newRide = rideService.createRide(r);
-        if (newRide== null) {
-            for (Payment p : r.getPayments()) {
-                simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true, -1));
-            }
-            return false;
-        }
 
-        if (newRide.getDriver().isAvailable()) {
-            simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(), newRide.getDriver().getEmail()));
-            this.userService.setDriverAvailable(newRide.getDriver(), false);
-        }
-        return true;
-    }
 
-    private  void chargeUsers(Reservation r){
-        reservationService.chargeUsers(r);
-        int rideId = -1;
-        if (r.getRide() != null){
-            rideId = r.getRide().getId();
-        }
-        for (Payment p : r.getPayments()) {
-         simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), false, rideId));
-     }
-    }
+
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/cancelPayment")
     public ResponseEntity<SuccessResponseDTO> cancelPayment(@RequestBody PaymentDTO paymentDTO) {
