@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SignUpDriverModalComponent } from 'src/app/admin/sign-up-driver-modal/sign-up-driver-modal.component';
+import { SignUpDriverModalComponent } from 'src/app/admin/components/sign-up-driver-modal/sign-up-driver-modal.component';
 import { SignInModalComponent } from '../sign-in-modal/sign-in-modal.component';
 import { SignUpModalComponent } from '../sign-up-modal/sign-up-modal.component';
 
