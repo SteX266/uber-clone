@@ -42,15 +42,27 @@ public class RideService {
 
     public Ride rejectRide(@NotNull RejectionDTO rejectionDTO) {
         Driver driver = driverRepository.findOneById(rejectionDTO.getDriverId());
+        if(driver == null){
+            return null;
+        }
         Ride ride = rideRepository.findByIdAndDriverId(rejectionDTO.getRideId(), driver.getId());
-        if(ride == null) return null;
+
+        if(ride == null){
+
+            return null;
+        }
+        if(ride.getStatus() == RideStatus.FINISHED || ride.getStatus() == RideStatus.CANCELED || ride.getStatus() == RideStatus.ABORTED){
+            return ride;
+        }
         ride.setRejection(rejectionDTO.createRejection(ride));
+
         if(ride.getStatus() == RideStatus.ARRIVING || ride.getStatus() == RideStatus.ARRIVED) {
             simpMessagingTemplate.convertAndSend("/ride/rejected", new RideDTO(ride.getId(), ride.getDriver().getId()));
         }
         if(ride.getStatus() == RideStatus.ONGOING){
             simpMessagingTemplate.convertAndSend("/ride/aborted", new RideDTO(ride.getId(), ride.getDriver().getId()));
         }
+
         ride.cancelRide();
         setUpDriver(driver);
         refundClients(ride);
@@ -77,8 +89,15 @@ public class RideService {
     }
 
     public Ride startRide(RideDTO rideDTO) {
-        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ARRIVING, rideDTO.getDriverId());
+        Ride ride = rideRepository.findByIdAndDriverId(rideDTO.getRideId(),  rideDTO.getDriverId());
+
         if(ride == null) return null;
+
+        if(ride.getStatus() != RideStatus.ARRIVED){
+            ride.setStatus(RideStatus.ABORTED);
+            return ride;
+        }
+
         ride.startRide();
         return rideRepository.save(ride);
     }
@@ -86,8 +105,11 @@ public class RideService {
     public Ride endRide(RideDTO rideDTO) {
         Driver driver = driverRepository.findOneById(rideDTO.getDriverId());
         if (driver == null)return null;
-        Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ONGOING, driver.getId());
+        Ride ride = rideRepository.findByIdAndDriverId(rideDTO.getRideId(),  driver.getId());
         if(ride == null) return null;
+        if(ride.getStatus() != RideStatus.ONGOING){
+            return ride;
+        }
         ride.endRide();
         setUpDriver(driver);
         Ride saved = rideRepository.save(ride);
