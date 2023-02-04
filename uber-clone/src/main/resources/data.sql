@@ -142,3 +142,6 @@ INSERT INTO public.ride(
 VALUES ( '2023-02-04 06:23:36.508963', 5, '2023-02-04 06:23:15.124699', 'FINISHED', 3, null,1);
 
 
+INSERT INTO public.payment(
+    amount, paid, customer_id, reservation_id)
+VALUES ( 137.98, true, 2, 1);
