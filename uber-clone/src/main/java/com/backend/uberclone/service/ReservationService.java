@@ -8,6 +8,7 @@ import com.backend.uberclone.repository.PaymentRepository;
 import com.backend.uberclone.repository.ReservationRepository;
 import com.backend.uberclone.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public class ReservationService {
 
     @Autowired
     RideRepository rideRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
 
     @Autowired
@@ -112,6 +116,8 @@ public class ReservationService {
     }
 
 
+
+
     public boolean confirmPayment(PaymentDTO paymentDTO) {
         Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
         Customer c = customerRepository.findOneByEmail(paymentDTO.getCustomerEmail());
@@ -124,6 +130,11 @@ public class ReservationService {
                     paymentRepository.save(p);
                 }
                 else{
+                    r.setStatus(ReservationStatus.DECLINED);
+                    reservationRepository.save(r);
+                    for (Payment payment : r.getPayments()) {
+                        simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(payment.getAmount(), r.getId(), payment.getCustomer().getEmail(), true, -1));
+                    }
                     return false;
                 }
             }
@@ -150,6 +161,17 @@ public class ReservationService {
         reservationRepository.save(r);
     }
 
+    public void initiateChargeUsers(Reservation r){
+        this.chargeUsers(r);
+        int rideId = -1;
+        if (r.getRide() != null){
+            rideId = r.getRide().getId();
+        }
+        for (Payment p : r.getPayments()) {
+            simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), false, rideId));
+        }
+    }
+
     public void chargeUsers(Reservation r) {
         for(Payment p:r.getPayments()){
             Customer c = p.getCustomer();
@@ -158,6 +180,7 @@ public class ReservationService {
         }
 
     }
+
 
     public ReservationDTO getReservationByRide(Integer rideId) {
         Ride ride = this.rideRepository.findOneById(rideId);

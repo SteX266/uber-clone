@@ -27,20 +27,23 @@ public class RideService {
     private CustomerRepository customerRepository;
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public void setRideRepository(RideRepository rideRepository) { this.rideRepository = rideRepository; }
 
 
-    public void rejectRide(@NotNull RejectionDTO rejectionDTO) {
+    public Ride rejectRide(@NotNull RejectionDTO rejectionDTO) {
         Driver driver = driverRepository.findOneById(rejectionDTO.getDriverId());
         Ride ride = rideRepository.findByIdAndDriverId(rejectionDTO.getRideId(), driver.getId());
-        if(ride == null) return;
+        if(ride == null) return null;
         ride.setRejection(rejectionDTO.createRejection(ride));
         if(ride.getStatus() == RideStatus.ARRIVING || ride.getStatus() == RideStatus.ARRIVED) {
             simpMessagingTemplate.convertAndSend("/ride/rejected", new RideDTO(ride.getId(), ride.getDriver().getId()));
@@ -51,7 +54,7 @@ public class RideService {
         ride.cancelRide();
         setUpDriver(driver);
         refundClients(ride);
-        rideRepository.save(ride);
+        return rideRepository.save(ride);
     }
 
     public void refundClients(Ride ride) {
@@ -62,7 +65,7 @@ public class RideService {
 
     }
 
-    private void setUpDriver(Driver driver) {
+    public void setUpDriver(Driver driver) {
         Ride ride = driver.getNextRide();
         if (ride == null){
             driver.setAvailable(true);
@@ -73,20 +76,23 @@ public class RideService {
         }
     }
 
-    public void startRide(RideDTO rideDTO) {
+    public Ride startRide(RideDTO rideDTO) {
         Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ARRIVING, rideDTO.getDriverId());
-        if(ride == null) return;
+        if(ride == null) return null;
         ride.startRide();
-        rideRepository.save(ride);
+        return rideRepository.save(ride);
     }
 
-    public void endRide(RideDTO rideDTO) {
+    public Ride endRide(RideDTO rideDTO) {
         Driver driver = driverRepository.findOneById(rideDTO.getDriverId());
+        if (driver == null)return null;
         Ride ride = rideRepository.findByIdAndStatusAndDriverId(rideDTO.getRideId(), RideStatus.ONGOING, driver.getId());
+        if(ride == null) return null;
         ride.endRide();
         setUpDriver(driver);
-        rideRepository.save(ride);
+        Ride saved = rideRepository.save(ride);
         simpMessagingTemplate.convertAndSend("/ride/finished", new RideDTO(ride.getId(), ride.getDriver().getId()));
+        return saved;
     }
 
 
@@ -113,6 +119,24 @@ public class RideService {
 
         reservationRepository.save(r);
         return rajd;
+    }
+
+    public boolean makeRide(Reservation r) {
+        Ride newRide = this.createRide(r);
+        if (newRide== null) {
+            for (Payment p : r.getPayments()) {
+                simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true, -1));
+            }
+            r.setStatus(ReservationStatus.DECLINED);
+            reservationRepository.save(r);
+            return false;
+        }
+
+        if (newRide.getDriver().isAvailable()) {
+            simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(), newRide.getDriver().getEmail()));
+            this.userService.setDriverAvailable(newRide.getDriver(), false);
+        }
+        return true;
     }
 
     private Driver findClosestAvailableDriver(Reservation r) {

@@ -22,7 +22,7 @@
     <p class="card-text" *ngFor="let person of data.customers">{{ person }}</p>
     <div class="row">
       <div class="col">
-        <button class="btn btn-dark" (click)="confirmReservation()">
+        <button id="confirmReservationButton" class="btn btn-dark" (click)="confirmReservation()">
           Confirm reservation
         </button>
       </div>
