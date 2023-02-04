@@ -187,4 +187,8 @@ public class ReservationService {
         ReservationDTO reservation = new ReservationDTO(ride.getReservation());
         return reservation;
     }
+
+    public void saveReservation(Reservation r) {
+        this.reservationRepository.save(r);
+    }
 }
