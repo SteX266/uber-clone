@@ -32,8 +32,6 @@ public class LoginTest extends TestBase{
     public void checkWrongCredentialsLogin(){
         HomePage homePage = new HomePage(driver);
         String text = homePage.unsuccessfulLogin("serfezev@gmail.com","perica11");
-        System.out.println("KURCINAAAAA");
-        System.out.println(text);
         assertEquals("Wrong credentials! Try again.", text);
     }
 
@@ -41,8 +39,6 @@ public class LoginTest extends TestBase{
     public void checkEmptyCredentialsLogin(){
         HomePage homePage = new HomePage(driver);
         String text = homePage.unsuccessfulLogin("","");
-        System.out.println("KURCINAAAAA");
-        System.out.println(text);
         assertEquals("Fields must be filled!", text);
     }
 

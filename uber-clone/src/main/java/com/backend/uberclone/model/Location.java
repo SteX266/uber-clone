@@ -16,8 +16,8 @@ import static java.lang.Math.sqrt;
 @Entity
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @OneToOne(mappedBy = "currentLocation")
