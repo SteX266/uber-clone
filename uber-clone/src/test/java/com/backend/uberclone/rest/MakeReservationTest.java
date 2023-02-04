@@ -5,6 +5,7 @@ import com.backend.uberclone.dto.*;
 import com.backend.uberclone.model.ReservationType;
 import com.backend.uberclone.model.VehicleType;
 import org.junit.Test;
+import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

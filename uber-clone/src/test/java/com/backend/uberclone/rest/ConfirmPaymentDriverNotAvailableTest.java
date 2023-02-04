@@ -6,6 +6,7 @@ import com.backend.uberclone.dto.SuccessResponseDTO;
 import com.backend.uberclone.dto.UserCredentialsDTO;
 import com.backend.uberclone.dto.UserTokenState;
 import org.junit.Test;
+import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

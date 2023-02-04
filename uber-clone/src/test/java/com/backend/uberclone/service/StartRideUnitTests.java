@@ -86,8 +86,9 @@ public class StartRideUnitTests {
     }
     @Test
     public void successfullStart() {
-        when(rideRepository.findByIdAndStatusAndDriverId(1,RideStatus.ARRIVING,1)).thenReturn(rideWithCustomers);
+        when(rideRepository.findByIdAndDriverId(1,1)).thenReturn(rideWithCustomers);
         when(rideRepository.save(rideWithCustomers)).thenReturn(rideWithCustomers);
+        rideWithCustomers.setStatus(RideStatus.ARRIVED);
         Ride r = rideService.startRide(dto);
         assertEquals(r.getStatus(),RideStatus.ONGOING);
         assertNotNull(r.getStartTime());

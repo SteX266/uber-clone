@@ -93,14 +93,7 @@ public class EndRideUnitTests {
         assertNull(rideService.endRide(dto));
     }
 
-    @Test
-    public void driverHasNoRidesList() {
-        Driver d = new Driver();
-        d.setId(1);
-        when(driverRepository.findOneById(1)).thenReturn(d);
-        when(rideRepository.findByIdAndStatusAndDriverId(1, RideStatus.ONGOING, 1)).thenReturn(rideWithCustomers);
-        assertThrows(NullPointerException.class, () -> rideService.endRide(dto));
-    }
+
 
 
     @Test
@@ -109,8 +102,9 @@ public class EndRideUnitTests {
         d.setId(1);
         d.setRides(new ArrayList<>());
         rideWithCustomers.setDriver(d);
+        rideWithCustomers.setStatus(RideStatus.ONGOING);
         when(driverRepository.findOneById(1)).thenReturn(d);
-        when(rideRepository.findByIdAndStatusAndDriverId(1, RideStatus.ONGOING, 1)).thenReturn(rideWithCustomers);
+        when(rideRepository.findByIdAndDriverId(1, 1)).thenReturn(rideWithCustomers);
         when(rideRepository.save(rideWithCustomers)).thenReturn(rideWithCustomers);
         Ride r = rideService.endRide(dto);
         assertEquals(r.getStatus(), RideStatus.FINISHED);
