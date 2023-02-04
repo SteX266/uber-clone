@@ -33,6 +33,8 @@ public class RideService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public void setRideRepository(RideRepository rideRepository) { this.rideRepository = rideRepository; }
@@ -117,6 +119,23 @@ public class RideService {
 
         reservationRepository.save(r);
         return rajd;
+    }
+
+    public boolean makeRide(Reservation r) {
+        Ride newRide = this.createRide(r);
+        if (newRide== null) {
+            for (Payment p : r.getPayments()) {
+                simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true, -1));
+            }
+            r.setStatus(ReservationStatus.DECLINED);
+            return false;
+        }
+
+        if (newRide.getDriver().isAvailable()) {
+            simpMessagingTemplate.convertAndSend("/ride/new-ride", new DriverNewRideNotificationDTO(newRide.getId(), newRide.getDriver().getEmail()));
+            this.userService.setDriverAvailable(newRide.getDriver(), false);
+        }
+        return true;
     }
 
     private Driver findClosestAvailableDriver(Reservation r) {
