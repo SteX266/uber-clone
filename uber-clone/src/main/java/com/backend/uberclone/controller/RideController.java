@@ -4,6 +4,7 @@ package com.backend.uberclone.controller;
 import com.backend.uberclone.dto.*;
 import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Ride;
+import com.backend.uberclone.model.RideStatus;
 import com.backend.uberclone.service.RideService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,19 +42,38 @@ public class RideController {
     @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/rejectRide")
     public ResponseEntity<SuccessResponseDTO> rejectRide(@RequestBody  RejectionDTO rejectionDTO) {
-        rideService.rejectRide(rejectionDTO); // treba vozac da se izvuce iz tokena
+        Ride ride = rideService.rejectRide(rejectionDTO); // treba vozac da se izvuce iz tokena
+        if (ride == null){
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+        }
+        if(ride.getStatus() == RideStatus.FINISHED){
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        }
+
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
     @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/startRide")
     public ResponseEntity<SuccessResponseDTO> startRide(@RequestBody RideDTO rideDTO) {
-        rideService.startRide(rideDTO);
+        Ride ride = rideService.startRide(rideDTO);
+        if (ride == null){
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+        }
+        if (ride.getStatus() != RideStatus.ONGOING){
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
     @PreAuthorize("hasRole('DRIVER')")
     @PostMapping("/endRide")
     public ResponseEntity<SuccessResponseDTO> endRide(@RequestBody RideDTO rideDTO) {
-        rideService.endRide(rideDTO);
+        Ride ride = rideService.endRide(rideDTO);
+        if (ride == null){
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
+        }
+        if(ride.getStatus() != RideStatus.FINISHED){
+            return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }
 

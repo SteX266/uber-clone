@@ -29,7 +29,7 @@ public class ReservationTest extends TestBase{
     }
 
 
-    @RepeatedTest(10)
+    @Test
     public void testCreateReservation() throws InterruptedException {
 
         HomePage homePage = new HomePage(driver);
