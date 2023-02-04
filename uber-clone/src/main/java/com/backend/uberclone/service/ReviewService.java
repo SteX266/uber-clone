@@ -2,13 +2,19 @@ package com.backend.uberclone.service;
 
 
 import com.backend.uberclone.dto.ReviewDTO;
+import com.backend.uberclone.model.Customer;
+import com.backend.uberclone.model.Driver;
 import com.backend.uberclone.model.Review;
+import com.backend.uberclone.model.Ride;
+import com.backend.uberclone.repository.CustomerRepository;
+import com.backend.uberclone.repository.DriverRepository;
 import com.backend.uberclone.repository.ReviewRepository;
+import com.backend.uberclone.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 @Service
 public class ReviewService {
@@ -17,64 +23,74 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private RideRepository rideRepository;
+
+    @Autowired
+    private DriverRepository driverRepository;
 
 
 
-    @Transactional
-    public boolean createReview(int reservationId, String username, String text, int rating) {
 
-        Reservation reservation = reservationRepository.getLockedReview(reservationId);
-        SystemEntity e = reservation.getSystemEntity();
-        User u = userRepository.findOneByUsername(username);
-        
-        for (Review r:e.getReviews()){
-            if (r.getClient().getUsername().equals(username)){
+    public boolean createReview(ReviewDTO reviewDTO) {
+        Customer reviewer = customerRepository.findOneByEmail(reviewDTO.getReviewerEmail());
+        Ride ride = rideRepository.findOneById(reviewDTO.getRideId());
+        if (ride == null || reviewer == null){
+            return false;
+        }
+        if (!canRideBeReviewed(reviewDTO.getRideId(), reviewDTO.getReviewerEmail())){
+            return false;
+        }
+        if (isRatingValid(reviewDTO.getVehicleRating(), reviewDTO.getDriverRating())){
+            Review review = new Review(ride, reviewer, ride.getDriver(), reviewDTO.getVehicleRating(), reviewDTO.getDriverRating(), reviewDTO.getComment());
+            reviewRepository.save(review);
+            Driver d = ride.getDriver();
+            d.addReview(review);
+            driverRepository.save(d);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canRideBeReviewed(int rideId, String userEmail){
+
+        Ride ride = rideRepository.findOneById(rideId);
+        if (ride == null){
+            return false;
+        }
+        if (!isRideDateValid(ride.getStartTime())){
+
+            return false;
+        }
+        Customer c = customerRepository.findOneByEmail(userEmail);
+        if(c == null){
+            return false;
+        }
+        for (Review review:c.getGiven_reviews()){
+            if (review.getRide().getId() == rideId){
                 return false;
             }
         }
-        Review review = new Review(rating, text, u, reservation.getSystemEntity());
-        reservation.getSystemEntity().addReview(review);
-        SystemEntity entity = reservation.getSystemEntity();
+        return true;
 
-        double avg = 0;
+    }
 
-        for(Review r:entity.getReviews()){
-            avg+=r.getScore();
+    private boolean isRideDateValid(LocalDateTime startTime) {
+        LocalDateTime today = LocalDateTime.now();
+        if (today.minusDays(3).isAfter(startTime)){
+            return false;
         }
-
-        entity.setAverageScore(avg/entity.getReviews().size());
-
-
-        reviewRepository.save(review);
-        systemEntityRepository.save(entity);
         return true;
 
+
     }
 
-    public ArrayList<ReviewDTO> getAllReviews() {
-        ArrayList<ReviewDTO> reportDTOs = new ArrayList<>();
-        ArrayList<Review> reports = (ArrayList<Review>) reviewRepository.findAll();
-        for (Review r: reports) {
-            if(!r.isApproved()) {
-                reportDTOs.add(new ReviewDTO(r));
-            }
-        }
-        return reportDTOs;
-    }
-    @Transactional
-    public boolean acceptReview(ReviewDTO dto) {
-        Review rr = reviewRepository.getLockedReview(dto.getId());
-        rr.setApproved(true);
-        reviewRepository.save(rr);
-        emailService.sendReviewEmail(rr.getSystemEntity().getOwner().getUsername(),rr.getText(),rr.getClient().getUsername(),rr.getScore(),rr.getSystemEntity().getName());
-        return true;
+    private boolean isRatingValid(int carRating, int driverRating) {
+        return carRating >= 0 && carRating <= 5 && driverRating >= 0 && driverRating <= 5;
     }
 
-    @Transactional
-    public boolean declineReview(ReviewDTO dto) {
-        Review rr = reviewRepository.getLockedReview(dto.getId());
-        reviewRepository.delete(rr);
-        emailService.sendReservationReportDeclined(dto.getClient(),dto.getOwner(),rr.getText(),dto.getText());
-        return true;
-    }
+
 }

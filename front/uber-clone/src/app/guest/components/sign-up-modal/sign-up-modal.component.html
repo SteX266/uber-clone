@@ -1,0 +1,83 @@
+<div id="signup-modal">
+  <form>
+    <h1>Sign Up</h1>
+    <p>
+      Sign Up with your email address or sign in directly with your social media
+      account:
+    </p>
+    <div class="form-group">
+      <input
+        type="email"
+        name="email"
+        id="email"
+        class="form-control"
+        placeholder="Email"
+        [(ngModel)]="email"
+      />
+      <input
+        type="password"
+        name="password"
+        id="password"
+        class="form-control"
+        placeholder="Password"
+        [(ngModel)]="password"
+      />
+      <input
+        type="password"
+        name="repeatedPassword"
+        id="repeatedPassword"
+        class="form-control"
+        placeholder="Repeat password"
+        [(ngModel)]="repeatedPassword"
+      />
+      <input
+        type="text"
+        name="name"
+        id="name"
+        class="form-control"
+        placeholder="Name"
+        [(ngModel)]="name"
+      />
+      <input
+        type="text"
+        name="surname"
+        id="surname"
+        class="form-control"
+        placeholder="Surname"
+        [(ngModel)]="surname"
+      />
+      <input
+        type="text"
+        name="city"
+        id="city"
+        class="form-control"
+        placeholder="City"
+        [(ngModel)]="city"
+      />
+      <input
+        type="text"
+        name="phoneNumber"
+        id="phoneNumber"
+        class="form-control"
+        placeholder="Phone number"
+        [(ngModel)]="phoneNumber"
+      />
+    </div>
+    <button
+      (click)="userSignUp()"
+      type="submit"
+      class="btn btn-dark btn-lg su-button"
+      id="signUpButton"
+      name="signUpButton"
+    >
+      Sign Up
+    </button>
+    <hr />
+    <div class="row">
+      <a (click)="facebookLogin()" class="col-6 text-center"
+        ><i class="fa fa-facebook fa-4x"></i
+      ></a>
+      <a class="col-6 text-center"><i class="fa fa-google fa-4x"></i></a>
+    </div>
+  </form>
+</div>

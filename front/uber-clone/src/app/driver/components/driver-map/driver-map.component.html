@@ -1,0 +1,20 @@
+<div class="row map-container">
+  <div class="col">
+    <app-driver-sidebar
+      [available]="available"
+      [rideState]="rideState"
+      (onEndRide)="endRide()"
+      (onRejectRide)="rejectRide($event)"
+      (onStartRide)="startRide()"
+      (onToggleAvailable)="toggleAvailable($event)"
+    ></app-driver-sidebar>
+  </div>
+
+  <div
+    class="col-9 map"
+    leaflet
+    [leafletOptions]="options"
+    (leafletMapReady)="initializeMap($event)"
+  ></div>
+</div>
+{{ rideState }}

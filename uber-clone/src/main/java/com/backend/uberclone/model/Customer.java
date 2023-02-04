@@ -17,17 +17,40 @@ import java.util.Set;
 @Entity
 public class Customer extends User {
 
+    @Column
+    private boolean riding;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FavouriteRoute> favoriteRoutes;
 
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> given_reviews;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Payment> payments;
 
+    @Column
+    private double coins;
     @ManyToMany
     @JoinTable(name = "rides",
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
     private Set<Ride> rides;
 
+    @ManyToMany
+    @JoinTable(name = "reservations",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "reservation_id", referencedColumnName = "id"))
+    private Set<Reservation> reservations;
+
+    public void addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
+    }
+
+    public void addCoins(double amount) {
+        this.coins += amount;
+    }
+
+    public void addRide(Ride ride) {
+        this.rides.add(ride);
+    }
 }

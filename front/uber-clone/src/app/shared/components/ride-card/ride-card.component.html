@@ -1,0 +1,84 @@
+<div class="card">
+  <div class="col-md-12">
+    <div class="faq-item">
+      <div class="row">
+        <div class="col-md-7">
+          <h2 class="faq-question">
+            {{ stations }}
+          </h2>
+          <small
+            >Driven by
+            <strong>
+              <a
+                class="link-secondary"
+                [routerLink]="'../profile/' + ride.driver.id"
+              >
+                {{ ride.driver.name }} {{ ride.driver.surname }}
+              </a>
+            </strong>
+            <i class="fa fa-clock-o"></i>
+            {{ startString }} - {{ endString }}</small
+          >
+          <br />
+          <div class="row">
+            <small
+              >status:
+              <strong>
+                {{ ride.status }}
+              </strong>
+            </small>
+          </div>
+
+          <div class="row">
+            <small
+              >vehicle type:
+              <strong>
+                {{ ride.vehicleType }}
+              </strong>
+            </small>
+          </div>
+          <div class="row">
+            <small
+              >ride type:
+              <strong>
+                {{ ride.type }}
+              </strong>
+            </small>
+          </div>
+          <div *ngIf="ride.hasBaby" class="row">
+            <small> baby seat : <strong>REQUIRED</strong> </small>
+          </div>
+          <div *ngIf="ride.hasPet" class="row">
+            <small> pet friendly: <strong>REQUIRED</strong> </small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <p>passengers:</p>
+          <div *ngFor="let user of ride.customers">
+            <a class="link-secondary" [routerLink]="'../profile/' + user.id">
+              {{ user.name }} {{ user.surname }}</a
+            >
+          </div>
+        </div>
+        <div class="col-md-2 text-right">
+          <span class="small font-bold">Cost </span><br />
+          {{ ride.estimatedCost }} rsd
+        </div>
+        <button
+          *ngIf="canReview"
+          class="btn btn-dark btn-sm"
+          (click)="openReviewDialog('0ms', '0ms')"
+        >
+          Review
+        </button>
+        <button
+          *ngIf="client"
+          class="btn btn-dark btn-sm"
+          (click)="repeatRide()"
+        >
+          Repeat Ride
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

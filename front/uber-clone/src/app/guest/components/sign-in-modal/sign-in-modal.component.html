@@ -1,0 +1,44 @@
+<div id="signup-modal">
+  <form>
+    <h1>Sign In</h1>
+    <p>Sign In with your email address or social media account:</p>
+    <div class="form-group">
+      <input
+        type="email"
+        name="email"
+        id="email"
+        class="form-control"
+        placeholder="Email"
+        [(ngModel)]="email"
+      />
+      <input
+        type="password"
+        name="password"
+        id="password"
+        class="form-control"
+        placeholder="Password"
+        [(ngModel)]="password"
+      />
+    </div>
+    <button
+      (click)="login()"
+      type="submit"
+      class="btn btn-dark btn-lg su-button"
+      id="submitLogin"
+      name="submitLogin"
+    >
+      Sign In
+    </button>
+    <br />
+    <a href="forgot-password">Forgot password?</a>
+    <hr />
+    <div class="row">
+      <div class="d-flex justify-content-center text-center mt-4 pt-1">
+        <a (click)="facebookLogin()" class="text-white" href="#"
+          ><em class="fa fa-facebook-square fa-2x px-2"></em
+        ></a>
+        <asl-google-signin-button class="px-2"></asl-google-signin-button>
+      </div>
+    </div>
+  </form>
+</div>

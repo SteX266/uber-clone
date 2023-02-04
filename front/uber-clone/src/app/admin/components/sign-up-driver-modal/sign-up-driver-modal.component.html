@@ -1,0 +1,64 @@
+<mat-dialog-content id="signup-modal">
+    <form>
+      <h1>Sign Up</h1>
+      <p>Sign Up with your email address or sign in directly with your social media account:</p>
+      <div class="form-group">
+        <input type="email" name="email" id="email" class="form-control" placeholder="Email" [(ngModel)]="email">
+        <input type="password" name="password" id="password" class="form-control" placeholder="Password" [(ngModel)]="password">
+        <input type="password"name="repeatedPassword" id="repeatedPassword" class="form-control" placeholder="Repeat password" [(ngModel)]="repeatedPassword">
+        <input type="text" name="name" id="name" class="form-control" placeholder="Name" [(ngModel)]="name">
+        <input type="text" name="surname" id="surname" class="form-control" placeholder="Surname" [(ngModel)]="surname">
+        <input type="text" name="city" id="city" class="form-control" placeholder="City" [(ngModel)]="city">
+        <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone number" [(ngModel)]="phoneNumber">
+  
+      </div>
+      <hr>
+      <h1>Vehicle Info</h1>
+      <div class="form-group row">
+        <label for="carModel" class="col-4 col-form-label">Car model</label> 
+        <div class="col-8">
+          <input [(ngModel)] = "carModel" id="carModel" name="carModel" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="select" class="col-4 col-form-label">Number of seats</label> 
+        <div class="col-8">
+          <select [(ngModel)] = "numberOfSeats" id="select" name="select" class="custom-select">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-4">Amenities</label> 
+        <div class="col-8">
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input [(ngModel)] = "petFriendly" name="petFriendlyChkBox" id="petFriendlyChkBox" type="checkbox" class="custom-control-input" value="petFriendly"> 
+            <label for="checkbox_0" class="custom-control-label">Pet friendly</label>
+          </div>
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input [(ngModel)] = "childrenFriendly" name="childrenFriendlyChkBox" id="childrenFriendlyChkBox" type="checkbox" class="custom-control-input" value="childrenFriendly"> 
+            <label for="checkbox_1" class="custom-control-label">Allows children</label>
+          </div>
+        </div>
+      </div> 
+
+      <div class="form-group row">
+        <label for="select" class="col-4 col-form-label">Vehicle type</label> 
+        <div class="col-8">
+          <select [(ngModel)] = "vehicleType" id="vehicleType" name="vehicleType" class="custom-select">
+            <option value="PREMIUM">Premium</option>
+            <option value="ECO">Eco</option>
+            <option value="REGULAR">Regular</option>
+          </select>
+        </div>
+      </div>
+
+      <button (click)="driverSignUp()" type="submit" class="btn btn-dark btn-lg su-button">Sign Up</button>
+
+    </form>
+  </mat-dialog-content>

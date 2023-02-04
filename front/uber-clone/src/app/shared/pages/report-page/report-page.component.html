@@ -1,0 +1,23 @@
+<div class="field col-12 md:col-4">
+  <label for="range">select date range: </label>
+  <p-calendar
+    [(ngModel)]="rangeDates"
+    selectionMode="range"
+    [readonlyInput]="true"
+    inputId="range"
+  ></p-calendar>
+</div>
+<button class="btn btn-dark btn-block" (click)="selectDateRange()">
+  Select Dates
+</button>
+
+<div *ngIf="basicData">
+  <p>Cumulative money: {{ cMoney }}</p>
+  <p>Average money per day: {{ aMoney }}</p>
+  <p>Cumulative rides: {{ cNumber }}</p>
+  <p>Average rides per day: {{ aNumber }}</p>
+  <p>Cumulative distance: {{ cumDistance }} km</p>
+  <p>Average distance per day: {{ aDistance }} km</p>
+</div>
+
+<app-chart [basicData]="basicData"></app-chart>

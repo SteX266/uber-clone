@@ -1,0 +1,65 @@
+#signup-modal {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  #signup-modal form {
+    padding: 20px;
+  }
+  
+  #signup-modal h1 {
+    margin-top: 0;
+    font-size: 22px;
+  }
+  
+  #signup-modal p {
+    margin: 20px 0 10px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  #signup-modal .form-control {
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  #signup-modal .btn {
+    height: 40px;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  
+  #signup-modal .btn-primary {
+    background-color: #4d90fe;
+    border-color: #4d90fe;
+
+  }
+  
+  #signup-modal .btn-primary:hover {
+    background-color: #357ae8;
+    border-color: #357ae8;
+  }
+  
+  #signup-modal hr {
+    margin: 20px 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #signup-modal .d-flex {
+    align-items: center;
+  }
+  
+  .fa{
+    color:black;
+  }
+
+  
+.centered{
+  margin:auto;
+  width:50%;
+}

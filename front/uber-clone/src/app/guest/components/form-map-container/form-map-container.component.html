@@ -1,0 +1,54 @@
+<div [ngSwitch]="activeCard">
+  <div class="card su">
+    <div class="card-header su-header">
+      <ul class="nav nav-fill su-nav">
+        <li class="nav-item">
+          <a class="nav-link su-link" (click)="changeActiveCard('drive')">
+            <img [src]="drivePath" /><br />Drive
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link su-link" (click)="changeActiveCard('ride')">
+            <img [src]="ridePath" /><br />Ride
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link su-link" (click)="changeActiveCard('map')">
+            <img [src]="mapPath" /><br />Try the map
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card-body" *ngSwitchCase="'drive'">
+      <h1 class="su-title">Get in the driver’s seat and get paid</h1>
+      <p class="card-text su-text">
+        Drive on the platform with the largest network of active riders.
+      </p>
+      <button
+        (click)="openDriverSignUpDialog('0ms', '0ms')"
+        type="button"
+        class="btn btn-dark btn-lg su-button"
+      >
+        Sign up to drive
+      </button>
+    </div>
+
+    <div class="card-body" *ngSwitchCase="'ride'">
+      <h1 class="su-title">Get in the back seat and enjoy the best rides.</h1>
+      <p class="card-text su-text">
+        Ride on the platform with the largest network of active riders.
+      </p>
+      <button
+        (click)="openSignUpDialog('0ms', '0ms')"
+        type="button"
+        class="btn btn-dark btn-lg su-button"
+      >
+        Sign up to ride
+      </button>
+    </div>
+    <div class="card-body" *ngSwitchCase="'map'">
+      <app-map-small></app-map-small>
+    </div>
+  </div>
+</div>

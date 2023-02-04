@@ -1,5 +1,5 @@
 package com.backend.uberclone.model;
 
 public enum VehicleType {
-    PREMIUM, LJIMUZINA, YUGO
+    PREMIUM, REGULAR, ANY, ECO
 }

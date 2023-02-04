@@ -17,13 +17,12 @@ public class Rejection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
     @Column
     private String reason;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="driver_id")
-    private Driver driver;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="ride_id")
+
+
+    @OneToOne(mappedBy = "rejection")
     private Ride ride;
 }

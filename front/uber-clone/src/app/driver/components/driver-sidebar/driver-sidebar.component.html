@@ -1,0 +1,59 @@
+<div class="conatiner" [ngSwitch]="rideState">
+  <div class="row" *ngSwitchCase="0">
+    <button id="rejectRideButton" class="btn btn-dark" (click)="onRejectRide.emit()">
+      Reject ride
+    </button>
+    <input
+      type="text"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Reason"
+      [(ngModel)]="reason"
+      class="form-control control"
+    />
+  </div>
+
+  <div class="row" *ngSwitchCase="1">
+    <button id="rejectRideButton" class="btn btn-dark" (click)="onRejectRide.emit(reason)">
+      Reject ride
+    </button>
+    <input
+      type="text"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Reason"
+      [(ngModel)]="reason"
+      class="form-control control"
+    />
+    <button id="startRideButton" class="btn btn-dark" (click)="onStartRide.emit()">
+      Start ride
+    </button>
+  </div>
+  <div class="row" *ngSwitchCase="2">
+    <button class="btn btn-dark" (click)="onRejectRide.emit(reason)">
+      Abort ride
+    </button>
+    <input
+      type="text"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Reason"
+      [(ngModel)]="reason"
+      class="form-control control"
+    />
+  </div>
+
+  <button id="endRideButton" class="btn btn-dark" *ngSwitchCase="3" (click)="onEndRide.emit()">
+    End ride
+  </button>
+  <div *ngSwitchDefault class="form-check form-switch">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      role="switch"
+      id="toggleAvailable"
+      [checked]="available"
+      (click)="toggleAvailable()"
+    />
+    <label class="form-check-label" for="toggleAvailable"
+      >Toggle Available</label
+    >
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="container map-container">
+  <div class="row map-container">
+    <div class="col">
+      <app-geocoding
+        (onShowResults)="refreshDirections($event)"
+      ></app-geocoding>
+      <ul class="list-group">
+        <a
+          (click)="selectRoute(i)"
+          class="list-group-item list-group-item-action flex-column align-items-start"
+          *ngFor="let route of routes; index as i"
+        >
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ i + 1 }}. Route</h5>
+            <small
+              >{{
+                roundDistance(route.properties.summary.distance)
+              }}
+              meters</small
+            >
+          </div>
+          <p class="mb-1">
+            Duration ≈
+            {{ roundDuration(route.properties.summary.duration) }} minutes
+            <br />
+            Price ≈ {{ calculatePrice(route.properties.summary.distance) }}
+          </p>
+        </a>
+      </ul>
+    </div>
+    <div
+      class="col-9 map"
+      leaflet
+      [leafletOptions]="options"
+      (leafletMapReady)="initializeMap($event)"
+    >
+      >
+    </div>
+  </div>
+</div>

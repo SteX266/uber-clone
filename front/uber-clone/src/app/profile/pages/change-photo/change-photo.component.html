@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="main-body">
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <app-user-profile> </app-user-profile>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div>
+            <div>
+              <div class="card h-100">
+                <div class="card-body">
+                  <div>
+                    <div class="bg-secondary-soft px-4 py-5 rounded">
+                      <div class="row g-3">
+                        <h4 class="mb-4 mt-0">Upload your profile photo</h4>
+                        <div class="text-center">
+                          <div class="square position-relative display-2 mb-3">
+                            <img
+                              src="{{ picture }}"
+                              alt="No photo"
+                              class="square position-relative display-2 mb-3"
+                            />
+                          </div>
+
+                          <input
+                            type="file"
+                            id="customFile"
+                            name="file"
+                            hidden=""
+                            (change)="addPhoto($event)"
+                          />
+                          <label class="btn btn-dark btn-block" for="customFile"
+                            >Upload</label
+                          >
+                          <button
+                            type="button"
+                            class="btn btn-danger-soft"
+                            (click)="removePhoto()"
+                          >
+                            Remove
+                          </button>
+
+                          <button
+                            type="button"
+                            class="btn btn-danger-soft"
+                            (click)="back()"
+                          >
+                            Back
+                          </button>
+
+                          <p class="text-muted mt-3 mb-0">
+                            <span class="me-1">Note:</span>Minimum size 300px x
+                            300px
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

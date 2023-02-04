@@ -16,7 +16,12 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="ride_id")
+    private Ride ride;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="reviewer_id")
     private Customer reviewer;
@@ -27,8 +32,20 @@ public class Review {
 
 
     @Column
-    private double rating;
+    private int carRating;
+    @Column
+    private int driverRating;
     @Column
     private String comment;
+
+    public Review(Ride ride, Customer reviewer, Driver recipient, int carRating, int driverRating, String comment){
+
+        this.ride = ride;
+        this.reviewer = reviewer;
+        this.recipient = recipient;
+        this.carRating = carRating;
+        this.driverRating = driverRating;
+        this.comment = comment;
+    }
 
 }

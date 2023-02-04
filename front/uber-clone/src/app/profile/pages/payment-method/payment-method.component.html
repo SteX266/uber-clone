@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="main-body">
+      <div class="row gutters-sm">
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <app-user-profile> </app-user-profile>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card mb-3">
+            <div>
+              <div>
+                <div class="card h-100">
+                  <div class="card-body">
+
+                      <div>
+                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                          <div class="row g-3">
+                            <h4 class="my-4">Buy tokens</h4>
+  
+
+  
+                            <div class="col-md-6">
+                              <label
+                                for="exampleInputPassword2"
+                                class="form-label"
+                                >Token amount</label
+                              >
+
+                              <input
+                              required
+                              min="1"
+                              max="1000"
+                              type="number"
+                              class="form-control"
+                              placeholder=""
+                              aria-label="Last name"
+                              [(ngModel)]="coinAmount"
+                              name="surname"
+                            />
+
+                            </div>
+  
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="gap-3 d-md-flex justify-content text-center">
+                        <button
+                          type="button"
+                          class="btn btn-danger-soft btn-lg"
+                          (click)="back()"
+                        >
+                          Back
+                        </button>
+                        <div id="paypal-button-container"> </div>
+                      </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
