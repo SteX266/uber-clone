@@ -128,6 +128,7 @@ public class RideService {
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true, -1));
             }
             r.setStatus(ReservationStatus.DECLINED);
+            reservationRepository.save(r);
             return false;
         }
 

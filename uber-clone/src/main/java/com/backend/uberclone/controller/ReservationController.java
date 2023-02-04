@@ -65,11 +65,11 @@ public class ReservationController {
                 if (!rideService.makeRide(r)){
                     return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
                 }else {
-                    reservationService.chargeUsers(r);
+                    reservationService.initiateChargeUsers(r);
                     return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
                 }
             }
-            reservationService.chargeUsers(r);
+            reservationService.initiateChargeUsers(r);
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
     }

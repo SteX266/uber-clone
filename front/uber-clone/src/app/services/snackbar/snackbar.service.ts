@@ -10,14 +10,14 @@ export class SnackBarService {
 
   openFailureSnackBar(text: string) {
     this.snackBar.open(text, 'Dismiss', {
-      duration: 300000,
+      duration: 3000,
       panelClass: ['red-snackbar', 'login-snackbar'],
     });
   }
 
   openSuccessSnackBar(text: string) {
     this.snackBar.open(text, 'Dismiss', {
-      duration: 300000,
+      duration: 3000,
       panelClass: ['green-snackbar', 'login-snackbar'],
     });
   }

@@ -130,6 +130,11 @@ public class ReservationService {
                     paymentRepository.save(p);
                 }
                 else{
+                    r.setStatus(ReservationStatus.DECLINED);
+                    reservationRepository.save(r);
+                    for (Payment payment : r.getPayments()) {
+                        simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(payment.getAmount(), r.getId(), payment.getCustomer().getEmail(), true, -1));
+                    }
                     return false;
                 }
             }
@@ -156,7 +161,7 @@ public class ReservationService {
         reservationRepository.save(r);
     }
 
-    public void chargeUsers(Reservation r){
+    public void initiateChargeUsers(Reservation r){
         this.chargeUsers(r);
         int rideId = -1;
         if (r.getRide() != null){
@@ -167,6 +172,14 @@ public class ReservationService {
         }
     }
 
+    public void chargeUsers(Reservation r) {
+        for(Payment p:r.getPayments()){
+            Customer c = p.getCustomer();
+            c.setCoins(c.getCoins()-p.getAmount());
+            customerRepository.save(c);
+        }
+
+    }
 
 
     public ReservationDTO getReservationByRide(Integer rideId) {
