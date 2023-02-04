@@ -23,7 +23,7 @@
       [(ngModel)]="reason"
       class="form-control control"
     />
-    <button class="btn btn-dark" (click)="onStartRide.emit()">
+    <button id="startRideButton" class="btn btn-dark" (click)="onStartRide.emit()">
       Start ride
     </button>
   </div>
@@ -40,7 +40,7 @@
     />
   </div>
 
-  <button class="btn btn-dark" *ngSwitchCase="3" (click)="onEndRide.emit()">
+  <button id="endRideButton" class="btn btn-dark" *ngSwitchCase="3" (click)="onEndRide.emit()">
     End ride
   </button>
   <div *ngSwitchDefault class="form-check form-switch">

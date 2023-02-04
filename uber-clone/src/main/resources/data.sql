@@ -53,7 +53,7 @@ VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa
 
 INSERT INTO public.customer(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins, social_login)
-VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 10000, false);
+VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 0, false);
 
 
 
