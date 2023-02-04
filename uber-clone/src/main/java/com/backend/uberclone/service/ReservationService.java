@@ -52,7 +52,7 @@ public class ReservationService {
         if(!checkCustomerBalance(customers, reservationDTO.getEstimatedCost())) return new ArrayList<>();
         List<Payment> payments = createPayments(customers, reservationDTO.getEstimatedCost());
         Reservation reservation = new Reservation(reservationDTO, customers, payments);
-        reservation = reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
         for(Customer c:customers){
             c.addReservation(reservation);
             customerRepository.save(c);
