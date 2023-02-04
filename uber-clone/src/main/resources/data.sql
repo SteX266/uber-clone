@@ -86,19 +86,12 @@ VALUES ( '2022-11-02', true, 'Odmah cemo proveriti u cemu je problem', 2, 1);
 
 INSERT INTO public.message(
     date, read, text, recipient_id, sender_id)
-VALUES ( '2022-11-03', true, 'Pozurite moram u WC. Ako mu se uneredim po kolima nije moja krivica pozzz', 1, 2);
+VALUES ( '2022-11-03', true, 'Pozurite moram u lov.  nije moja krivica pozzz', 1, 2);
 
 INSERT INTO public.message(
     date, read, text, recipient_id, sender_id)
-VALUES ( '2022-11-04', true, 'Molim vas da ne cinite to. Stvarno bi bilo jako neprijatno', 2, 1);
+VALUES ( '2022-11-04', true, 'Molim vas da ne cinite to', 2, 1);
 
-INSERT INTO public.message(
-    date, read, text, recipient_id, sender_id)
-VALUES ( '2022-11-05', true, 'Nije do mene druze eksploditracu, a mogu to da obavim samo kuci i u Pogonu', 1, 2);
-
-INSERT INTO public.message(
-    date, read, text, recipient_id, sender_id)
-VALUES ( '2022-11-06', true, 'Razumem vas u potpunosti. Pogon zaista ima lep WC. Ucinicu sve sto je u mojoj moci da vozilo dodje sto pre', 2, 1);
 
 
 
