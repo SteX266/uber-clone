@@ -16,7 +16,7 @@ export class AuthService {
   private readonly registrationUrl: string;
   private readonly forgotPasswordUrl: string;
   private readonly resetPasswordUrl: string;
-  private readonly logoutDriverUrl:string;
+  private readonly logoutDriverUrl: string;
   constructor(private http: HttpClient) {
     this.loginUrl = environment.apiEndpoint + 'auth/login';
     this.signUpUrl = environment.apiEndpoint + 'auth/usersignup';
@@ -72,26 +72,26 @@ export class AuthService {
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('currentUserRole');
-
   }
 
-  logoutAdmin(){
-    let body ={
-      id:this.getCurrentUserId()
-    }
-    return this.http.post<any>(this.logoutDriverUrl, body, this.getHttpOptionsWithToken());
-
-
+  logoutAdmin() {
+    let body = {
+      id: this.getCurrentUserId(),
+    };
+    return this.http.post<any>(
+      this.logoutDriverUrl,
+      body,
+      this.getHttpOptionsWithToken()
+    );
   }
 
   logout() {
-    if(this.getCurrentUserRole() === "DRIVER"){
+    if (this.getCurrentUserRole() === 'DRIVER') {
       this.logoutAdmin().subscribe();
     }
 
     this.invalidateToken();
     window.location.href = '/';
-
   }
 
   getHttpOptions() {
@@ -113,9 +113,9 @@ export class AuthService {
     };
   }
 
-  public getHttpOptionsWithBlob():Object{
-    return{
-      responseType:'blob',
+  public getHttpOptionsWithBlob(): Object {
+    return {
+      responseType: 'blob',
 
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
@@ -153,7 +153,6 @@ export class AuthService {
   sendRegistrationRequest(
     registrationRequest: UserRegistrationRequest
   ): Observable<any> {
-
     return this.http.post<any>(
       this.registrationUrl,
       registrationRequest,
