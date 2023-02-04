@@ -56,10 +56,7 @@ public class ReservationController {
         boolean isPaymentDone = this.reservationService.confirmPayment(paymentDTO);
         if (isPaymentDone) {
             Reservation r = reservationService.findOneById(paymentDTO.getReservationId());
-            for (Customer c: r.getCustomers()
-                 ) {
-                System.out.println(c.getUsername());
-            }
+
             r.setStatus(ReservationStatus.FINISHED);
             if (r.getType() == ReservationType.INSTANT) {
                 if (!rideService.makeRide(r)){
@@ -69,6 +66,8 @@ public class ReservationController {
                     return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
                 }
             }
+            r.setStatus(ReservationStatus.ASSIGNMENT);
+            reservationService.saveReservation(r);
             reservationService.initiateChargeUsers(r);
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
