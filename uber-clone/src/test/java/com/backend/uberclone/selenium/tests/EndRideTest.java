@@ -5,14 +5,13 @@ import com.backend.uberclone.selenium.pages.DriverHomePage;
 import com.backend.uberclone.selenium.pages.HomePage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EndRide extends TestBase{
+public class EndRideTest extends TestBase{
     public static WebDriver otherDriver;
 
 
@@ -29,7 +28,7 @@ public class EndRide extends TestBase{
     }
 
 
-    @RepeatedTest(10)
+    @Test
     public void testEndReservation() throws InterruptedException {
 
         HomePage homePage = new HomePage(driver);

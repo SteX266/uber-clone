@@ -108,17 +108,17 @@ VALUES ( '2022-11-02', true, 'Izvinite gospodine, ali ne mozemo tu nista', 3, 1)
 
 
 INSERT INTO public.location(
-   id, latitude, longitude)
-VALUES (2, 45.2464013, 19.8337933);
+    latitude, longitude)
+VALUES ( 45.2464013, 19.8337933);
 
 INSERT INTO public.location(
-     id,latitude, longitude)
-VALUES (3, 45.2450937,19.8360421);
+     latitude, longitude)
+VALUES ( 45.2450937,19.8360421);
 
 
 INSERT INTO public.route(
     dtype,  distance_in_km, estimated_time_in_minutes, name, start, end_coordinates_id, start_coordinates_id, customer_id)
-VALUES ('Route',  0.3165, 1.266666, null, null, 2, 3, null);
+VALUES ('Route',  0.3165, 1.266666, null, null, 1, 2, null);
 
 
 INSERT into public.reservation(estimated_cost,has_baby,has_pet,reservation_time,status,type,vehicle_type,route_id) VALUES

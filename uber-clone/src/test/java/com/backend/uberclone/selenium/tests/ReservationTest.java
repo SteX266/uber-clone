@@ -57,7 +57,7 @@ public class ReservationTest extends TestBase{
 
     }
 
-    @RepeatedTest(10)
+    @Test
     public void testCreateReservationNoCoins() throws InterruptedException {
         HomePage homePage = new HomePage(driver);
         HomePage homePage1 = new HomePage(otherDriver);

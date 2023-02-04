@@ -42,6 +42,7 @@ INSERT INTO public.location(
     latitude, longitude)
 VALUES (45.246401, 19.833793);
 
+
 INSERT INTO public.admin(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname, social_login)
 VALUES (1, false, 'Sremska Mitrovica', false, 'bubibubisa@gmail.com', true, null,'Bubi', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '066333555', '',null , 'Bubisa', false);
@@ -119,12 +120,12 @@ VALUES ( '2022-11-02', true, 'Izvinite gospodine, ali ne mozemo tu nista', 3, 1)
 
 
 INSERT INTO public.location(
-    id, latitude, longitude)
-VALUES (2, 45.2464013, 19.8337933);
+     latitude, longitude)
+VALUES ( 45.2464013, 19.8337933);
 
 INSERT INTO public.location(
-    id,latitude, longitude)
-VALUES (3, 45.2450937,19.8360421);
+    latitude, longitude)
+VALUES ( 45.2450937,19.8360421);
 
 
 INSERT INTO public.route(
