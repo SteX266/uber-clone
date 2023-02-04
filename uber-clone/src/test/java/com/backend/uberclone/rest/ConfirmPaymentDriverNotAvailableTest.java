@@ -28,11 +28,9 @@ public class ConfirmPaymentDriverNotAvailableTest {
 
     private HttpHeaders headers;
     public void setUp() {
-        System.out.println("USAO I OVDE");
         UserCredentialsDTO requestTestDriver = new UserCredentialsDTO();
         requestTestDriver.setEmail("serfezev@gmail.com");
         requestTestDriver.setPassword("perica00");
-        System.out.println("USAO DO OVDE");
         headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         headers.add("Access-Control-Allow-Origin", "*");
@@ -40,8 +38,6 @@ public class ConfirmPaymentDriverNotAvailableTest {
         ResponseEntity<UserTokenState> resTest = restTemplate
                 .exchange("/auth/login", HttpMethod.POST, httpEntity, UserTokenState.class);
         String tokenTestDriver = "Bearer " + resTest.getBody().getAccessToken();
-        System.out.println("KURCU GLUPI");
-        System.out.println(tokenTestDriver);
         headers = new HttpHeaders();
         headers.add("Authorization", tokenTestDriver);
         headers.setContentType(MediaType.APPLICATION_JSON);

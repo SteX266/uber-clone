@@ -39,8 +39,9 @@ VALUES (3, 'ROLE_DRIVER');
 
 
 INSERT INTO public.location(
-     latitude, longitude)
-VALUES ( 45.246401, 19.833793);
+    latitude, longitude)
+VALUES (45.246401, 19.833793);
+
 
 INSERT INTO public.admin(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, reset_password_token, surname, social_login)
@@ -57,7 +58,7 @@ VALUES (3, false, 'Novi Sad', false, 'stevaszumza@gmail.com', true, null,'Aleksa
 
 INSERT INTO public.customer(
     id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins, social_login)
-VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 0, false);
+VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 1000, false);
 
 
 

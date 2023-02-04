@@ -19,10 +19,10 @@ public class RouteService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void saveFavoriteRoute(FavoriteRouteDTO favoriteRouteDTO) {
+    public FavouriteRoute saveFavoriteRoute(FavoriteRouteDTO favoriteRouteDTO) {
         Customer customer = customerRepository.findOneByEmail(favoriteRouteDTO.getCustomer());
         FavouriteRoute favouriteRoute = new FavouriteRoute(favoriteRouteDTO, customer);
-        this.favoriteRouteRepository.save(favouriteRoute);
+        return this.favoriteRouteRepository.save(favouriteRoute);
     }
 
     public List<FavoriteRouteDTO> getFavoriteRoutes(Integer customerId) {
