@@ -60,6 +60,7 @@ public class ReservationController {
             r.setStatus(ReservationStatus.FINISHED);
             if (r.getType() == ReservationType.INSTANT) {
                 if (!rideService.makeRide(r)){
+
                     return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.NOT_FOUND);
                 }else {
                     reservationService.initiateChargeUsers(r);

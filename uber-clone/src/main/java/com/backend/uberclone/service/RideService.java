@@ -124,6 +124,7 @@ public class RideService {
     public boolean makeRide(Reservation r) {
         Ride newRide = this.createRide(r);
         if (newRide== null) {
+            System.out.println("USAO U NULL");
             for (Payment p : r.getPayments()) {
                 simpMessagingTemplate.convertAndSend("/payment/all-confirmed", new PaymentDTO(p.getAmount(), r.getId(), p.getCustomer().getEmail(), true, -1));
             }
