@@ -37,13 +37,12 @@ public class ReservationController {
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/makeReservation")
     public ResponseEntity<SuccessResponseDTO> makeReservation(@RequestBody ReservationDTO reservationDTO) {
+        if(reservationDTO.getCustomers().isEmpty()) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         List<PaymentDTO> paymentDTOS = reservationService.makeReservation(reservationDTO);
         if (paymentDTOS.size() < 1)
             return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         for (PaymentDTO p :
                 paymentDTOS) {
-            System.out.println("PLACANJEEEEEE");
-            System.out.println(p.getCustomerEmail());
             simpMessagingTemplate.convertAndSend("/payment/payment-made", p);
         }
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
@@ -92,7 +91,8 @@ public class ReservationController {
 
     @PostMapping("/addFavoriteRoute")
     public ResponseEntity<SuccessResponseDTO> cancelPayment(@RequestBody FavoriteRouteDTO favoriteRouteDTO) {
-        this.routeService.saveFavoriteRoute(favoriteRouteDTO);
+        FavouriteRoute route = this.routeService.saveFavoriteRoute(favoriteRouteDTO);
+        if(route.getRouteGeoJson() == null) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.OK);
 
     }

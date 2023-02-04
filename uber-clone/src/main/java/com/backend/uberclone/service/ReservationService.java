@@ -48,8 +48,8 @@ public class ReservationService {
         if(doCustomersHaveOngoingReservations(customers)){
             return new ArrayList<>();
         }
-
         if(!checkCustomerBalance(customers, reservationDTO.getEstimatedCost())) return new ArrayList<>();
+        System.out.println("CUSTOMER HAS MONEY");
         List<Payment> payments = createPayments(customers, reservationDTO.getEstimatedCost());
         Reservation reservation = new Reservation(reservationDTO, customers, payments);
         reservationRepository.save(reservation);

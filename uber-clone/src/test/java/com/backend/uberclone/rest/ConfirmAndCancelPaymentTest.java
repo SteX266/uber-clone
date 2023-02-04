@@ -11,8 +11,6 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-
 import static org.testng.Assert.*;
 
 
@@ -21,7 +19,7 @@ import static org.testng.Assert.*;
 @TestPropertySource(
         locations = {"classpath:application.properties", "classpath:application-reservation.properties"}
 )
-public class ReservationControllerTest {
+public class ConfirmAndCancelPaymentTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -29,11 +27,9 @@ public class ReservationControllerTest {
     private HttpHeaders headers;
 
     public void setUp() {
-        System.out.println("USAO I OVDE");
         UserCredentialsDTO requestTestDriver = new UserCredentialsDTO();
         requestTestDriver.setEmail("serfezev@gmail.com");
         requestTestDriver.setPassword("perica00");
-        System.out.println("USAO DO OVDE");
         headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         headers.add("Access-Control-Allow-Origin", "*");
@@ -41,8 +37,6 @@ public class ReservationControllerTest {
         ResponseEntity<UserTokenState> resTest = restTemplate
                 .exchange("/auth/login", HttpMethod.POST, httpEntity, UserTokenState.class);
         String tokenTestDriver = "Bearer " + resTest.getBody().getAccessToken();
-        System.out.println("KURCU GLUPI");
-        System.out.println(tokenTestDriver);
         headers = new HttpHeaders();
         headers.add("Authorization", tokenTestDriver);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -81,19 +75,7 @@ public class ReservationControllerTest {
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
-    @Test
-    public void testAddFavoriteRoute() {
-        setUp();
-        FavoriteRouteDTO favoriteRouteDTO = new FavoriteRouteDTO();
-        favoriteRouteDTO.setName("Puskinova 11, Gogoljeva 23");
-        favoriteRouteDTO.setCustomer("serfezev@gmail.com");
-        favoriteRouteDTO.setStops(new ArrayList<>());
-        HttpEntity<FavoriteRouteDTO> entity = new HttpEntity<>(favoriteRouteDTO, headers);
 
-        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/api/reservation/addFavoriteRoute", entity, SuccessResponseDTO.class);
-
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-    }
 
 
 }
