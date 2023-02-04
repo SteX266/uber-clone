@@ -121,7 +121,8 @@ public class ReservationService {
     public boolean confirmPayment(PaymentDTO paymentDTO) {
         Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
         Customer c = customerRepository.findOneByEmail(paymentDTO.getCustomerEmail());
-
+        if(r == null || c == null){
+            return false;}
         for(Payment p:r.getPayments()){
 
             if (p.getCustomer().getEmail().equals(c.getEmail())){
@@ -157,6 +158,8 @@ public class ReservationService {
 
     public void cancelPayment(PaymentDTO paymentDTO) {
         Reservation r = reservationRepository.findOneById(paymentDTO.getReservationId());
+        if (r == null)
+            return;
         r.setStatus(ReservationStatus.DECLINED);
         reservationRepository.save(r);
     }

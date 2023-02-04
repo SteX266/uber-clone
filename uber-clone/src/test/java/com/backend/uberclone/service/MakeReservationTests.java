@@ -120,7 +120,7 @@ public class MakeReservationTests {
     }
 
     @Test
-    public void eustomersHaveOngoingReservations() {
+    public void customersHaveOngoingReservations() {
 
         Reservation r = new Reservation();
         r.setStatus(ReservationStatus.PAYMENT);
