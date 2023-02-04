@@ -1,8 +1,7 @@
 package com.backend.uberclone.rest;
 
 import com.backend.uberclone.dto.*;
-import com.backend.uberclone.model.ReservationType;
-import com.backend.uberclone.model.VehicleType;
+
 import com.backend.uberclone.repository.ReservationRepository;
 import com.backend.uberclone.service.ReservationService;
 import org.junit.Test;
@@ -16,10 +15,6 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 
 
@@ -88,5 +83,7 @@ public class ReservationControllerTest {
 
         assertNotEquals(response.getStatusCode(), HttpStatus.OK);
     }
+
+    
 
 }
