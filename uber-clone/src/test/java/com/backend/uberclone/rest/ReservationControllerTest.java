@@ -15,7 +15,9 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.testng.Assert.assertNotEquals;
+import java.util.ArrayList;
+
+import static org.testng.Assert.*;
 
 
 @RunWith(SpringRunner.class)
@@ -54,7 +56,7 @@ public class ReservationControllerTest {
         headers.add("Content-Type", "application/json");
     }
     @Test
-    public void testConfirmPaymentNoValidId() throws Exception {
+    public void testConfirmPayment() throws Exception {
         // this.reservationService.makeReservation(new ReservationDTO(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")), LocalDateTime.now(), new ArrayList<>(Arrays.asList("Route1")), new ArrayList<>(Arrays.asList("serfezev@gmail.com")), VehicleType.ANY, ReservationType.INSTANT, false, false, 0.34, 80, 130, new ArrayList<>(Arrays.asList(19.4, 45.6)), new ArrayList<>(Arrays.asList(19.2, 45.7))));
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setReservationId(1);
@@ -66,11 +68,11 @@ public class ReservationControllerTest {
 
         ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/api/reservation/confirmPayment", entity, SuccessResponseDTO.class);
 
-        assertNotEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
-    public void testCancelPaymentNoReservationId() {
+    public void testCancelPayment() {
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setReservationId(1);
         paymentDTO.setCanceled(false);
@@ -81,9 +83,21 @@ public class ReservationControllerTest {
 
         ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/api/reservation/cancelPayment", entity, SuccessResponseDTO.class);
 
-        assertNotEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
-    
+    @Test
+    public void testAddFavoriteRoute() {
+        FavoriteRouteDTO favoriteRouteDTO = new FavoriteRouteDTO();
+        favoriteRouteDTO.setName("Puskinova 11, Gogoljeva 23");
+        favoriteRouteDTO.setCustomer("serfezev@gmail.com");
+        favoriteRouteDTO.setStops(new ArrayList<>());
+        HttpEntity<FavoriteRouteDTO> entity = new HttpEntity<>(favoriteRouteDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/api/reservation/addFavoriteRoute", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
+
 
 }
