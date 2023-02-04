@@ -227,7 +227,7 @@ public class UserService {
         driverRepository.save(driver);
     }
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         return userRepository.findOneByEmail(user.getUsername());

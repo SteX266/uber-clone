@@ -61,6 +61,10 @@ INSERT INTO public.customer(
 VALUES (4, false, 'Novi Sad', false, 'esteban@gmail.com', true, null, 'Stefan', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Milosevic', false, 1000, false);
 
 
+INSERT INTO public.customer(
+    id, banned, city, deleted, email, enabled, last_password_reset_date, name, password, phone_number, profile_picture, surname, riding,coins, social_login)
+VALUES (5, false, 'Novi Sad', false, 'nikola@gmail.com', true, null, 'Nikola', '$2a$10$YlFmOPcg9JpJnTPQsJhsaO4t0MH/KAtWPD3dvWW2MO0ddBAkl4LVC', '0665241322','', 'Nikolic', false, 1000, false);
+
 
 INSERT INTO public.user_role(
     user_id, role_id)
@@ -79,6 +83,10 @@ VALUES (3, 3);
 INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (4, 2);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (5, 2);
 
 
 INSERT INTO public.message(

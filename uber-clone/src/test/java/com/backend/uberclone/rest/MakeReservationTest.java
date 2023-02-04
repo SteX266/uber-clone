@@ -73,12 +73,36 @@ public class MakeReservationTest {
 
     @Test
     public void testMakeInstantReservationValidData() throws Exception {
-        setUp("esteban@gmail.com");
+        setUp("nikola@gmail.com");
         ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setVehicleType(VehicleType.ANY);
         reservationDTO.setReservationTime(LocalDateTime.now());
         reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
         reservationDTO.setReservationType(ReservationType.INSTANT);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("nikola@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void testMakeScheduledReservationValidData() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
         reservationDTO.setHasPet(false);
         reservationDTO.setHasBaby(false);
         reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
@@ -119,7 +143,7 @@ public class MakeReservationTest {
     }
 
     @Test
-    public void testMakeScheduledReservationNoUser() throws Exception {
+    public void testMakeScheduledReservationNoCustomers() throws Exception {
         setUp("serfezev@gmail.com");
         ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setVehicleType(VehicleType.ANY);
@@ -142,7 +166,316 @@ public class MakeReservationTest {
         assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
     }
 
+    @Test
+    public void testMakeReservationNoReservationTime() throws Exception {
+        setUp("serfezev@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(null);
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(Arrays.asList("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(Arrays.asList("serfezev@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
 
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeReservationNoRoute() throws Exception {
+        setUp("serfezev@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(null);
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>());
+        reservationDTO.setCustomers(new ArrayList<>(Arrays.asList("serfezev@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeReservationRouteIsNull() throws Exception {
+        setUp("serfezev@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(null);
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(null);
+        reservationDTO.setCustomers(new ArrayList<>(Arrays.asList("serfezev@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeReservationCustomersIsNull() throws Exception {
+        setUp("serfezev@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(null);
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(null);
+        reservationDTO.setCustomers(null);
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeReservationNotLoggedIn() throws Exception {
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(null);
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(null);
+        reservationDTO.setCustomers(new ArrayList<>(Arrays.asList("serfezev@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.UNAUTHORIZED);
+    }
+
+
+    @Test
+    public void testMakeScheduledReservationNoVehicleType() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(null);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeScheduledReservationNoReservationType() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(null);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeScheduledReservationNoStops() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>());
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+    @Test
+    public void testMakeScheduledReservationStopsNull() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(null);
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>(Arrays.asList(19.4, 45.6)));
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeScheduledReservationNoStartCoordinates() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setStartCoordinates( new ArrayList<>());
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeScheduledReservationStartCoordinatesNull() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setStartCoordinates( null);
+        reservationDTO.setEndCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeScheduledReservationNoEndCoordinates() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setEndCoordinates( new ArrayList<>());
+        reservationDTO.setStartCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @Test
+    public void testMakeScheduledReservationEndCoordinatesNull() throws Exception {
+        setUp("esteban@gmail.com");
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setVehicleType(VehicleType.ANY);
+        reservationDTO.setReservationTime(LocalDateTime.now());
+        reservationDTO.setStops(new ArrayList<String>(Arrays.asList("Puskinova 11, Novi Sad", "Gogoljeva 23, Novi Sad")));
+        reservationDTO.setReservationType(ReservationType.SCHEDULED);
+        reservationDTO.setHasPet(false);
+        reservationDTO.setHasBaby(false);
+        reservationDTO.setRouteGeoJson(new ArrayList<>(List.of("Route1")));
+        reservationDTO.setCustomers(new ArrayList<>(List.of("esteban@gmail.com")));
+        reservationDTO.setEndCoordinates( null);
+        reservationDTO.setStartCoordinates(new ArrayList<>(Arrays.asList(19.2, 45.7)));
+        reservationDTO.setEstimatedTime(80);
+        reservationDTO.setEstimatedCost(130);
+        reservationDTO.setDistance(0.34);
+        HttpEntity<ReservationDTO> entity = new HttpEntity<>(reservationDTO, headers);
+
+        ResponseEntity<SuccessResponseDTO> response = restTemplate.postForEntity("/reservation/makeReservation", entity, SuccessResponseDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED);
+    }
 
 
 

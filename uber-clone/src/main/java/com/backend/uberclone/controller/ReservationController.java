@@ -37,7 +37,15 @@ public class ReservationController {
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/makeReservation")
     public ResponseEntity<SuccessResponseDTO> makeReservation(@RequestBody ReservationDTO reservationDTO) {
+        if(reservationDTO.getCustomers() == null) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         if(reservationDTO.getCustomers().isEmpty()) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getReservationTime() == null) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getRouteGeoJson() == null) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getRouteGeoJson().isEmpty()) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getStartCoordinates() == null) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getStartCoordinates().isEmpty()) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getEndCoordinates() == null) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
+        if(reservationDTO.getEndCoordinates().isEmpty()) return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
         List<PaymentDTO> paymentDTOS = reservationService.makeReservation(reservationDTO);
         if (paymentDTOS.size() < 1)
             return new ResponseEntity<>(new SuccessResponseDTO(), HttpStatus.EXPECTATION_FAILED);
@@ -103,6 +111,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservation, HttpStatus.OK);
 
     }
+
 
 
 }

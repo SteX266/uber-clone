@@ -46,6 +46,7 @@ public class ReservationService {
 
         Set<Customer> customers = customerRepository.findAllByEmailIn(reservationDTO.getCustomers());
         if(doCustomersHaveOngoingReservations(customers)){
+            System.out.println("CUSTOMER HAS ONGOING RESERVATION");
             return new ArrayList<>();
         }
         if(!checkCustomerBalance(customers, reservationDTO.getEstimatedCost())) return new ArrayList<>();
