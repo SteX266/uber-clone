@@ -110,7 +110,35 @@ VALUES ( '2022-11-01', true, 'Alo be bate ovaj ga nema.', 1, 3);
 
 INSERT INTO public.message(
     date, read, text, recipient_id, sender_id)
-VALUES ( '2022-11-02', true, 'Izvinite gospodine, ali ne razumem srbijanski', 3, 1);
+VALUES ( '2022-11-02', true, 'Izvinite gospodine, ali ne mozemo tu nista', 3, 1);
 
+
+
+INSERT INTO public.location(
+   id, latitude, longitude)
+VALUES (2, 45.2464013, 19.8337933);
+
+INSERT INTO public.location(
+     id,latitude, longitude)
+VALUES (3, 45.2450937,19.8360421);
+
+
+INSERT INTO public.route(
+    dtype,  distance_in_km, estimated_time_in_minutes, name, start, end_coordinates_id, start_coordinates_id, customer_id)
+VALUES ('Route',  0.3165, 1.266666, null, null, 2, 3, null);
+
+
+INSERT into public.reservation(estimated_cost,has_baby,has_pet,reservation_time,status,type,vehicle_type,route_id) VALUES
+    (137.98000000000002,false,false,'2023-02-04 06:21:59.010323','FINISHED','INSTANT','ANY',1);
+
+
+INSERT INTO public.reservations(
+    customer_id, reservation_id)
+VALUES (2, 1);
+
+
+INSERT INTO public.ride(
+     end_time, estimated_arrival_time_in_minutes, start_time, status, driver_id, rejection_id, reservation)
+VALUES ( '2023-02-04 06:23:36.508963', 5, '2023-02-04 06:23:15.124699', 'FINISHED', 3, null,1);
 
 
